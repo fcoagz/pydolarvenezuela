@@ -14,11 +14,11 @@ pip3 install pyDolarVenezuela
 ## Uso
 1. Importamos la librería:
 ```py
-from pyDolaVenezuela import price
+from pyDolarVenezuela import price
 ```
 2. Para consultar la libreria, debemos crear una variable `precios` dentro de ella estara nuestra funcion `price()`:
 ```py
-from pyDolaVenezuela import price
+from pyDolarVenezuela import price
 
 precios = price()
 print(precios)
@@ -36,7 +36,7 @@ Retorna una estructura en formato JSON.
 
 3. Para acceder una de ellas se hace de la siguiente manera:
 ```py
-from pyDolaVenezuela import price
+from pyDolarVenezuela import price
 
 precios = price()
 print(precios['$bcv'])
