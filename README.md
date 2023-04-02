@@ -24,12 +24,12 @@ precios = price()
 print(precios)
 
 >> {
-  '$bcv': 'Bs. 24,497',
-  '$enparalelovzla': 'Bs. 25,11',
-  '$dolartoday': 'Bs. 25,15',
-  '$monitordolarweb': 'Bs. 25,02',
-  '$enparalelovzlavip': 'Bs. 25,04',
-  '$binancep2p': 'Bs. 25,020'
+  '$bcv': 'Bs. 24.497',
+  '$enparalelovzla': 'Bs. 25.11',
+  '$dolartoday': 'Bs. 25.15',
+  '$monitordolarweb': 'Bs. 25.02',
+  '$enparalelovzlavip': 'Bs. 25.04',
+  '$binancep2p': 'Bs. 25.020'
    }
 ```
 Retorna una estructura en formato JSON.
@@ -41,5 +41,5 @@ from pyDolarVenezuela import price
 precios = price()
 print(precios['$bcv'])
 
->> Bs. 24,497
+>> Bs. 24.497
 ```

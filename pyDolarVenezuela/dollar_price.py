@@ -12,7 +12,7 @@ def price():
 
   for divElement in divElements:
     text = divElement.find('p')
-    priceResult.append(text.text.split(' ')[2])
+    priceResult.append(text.text.split(' ')[-1].replace(',', '.'))
 
   return {
     '$bcv' : f'Bs. {priceResult[0]}',
