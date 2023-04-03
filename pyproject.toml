@@ -1,6 +1,6 @@
 [project]
 name = "pyDolarVenezuela"
-version = "1.0.2"
+version = "1.0.3"
 authors = [
   { name="Francisco Griman", email="grihardware@gmail.com" },
 ]
@@ -21,7 +21,8 @@ keywords = [
 ]
 dependencies = [
   "requests",
-  "bs4"
+  "bs4",
+  "beautifulsoup4"
 ]
 
 [project.urls]
