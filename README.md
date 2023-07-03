@@ -1,45 +1,46 @@
 # pyDolarVenezuela
-Esta es una libreria desarrollado en Python te permite consultar los precios del dólar en diferente monitores en Venezuela.
+**pyDolarVenezuela** es una libreria de Python que permite obtener los valores de diferentes monitores del dolar en Venezuela y las tasas de cambio del Banco Central de Venezuela.
 
 ## Instalación
-Para instalar esta librería, puedes utilizar el siguiente comando de pip:
-
-```py
+``` sh
 pip install pyDolarVenezuela
 ```
-En Linux o Mac:
-```py
-pip3 install pyDolarVenezuela
-```
+
 ## Uso
-1. Importamos la librería:
-```py
-from pyDolarVenezuela import price
+La clase `pyDolarVenezuela.Monitor` tiene el siguiente metodo:
+
+- `Monitor().get_value_monitors()`: Te muestra los valores del dolar no oficial. EnParaleloVzla, MonitorDolarWeb, Binance.
+
+Los parametros del metodo ante mencionado son los siguientes:
+
+- `monitor_code`: Acepta el nombre de cada monitor que desea conocer su valor.
+- `prettify`: Acepta un valor booleano si desea que el valor de la moneda salga junto con el simbolo de Bolivares. `Bs. [VALOR]`.
+
+### Ejemplo
+``` py
+import pyDolarVenezuela as pdv
+
+monitor = pdv.Monitor()
+
+get_value_enparalelovzla = monitor.get_value_monitors(monitor_code='enparalelovzla', prettify=True)
+get_value_binance = monitor.get_value_monitors(monitor_code='binance', prettify=False)
 ```
-2. Para consultar la libreria, debemos crear una variable `precios` dentro de ella estara nuestra funcion `price()`:
-```py
-from pyDolarVenezuela import price
 
-precios = price()
-print(precios)
+La clase `pyDolarVenezuela.Bcv` tiene el siguiente metodo:
 
->> {
-  '$bcv': 'Bs. 24.497',
-  '$enparalelovzla': 'Bs. 25.11',
-  '$dolartoday': 'Bs. 25.15',
-  '$monitordolarweb': 'Bs. 25.02',
-  '$enparalelovzlavip': 'Bs. 25.04',
-  '$binancep2p': 'Bs. 25.020'
-   }
-```
-Retorna una estructura en formato JSON.
+- `Bcv().get_rate()`: Te muestra los valores de las tasas de cambio del Banco Central de Venezuela. EUR, CNY, TRY, USD.
 
-3. Para acceder una de ellas se hace de la siguiente manera:
-```py
-from pyDolarVenezuela import price
+Los parametros del metodo ante mencionado son los siguientes:
 
-precios = price()
-print(precios['$bcv'])
+- `currency_code`: Acepta un código de moneda o fecha como argumento.
+- `prettify`: Acepta un valor booleano si desea que el valor de la moneda salga junto con el simbolo de Bolivares. `Bs. [VALOR]`.
 
->> Bs. 24.497
+### Ejemplo
+``` py
+import pyDolarVenezuela as pdv
+
+bcv = pdv.Bcv()
+
+get_value_usd = bcv.get_rate(currency_code='USD', prettify=True)
+get_value_eur = bcv.get_rate(currency_code='EUR', prettify=False)
 ```
