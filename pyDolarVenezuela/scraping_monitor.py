@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from request import _get_response_content
+from .request import _get_response_content
 
 class Monitor:
     def __init__(self) -> None:
