@@ -15,7 +15,7 @@ class Bcv:
     def _get_value_by_id(self, tag_id: str, soup: BeautifulSoup):
         return soup.find(id=tag_id).find("strong").text.strip().replace(',', '.')
     
-    def get_rates(self, currency_code: str):
+    def get_rates(self, currency_code: str, prettify: bool = False):
         content = self._get_content(self.page_bcv)
         soup = BeautifulSoup(content, "html.parser")
         section_tipo_de_cambio_oficial = soup.find("div", "view-tipo-de-cambio-oficial-del-bcv")
@@ -31,5 +31,5 @@ class Bcv:
         if not currency_code:
             return rates
         if currency_code not in rates:
-            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://gothub.com/fcoagz/pydolarvenezuela")
-        return rates[currency_code]
+            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pydolarvenezuela")
+        return rates[currency_code] if not prettify else f'Bs. {rates[currency_code]}'

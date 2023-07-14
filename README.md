@@ -28,7 +28,7 @@ get_value_binance = monitor.get_value_monitors(monitor_code='binance', prettify=
 
 La clase `pyDolarVenezuela.Bcv` tiene el siguiente metodo:
 
-- `Bcv().get_rate()`: Te muestra los valores de las tasas de cambio del Banco Central de Venezuela. EUR, CNY, TRY, USD.
+- `Bcv().get_rates()`: Te muestra los valores de las tasas de cambio del Banco Central de Venezuela. EUR, CNY, TRY, USD.
 
 Los parametros del metodo ante mencionado son los siguientes:
 
@@ -41,6 +41,6 @@ import pyDolarVenezuela as pdv
 
 bcv = pdv.Bcv()
 
-get_value_usd = bcv.get_rate(currency_code='USD', prettify=True)
-get_value_eur = bcv.get_rate(currency_code='EUR', prettify=False)
+get_value_usd = bcv.get_rates(currency_code='USD', prettify=True)
+get_value_eur = bcv.get_rates(currency_code='EUR', prettify=False)
 ```

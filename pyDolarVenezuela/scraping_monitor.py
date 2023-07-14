@@ -27,5 +27,5 @@ class Monitor:
         if not monitor_code:
             return results
         if monitor_code not in results:
-            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://gothub.com/fcoagz/pydolarvenezuela")
+            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pydolarvenezuela")
         return results[monitor_code] if not prettify else f'Bs. {results[monitor_code]}'
