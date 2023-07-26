@@ -1,14 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 
-from .request import _get_response_content
+from pyDolarVenezuela.request import ensure_200_and_return_content
 
 class Monitor:
     def __init__(self) -> None:
         self.website = 'https://monitordolarvenezuela.com/'
 
     def _get_content(self, url: str):
-        return _get_response_content(requests.get(url))
+        return ensure_200_and_return_content(requests.get(url))
     
     def _get_results_price(self, soup: BeautifulSoup):
         return [str(x.find('p').text).split(' ')[-1].replace(',', '.') for x in soup.find_all('div', 'col-12 col-sm-4 col-md-2 col-lg-2')]
