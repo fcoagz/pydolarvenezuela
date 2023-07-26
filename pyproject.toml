@@ -22,7 +22,8 @@ keywords = [
 dependencies = [
   "requests",
   "bs4",
-  "beautifulsoup4"
+  "beautifulsoup4",
+  "pyBCV"
 ]
 
 [project.urls]

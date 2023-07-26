@@ -17,7 +17,8 @@ LONG_DESC_TYPE = "text/markdown"
 INSTALL_REQUIRES = [
       'requests',
       'bs4',
-      'beautifulsoup4'
+      'beautifulsoup4',
+      'pyBCV'
       ]
 
 CLASSIFIERS = [
