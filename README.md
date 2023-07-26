@@ -25,10 +25,10 @@ monitor = pdv.Monitor()
 values = monitor.get_value_monitors()
 
 # Obtener el valor del dólar en EnParaleloVzla
-get_value_enparalelovzla = monitor.get_value_monitors(monitor_code=2, name_property='price', prettify=True)
+get_value_enparalelovzla = monitor.get_value_monitors(monitor_code='2', name_property='price', prettify=True)
 
 # Obtener la ultima actualizacion del dólar en Binance
-get_value_binance = monitor.get_value_monitors(monitor_code=17, name_property='last_update' prettify=False)
+get_value_binance = monitor.get_value_monitors(monitor_code='17', name_property='last_update', prettify=False)
 ```
 
 La clase `Bcv` tiene el siguiente metodo:
