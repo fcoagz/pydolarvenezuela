@@ -33,6 +33,7 @@ class Monitor(object):
                 "name": monitor.find('h6', 'nombre').text,
                 "unit": monitor.find('p', 'unidad').text,
                 "price": str(monitor.find('p', 'precio').text).replace(',', '.'),
+                "change": monitor.find('p', 'cambio-por').text,
                 "last_update": monitor.find('p', 'fecha').text
             }
             self.all_monitors[f"{i}"] = data
