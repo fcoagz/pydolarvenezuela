@@ -5,7 +5,7 @@ from requests import Response
 
 def ensure_200_and_return_content(response: Response) -> bytes:
     if not response.status_code == requests.codes.ok:
-        raise ValueError("Error de comunicación Alcambio. Codigo: {0}".format(response.status_code))
+        raise ValueError("Error de comunicación ExchangeMonitor. Codigo: {0}".format(response.status_code))
     return response.content
 
 def get_content_page(url: str) -> bytes:

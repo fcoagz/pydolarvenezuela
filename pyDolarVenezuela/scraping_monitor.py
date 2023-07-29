@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import re
+from emoji import emojize
 
 from pyDolarVenezuela.request import get_content_page
 from pyDolarVenezuela.util import PAGINA_PRINCIPAL_EXCHANGE_MONITOR
@@ -29,11 +29,11 @@ class Monitor(object):
         i: int = 0
         for monitor in all_monitors:
             monitor = monitor.find("div", "module-table module-table-fecha")
+            change = str(monitor.find('p', 'cambio-por').text)
             data = {
-                "name": monitor.find('h6', 'nombre').text,
-                "unit": monitor.find('p', 'unidad').text,
+                "title": monitor.find('h6', 'nombre').text,
                 "price": str(monitor.find('p', 'precio').text).replace(',', '.'),
-                "change": monitor.find('p', 'cambio-por').text,
+                "change": ("\U00002B07" + change[1:] if change[0] == '▼' else "\U00002B06" + change[1:] if change[0] == '▲' else "" + change[1:]),
                 "last_update": monitor.find('p', 'fecha').text
             }
             self.all_monitors[f"{i}"] = data
