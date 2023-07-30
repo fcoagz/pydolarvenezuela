@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from emoji import emojize
 
 from pyDolarVenezuela.request import get_content_page
 from pyDolarVenezuela.util import PAGINA_PRINCIPAL_EXCHANGE_MONITOR
@@ -9,6 +8,12 @@ def _get_values_monitors(soup: BeautifulSoup):
 
 def _get_date_value(soup: BeautifulSoup):
     return str(soup.find('p')).split("<br/>")[-1].replace("</p>", "")
+
+def _convert_specific_format(text: str) -> str:
+    acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
+    for acento, sin_acento in acentos.items():
+        text = text.lower().replace(acento, sin_acento).replace(' ', '_')
+    return text
 
 class Monitor(object):
     """
@@ -34,10 +39,10 @@ class Monitor(object):
                 "title": monitor.find('h6', 'nombre').text,
                 "price": str(monitor.find('p', 'precio').text).replace(',', '.'),
                 "change": ("\U00002B07" + change[1:] if change[0] == '▼' else "\U00002B06" + change[1:] if change[0] == '▲' else "" + change[1:]),
-                "last_update": monitor.find('p', 'fecha').text
+                "last_update": ' '.join(str(monitor.find('p', 'fecha').text).split(' ')[1:])
             }
-            self.all_monitors[f"{i}"] = data
-            i += 1
+            self.all_monitors[_convert_specific_format(data['title'])] = data
+            
     
     def get_value_monitors(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         """
