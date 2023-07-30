@@ -1,0 +1,13 @@
+{
+    "builds": [
+        {
+            "src":"pyDolarVenezuela/router/app.py",
+            "use":"@vercel/python"
+        }
+    ],
+    "routes":
+    {
+        "src":"/(.*)",
+        "dest":"pyDolarVenezuela/router/app.py"
+    }
+}
