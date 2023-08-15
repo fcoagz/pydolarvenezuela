@@ -35,9 +35,11 @@ class Monitor(object):
         for monitor in all_monitors:
             monitor = monitor.find("div", "module-table module-table-fecha")
             change = str(monitor.find('p', 'cambio-por').text)
+            text_price = str(monitor.find('p', 'precio').text).replace(',', '.')
+
             data = {
                 "title": monitor.find('h6', 'nombre').text,
-                "price": str(monitor.find('p', 'precio').text).replace(',', '.'),
+                "price": text_price.replace('.', '', 1) if text_price.count('.') == 2 else text_price,
                 "change": ("\U00002B07" + change[1:] if change[0] == '▼' else "\U00002B06" + change[1:] if change[0] == '▲' else "" + change[1:]),
                 "last_update": ' '.join(str(monitor.find('p', 'fecha').text).split(' ')[1:])
             }
