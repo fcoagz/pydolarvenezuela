@@ -31,7 +31,7 @@ class Monitor(object):
 
         self.all_monitors = {}
         self.all_monitors['value'] = {"date": date}
-        i: int = 0
+
         for monitor in all_monitors:
             monitor = monitor.find("div", "module-table module-table-fecha")
             change = str(monitor.find('p', 'cambio-por').text)
@@ -41,11 +41,10 @@ class Monitor(object):
                 "title": monitor.find('h6', 'nombre').text,
                 "price": text_price.replace('.', '', 1) if text_price.count('.') == 2 else text_price,
                 "change": ("\U00002B07" + change[1:] if change[0] == '▼' else "\U00002B06" + change[1:] if change[0] == '▲' else "" + change[1:]),
-                "last_update": ' '.join(str(monitor.find('p', 'fecha').text).split(' ')[1:])
+                "last_update": ' '.join(str(monitor.find('p', 'fecha').text).split(' ')[1:]).capitalize()
             }
             self.all_monitors[_convert_specific_format(data['title'])] = data
-            
-    
+
     def get_value_monitors(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         """
         El parámetro `monitor_code` indica el código del monitor del cual se desea obtener información, \
