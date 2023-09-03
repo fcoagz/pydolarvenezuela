@@ -1,13 +1,14 @@
 from bs4 import BeautifulSoup
 
+from pyDolarVenezuela.timezone import get_time_zone
 from pyDolarVenezuela.request import get_content_page
 from pyDolarVenezuela.util import PAGINA_PRINCIPAL_EXCHANGE_MONITOR
 
 def _get_values_monitors(soup: BeautifulSoup):
     return [value for value in soup]
 
-def _get_date_value(soup: BeautifulSoup):
-    return str(soup.find('p')).split("<br/>")[-1].replace("</p>", "")
+# def _get_date_value(soup: BeautifulSoup):
+#     return str(soup.find('p')).split("<br/>")[-1].replace("</p>", "")
 
 def _convert_specific_format(text: str) -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -24,13 +25,12 @@ class Monitor(object):
     def _load(self):
         soup = BeautifulSoup(get_content_page(PAGINA_PRINCIPAL_EXCHANGE_MONITOR), "html.parser")
         section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
-        section_fecha_valor = soup.find("div", "col-xs-12 text-center")
 
-        date = _get_date_value(section_fecha_valor)
+        date = get_time_zone()
         all_monitors = _get_values_monitors(section_dolar_venezuela)
 
         self.all_monitors = {}
-        self.all_monitors['value'] = {"date": date}
+        self.all_monitors['datetime'] = date
 
         for monitor in all_monitors:
             monitor = monitor.find("div", "module-table module-table-fecha")
