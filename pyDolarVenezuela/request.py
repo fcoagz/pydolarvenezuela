@@ -1,8 +1,8 @@
-from httpx import Response
-import httpx
+from requests import Response
+import requests
 
 def _ensure_200_and_return_content(response: Response) -> bytes:
-    if response.status_code != httpx.codes.OK:
+    if response.status_code != requests.codes.ok:
         raise ValueError("")
     return response.content
 
@@ -11,5 +11,5 @@ def _ensure_200_and_return_content(response: Response) -> bytes:
 #     return _ensure_200_and_return_content(response)
 
 def content(url: str) -> bytes:
-    response = httpx.get(url, timeout=10.0)
+    response = requests.get(url, timeout=10.0)
     return _ensure_200_and_return_content(response)
