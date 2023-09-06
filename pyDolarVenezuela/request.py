@@ -1,14 +1,15 @@
-import requests
-from requests import Response
+from httpx import Response
+import httpx
 
-# headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-
-def ensure_200_and_return_content(response: Response) -> bytes:
-    if not response.status_code == requests.codes.ok:
-        raise ValueError("Error de comunicación ExchangeMonitor. Codigo: {0}".format(response.status_code))
+def _ensure_200_and_return_content(response: Response) -> bytes:
+    if response.status_code != httpx.codes.OK:
+        raise ValueError("")
     return response.content
 
-def get_content_page(url: str) -> bytes:
-    return ensure_200_and_return_content(
-        requests.get(url=url)
-    )
+# def ask(url: str, params: dict):
+#     response = httpx.get(url, params=params, timeout=10.0)
+#     return _ensure_200_and_return_content(response)
+
+def content(url: str) -> bytes:
+    response = httpx.get(url, timeout=10.0)
+    return _ensure_200_and_return_content(response)
