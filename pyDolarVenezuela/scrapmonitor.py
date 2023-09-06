@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from pyDolarVenezuela.functionstime import get_time, get_time_zone
+from pyDolarVenezuela.functionstime import Time
 from pyDolarVenezuela.request import content
 from pyDolarVenezuela.util import ExchangeMonitor
 
@@ -25,12 +25,13 @@ class Monitor(object):
     def _scraped(self):
         response = content(self.url)
         soup = BeautifulSoup(response, "html.parser")
+        time = Time()
 
         section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
         _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
         
         self.data = {}
-        self.data['datetime'] = get_time_zone()
+        self.data['datetime'] = time.get_time_zone()
 
         for scraping_monitor in _scraping_monitors:
             result = scraping_monitor.find("div", "module-table module-table-fecha")
@@ -41,7 +42,7 @@ class Monitor(object):
             if price.count('.') == 2:
                 price = price.replace('.', '', 1)
             
-            last_update = get_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
+            last_update = time.get_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
             symbol = str(result.find('p', "cambio-por").text)[0] if not str(result.find('p', "cambio-por").text)[0] == ' ' else ''
             color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
             percent = str(result.find('p', "cambio-por").text)[1:].strip()
