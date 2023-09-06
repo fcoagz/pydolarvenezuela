@@ -1,15 +1,11 @@
-import json
+from datetime import datetime, timedelta 
+from babel.dates import format_date, format_time, get_timezone
 
-from datetime import datetime, timedelta
-from babel.dates import format_date, format_time
-from pyDolarVenezuela.request import content
-from pyDolarVenezuela.util import WorldTime
-
-response = content(WorldTime)
-datetime_obj = json.loads(response)['datetime']
+locality = get_timezone('America/Caracas')
+datetime_obj = datetime.now(locality)
 
 def get_time(date: str):
-    datetime_f = datetime.fromisoformat(datetime_obj)
+    datetime_f = datetime_obj
     listdate = date.split(' ')
 
     if len(listdate) == 3:
@@ -21,12 +17,11 @@ def get_time(date: str):
             hms = int(listdate[1])
 
         time_units = {
-            "semana": "weeks",
-            "semanas": "weeks",
+            "semana": "weeks", "semanas": "weeks",
             "día": "days", "días": "days",
             "horas": "hours", "hora": "hours",
             "minutos": "minutes", "minuto": "minutes",
-            "segundos": "seconds"
+            "segundos": "seconds", "segundo": "seconds"
         }
         
         duration = timedelta(**{time_units[time]: hms})
@@ -47,10 +42,8 @@ def get_time(date: str):
         return None 
 
 def get_time_zone():
-    datetime_str = datetime.strptime(datetime_obj, "%Y-%m-%dT%H:%M:%S.%f%z")
-
-    formatted_date = format_date(datetime_str.date(), format='full', locale='es')
-    formatted_time = format_time(datetime_str.time(), format='h:mm:ss a', locale='es')
+    formatted_date = format_date(datetime_obj.date(), format='full', locale='es')
+    formatted_time = format_time(datetime_obj.time(), format='h:mm:ss a', locale='es')
 
     return {
         "date": formatted_date,
