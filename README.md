@@ -11,7 +11,7 @@ La clase `Monitor` de la librería pyDolarVenezuela te permite obtener los valor
 
 La clase tiene dos métodos principales:
 
-`_load()`: Este método se encarga de cargar los datos de los monitores a través del scraping de la página web de referencia y almacenarlos en un diccionario.
+`_scraped()`: Este método se encarga de cargar los datos de los monitores a través del scraping de la página web de referencia y almacenarlos en un diccionario.
 
 `get_value_monitors()`: Este método permite acceder a los datos almacenados en el diccionario. El parámetro `monitor_code` indica el código del monitor del cual se desea obtener información, `name_property` accedes a la propiedad del diccionario para obtener su valor, mientras que el parámetro `prettify` permite mostrar los precios en formato de moneda con el símbolo de Bolívares. Si se proporciona un nombre de propiedad válido, se devolverá el valor correspondiente para ese monitor.
 
