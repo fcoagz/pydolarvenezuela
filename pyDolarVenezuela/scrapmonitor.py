@@ -65,7 +65,7 @@ class Monitor(object):
         Si se proporciona un nombre de propiedad válido, se devolverá el valor correspondiente para ese monitor.
         """
         self._scraped()
-        monitor_code = monitor_code.lower()
+        # monitor_code = monitor_code.lower() xd
 
         if not monitor_code:
             return self.data
