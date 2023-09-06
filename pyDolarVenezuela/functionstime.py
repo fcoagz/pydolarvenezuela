@@ -8,7 +8,7 @@ from pyDolarVenezuela.util import WorldTime
 response = content(WorldTime)
 datetime_obj = json.loads(response)['datetime']
 
-def get_time(date: str) -> (datetime | None):
+def get_time(date: str):
     datetime_f = datetime.fromisoformat(datetime_obj)
     listdate = date.split(' ')
 
