@@ -53,7 +53,8 @@ class Monitor(object):
                 "last_update": last_update,
                 "percent": percent,
                 "change": change,
-                "color": color
+                "color": color,
+                "symbol": symbol
             }
 
             self.data[_convert_specific_format(name)] = data
