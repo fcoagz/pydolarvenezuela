@@ -1,2 +1,2 @@
-from pyDolarVenezuela.module_bcv import Bcv
-from pyDolarVenezuela.scraping_monitor import Monitor
+from pyDolarVenezuela.modulebcv import Bcv
+from pyDolarVenezuela.scrapmonitor import Monitor
