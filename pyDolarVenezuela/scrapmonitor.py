@@ -67,13 +67,15 @@ class Monitor(object):
         Si se proporciona un nombre de propiedad válido, se devolverá el valor correspondiente para ese monitor.
         """
         self._scraped()
-        # monitor_code = monitor_code.lower() xd
 
         if not monitor_code:
             return self.data
-        if monitor_code not in self.data:
-            raise ValueError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
         
-        return (f"Bs. {self.data[monitor_code][name_property]}" if prettify and name_property == "price"
-                else self.data[monitor_code][name_property] if name_property in self.data[monitor_code]
-                else self.data[monitor_code])
+        try:
+            monitor_data = self.data[monitor_code.lower()]
+            if name_property:
+                value = monitor_data[name_property]
+                return f'Bs. {value}' if prettify and name_property == 'price' else value
+            return monitor_data
+        except KeyError:
+            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
