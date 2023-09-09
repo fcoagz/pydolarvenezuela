@@ -1,0 +1,1 @@
+from pyDolarVenezuela.time.functions import TimeDollar
