@@ -1,6 +1,9 @@
 from bs4 import BeautifulSoup
+from dataclasses import asdict
 
-from pyDolarVenezuela.functionstime import Time
+from pyDolarVenezuela.time.functions import TimeDollar
+from pyDolarVenezuela.module.dollar import InformationDollar
+from pyDolarVenezuela.calculator.function import currency_converter
 from pyDolarVenezuela.request import content
 from pyDolarVenezuela.util import ExchangeMonitor
 
@@ -25,7 +28,7 @@ class Monitor(object):
     def _scraped(self):
         response = content(self.url)
         soup = BeautifulSoup(response, "html.parser")
-        time = Time()
+        time = TimeDollar()
 
         section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
         _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
@@ -48,17 +51,17 @@ class Monitor(object):
             percent = str(result.find('p', "cambio-por").text)[1:].strip()
             change = str(result.find('p', "cambio-num").text)
 
-            data = {
-                "title": name,
-                "price": price,
-                "last_update": last_update,
-                "percent": percent,
-                "change": change,
-                "color": color,
-                "symbol": symbol
-            }
+            data = InformationDollar(
+                title=name,
+                price=price,
+                last_update=last_update,
+                percent=percent,
+                change=change,
+                color=color,
+                symbol=symbol
+            )
 
-            self.data[_convert_specific_format(name)] = data
+            self.data[_convert_specific_format(name)] = asdict(data)
 
     def get_value_monitors(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         """
@@ -79,3 +82,26 @@ class Monitor(object):
             return monitor_data
         except KeyError:
             raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
+    
+    def currency_converter(self, monitor_code: str, value, currency: str, prettify: bool = False):
+        """
+        Convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
+
+        monitor_code (str): El código del monitor a utilizar para la conversión.
+        value (float or int): La cantidad de dinero a convertir.
+        currency (str): La moneda en la que se encuentra la cantidad de dinero. Debe ser 'USD' o 'VES'.
+        prettify (bool): Si es True, devuelve el resultado en un formato más legible. Por defecto es False (Bs. [VALUE] | $[VALUE]).
+        """
+        self._scraped()
+
+        try:
+            monitor_data = self.data[monitor_code]
+            calculator = currency_converter(currency, value, monitor_data)
+            
+            if prettify and currency == 'VES':
+                return f"${calculator}"
+            elif prettify and currency == 'USD':
+                return f"Bs. {calculator}"
+            return f"{calculator}"
+        except KeyError:
+            raise KeyError("The monitor is invalid")
