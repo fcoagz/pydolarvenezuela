@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta 
 from babel.dates import format_date, format_time, get_timezone
 
-class Time(object):
+class TimeDollar(object):
     def __init__(self) -> None:
         locality = get_timezone('America/Caracas')
         self.datetime_obj = datetime.now(locality)
