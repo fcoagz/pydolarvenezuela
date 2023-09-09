@@ -36,10 +36,10 @@ get_value_binance = monitor.get_value_monitors(monitor_code='binance', name_prop
 import PyDolarVenezuela as pdv
 
 # Crear una instancia de PyDolarVenezuela
-converter = pdv.Monitor()
+monitor = pdv.Monitor()
 
 # Convertir 1000 bolívares a dólares utilizando el monitor "EnparaleloVzla"
-resultado = pdv.currency_converter("enparalelovzla", 1000, "VES", True)
+resultado = monitor.currency_converter("enparalelovzla", 1000, "VES", True)
 
 print(resultado)  # Imprime algo como "$28.71"
 ```
