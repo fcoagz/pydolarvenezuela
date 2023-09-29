@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '1.2.8'
+VERSION = '1.3.0'
 PACKAGE_NAME = 'pyDolarVenezuela' 
 AUTHOR = 'Francisco Griman'
 AUTHOR_EMAIL = 'grihardware@gmail.com'
@@ -16,10 +16,11 @@ LONG_DESC_TYPE = "text/markdown"
 
 INSTALL_REQUIRES = [
       'httpx',
+      'requests',
       'bs4',
       'beautifulsoup4',
-      'pyBCV',
-      'babel'
+      'babel',
+      'colorama'
       ]
 
 CLASSIFIERS = [
