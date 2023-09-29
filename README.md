@@ -1,5 +1,14 @@
 # pyDolarVenezuela
-pyDolarVenezuela es una librería de Python que te permite obtener los valores del dólar en diferentes monitores en Venezuela, así como las tasas de cambio del Banco Central de Venezuela. Con esta librería, puedes acceder a los precios del dólar en monitores como EnParaleloVzla, MonitorDolarWeb y Binance, y obtener información actualizada de las tasas de cambio para las monedas EUR, CNY, TRY y USD. La librería es fácil de usar y ofrece una manera rápida y eficiente de obtener información relevante sobre el mercado cambiario en Venezuela.
+pyDolarVenezuela es una librería de Python que te brinda la posibilidad de obtener los valores del dólar en distintos monitores en Venezuela, así como las tasas de cambio proporcionadas por el Banco Central de Venezuela. Esta librería consulta diversas páginas web que ofrecen información actualizada sobre el valor del dólar:
+
+| Página Web | URL |
+|------------|-------------|
+| Exchange Monitor | https://exchangemonitor.net/dolar-venezuela |
+| CriptoDolar | https://criptodolar.net/ |
+| BCV (Banco Central de Venezuela) | http://www.bcv.org.ve/ |
+
+
+pyDolarVenezuela tiene como objetivo principal brindar una solución eficiente y confiable para acceder a información relevante sobre el valor del dólar en Venezuela, ofreciendo así una herramienta valiosa para desarrolladores interesados en trabajar en este ámbito.
 
 ## Instalación
 ``` sh
@@ -7,58 +16,46 @@ pip install pyDolarVenezuela
 ```
 
 ## Uso
-La clase `Monitor` de la librería pyDolarVenezuela te permite obtener los valores del dólar en diferentes monitores en Venezuela.
+Para utilizar la librería, debes importar el módulo `pages`, donde encontrarás las variables que contienen la información sobre la página de donde obtendrás los valores. Además, deberás importar la clase `Monitor`, cuyo parámetro será la página que deseas utilizar.
 
-La clase tiene tres métodos principales:
+```python
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela import Monitor
 
-`_scraped()`: Este método se encarga de cargar los datos de los monitores a través del scraping de la página web de referencia y almacenarlos en un diccionario.
+monitor = Monitor(CriptoDolar)
+```
+El método `get_value_monitors()` se utiliza después de crear una instancia del objeto Monitor y permite acceder a los datos almacenados en el diccionario. Utiliza los parámetros `monitor_code`, name_property y `prettify` para obtener valores específicos y mostrarlos en formato monetario con símbolo de Bolívares si es necesario.
 
-`get_value_monitors()`: Este método permite acceder a los datos almacenados en el diccionario. El parámetro `monitor_code` indica el código del monitor del cual se desea obtener información, `name_property` accedes a la propiedad del diccionario para obtener su valor, mientras que el parámetro `prettify` permite mostrar los precios en formato de moneda con el símbolo de Bolívares. Si se proporciona un nombre de propiedad válido, se devolverá el valor correspondiente para ese monitor.
+```python
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela import Monitor
 
-`currency_converter()`: Este método convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
-### Ejemplo
-``` py
-import pyDolarVenezuela as pdv
-
-monitor = pdv.Monitor()
+monitor = Monitor(CriptoDolar)
 
 # Obtener los valores de todos los monitores
-values = monitor.get_value_monitors()
+valores_dolar = monitor.get_value_monitors()
 
 # Obtener el valor del dólar en EnParaleloVzla
-get_value_enparalelovzla = monitor.get_value_monitors(monitor_code='enparalelovzla', name_property='price', prettify=True)
+valor_dolar = monitor.get_value_monitors("enparalelovzla", "price", prettify=True)
 
-# Obtener la ultima actualizacion del dólar en Binance
-get_value_binance = monitor.get_value_monitors(monitor_code='binance', name_property='last_update', prettify=False)
-```
-### Ejemplo - Convertidor de Moneda
-```py
-import PyDolarVenezuela as pdv
-
-# Crear una instancia de PyDolarVenezuela
-monitor = pdv.Monitor()
-
-# Convertir 1000 bolívares a dólares utilizando el monitor "EnparaleloVzla"
-resultado = monitor.currency_converter("enparalelovzla", 1000, "VES", True)
-
-print(resultado)  # Imprime algo como "$28.71"
+print(valor_dolar)
 ```
 
-La clase `Bcv` tiene el siguiente metodo:
+La función `currency_converter` convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
 
-- `Bcv().get_rates()`: Te muestra los valores de las tasas de cambio del Banco Central de Venezuela. EUR, CNY, TRY, USD.
+```python
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela import Monitor
+from pyDolarVenezuela import currency_converter
 
-Los parametros del metodo ante mencionado son los siguientes:
+monitor = Monitor(CriptoDolar)
 
-- `currency_code`: Acepta un código de moneda o fecha como argumento.
-- `prettify`: Acepta un valor booleano si desea que el valor de la moneda salga junto con el simbolo de Bolivares. `Bs. [VALOR]`.
+information_dolar = monitor.get_value_monitors("enparalelovzla")
+price_in_dolares = currency_converter(
+    type='VES', # VES | USD
+    value=1000, # Bs. 1000
+    monitor=information_dolar # Datos del dolar
+)
 
-### Ejemplo
-``` py
-import pyDolarVenezuela as pdv
-
-bcv = pdv.Bcv()
-
-get_value_usd = bcv.get_rates(currency_code='USD', prettify=True)
-get_value_eur = bcv.get_rates(currency_code='EUR', prettify=False)
+print(price_in_dolares)  # Imprime algo como 28.22466836014677
 ```
