@@ -1,1 +1,0 @@
-ExchangeMonitor = "https://exchangemonitor.net"

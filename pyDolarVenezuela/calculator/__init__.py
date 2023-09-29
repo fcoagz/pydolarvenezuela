@@ -1,1 +1,0 @@
-from pyDolarVenezuela.calculator.function import currency_converter
