@@ -6,6 +6,7 @@ pyDolarVenezuela es una librería de Python que te brinda la posibilidad de obte
 | Exchange Monitor | https://exchangemonitor.net/dolar-venezuela |
 | CriptoDolar | https://criptodolar.net/ |
 | BCV (Banco Central de Venezuela) | http://www.bcv.org.ve/ |
+| iVenezuela | https://www.ivenezuela.travel/ |
 
 
 pyDolarVenezuela tiene como objetivo principal brindar una solución eficiente y confiable para acceder a información relevante sobre el valor del dólar en Venezuela, ofreciendo así una herramienta valiosa para desarrolladores interesados en trabajar en este ámbito.
@@ -27,7 +28,7 @@ monitor = Monitor(CriptoDolar)
 El método `get_value_monitors()` se utiliza después de crear una instancia del objeto Monitor y permite acceder a los datos almacenados en el diccionario. Utiliza los parámetros `monitor_code`, name_property y `prettify` para obtener valores específicos y mostrarlos en formato monetario con símbolo de Bolívares si es necesario.
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela
 from pyDolarVenezuela import Monitor
 
 monitor = Monitor(CriptoDolar)
@@ -44,7 +45,7 @@ print(valor_dolar)
 La función `currency_converter` convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela
 from pyDolarVenezuela import Monitor
 from pyDolarVenezuela import currency_converter
 
