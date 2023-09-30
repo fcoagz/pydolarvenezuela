@@ -39,8 +39,6 @@ class Monitor:
         El parámetro `monitor_code` indica el código del monitor del cual se desea obtener información, \
         mientras que el parámetro `prettify` permite mostrar los precios en formato de moneda con el símbolo de Bolívares. \
         Si se proporciona un nombre de propiedad válido, se devolverá el valor correspondiente para ese monitor.
-
-        Si estás usando en `iVenezuela`, obtendrás claves como `simple` e `image`, luego con la propiedad del nombre accedes al monitor, `prefitty` lo omite.
         """
         return Provider.select_monitor(self.provider, monitor_code, name_property, prettify)
 

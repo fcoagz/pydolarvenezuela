@@ -15,12 +15,16 @@ def _get_values_monitors(url: str):
     monitors_simple = section_information_dollar.find('p', style='font-size:16px')
     image_monitors = section_information_dollar.find_all('div', 'wp-block-image')
 
-    data = {
-        'simple': _extract_simple_data(monitors_simple),
-        'image': _extract_image_data(image_monitors)
-    }
+    information  = _extract_simple_data(monitors_simple)
+    image = _extract_image_data(image_monitors)
+    result = {}
 
-    return data
+    for key, value in information.items():
+        result[key] = value
+        if key in image:
+            result[key]['image'] = image[key]
+
+    return result
 
 def _extract_simple_data(monitors_simple):
     result = {}
@@ -40,11 +44,11 @@ def _extract_image_data(image_monitors):
     result = {}
     for image in image_monitors:
         title_map = {
-            'Tasa': 'BCV',
-            'Monitor': 'EnParaleloVzla',
-            'Dolartoday': 'DolarToday'
+            'Tasa': 'bcv',
+            'Monitor': 'enparalelovzla',
+            'Dolartoday': 'dolartoday'
         }
-        alt_text = str(image.find('img')['alt'])
+        alt_text = str(image.find('img')['alt']).split(' ')[0]
         for key, value in title_map.items():
             if key in alt_text:
                 if value not in result:
@@ -66,7 +70,7 @@ class iVenezuela:
                 self.data = _get_values_monitors(page.find('strong').find('a')['href'])
                 self.data['date'] = ' '.join(page.find('a').text.split('hoy  ')[1::])
     
-    def get_values(self, monitor_code: str = None, name_property: str = None, ARGS = None):
+    def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         self._load()
 
         if not monitor_code:
