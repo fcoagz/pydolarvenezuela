@@ -19,3 +19,8 @@ ExchangeMonitor = Monitor(
     name="Exchange Monitor",
     provider="https://exchangemonitor.net/"
 )
+
+iVenezuela = Monitor(
+    name="iVenezuela",
+    provider="https://www.ivenezuela.travel/"
+)
