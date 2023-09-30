@@ -22,10 +22,9 @@ class Provider:
     def select_monitor(self, monitor: Monitor, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         page = get_name_the_page(monitor.provider)
 
-        match(page):
-            case 'bcv':
-                return BCV(monitor.provider).get_values(monitor_code, name_property, prettify)
-            case 'exchangemonitor':
-                return ExchangeMonitor(monitor.provider).get_values(monitor_code, name_property, prettify)
-            case 'exchange':
-                return CriptoDolar(monitor.provider).get_values(monitor_code, name_property, prettify)
+        if page == 'bcv':
+            return BCV(monitor.provider).get_values(monitor_code, name_property, prettify)
+        elif page == 'exchangemonitor':
+            return ExchangeMonitor(monitor.provider).get_values(monitor_code, name_property, prettify)
+        elif page == 'exchange':
+            return CriptoDolar(monitor.provider).get_values(monitor_code, name_property, prettify)
