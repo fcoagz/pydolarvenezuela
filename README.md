@@ -20,7 +20,7 @@ pip install pyDolarVenezuela
 Para utilizar la librería, debes importar el módulo `pages`, donde encontrarás las variables que contienen la información sobre la página de donde obtendrás los valores. Además, deberás importar la clase `Monitor`, cuyo parámetro será la página que deseas utilizar.
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela
 from pyDolarVenezuela import Monitor
 
 monitor = Monitor(CriptoDolar)
