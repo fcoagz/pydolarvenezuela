@@ -3,6 +3,7 @@ from pyDolarVenezuela.pages import Monitor
 from .bcv import BCV
 from .criptodolar import CriptoDolar
 from .exchangemonitor import ExchangeMonitor
+from .ivenezuela import iVenezuela
 
 from urllib.parse import urlparse
 
@@ -28,3 +29,5 @@ class Provider:
             return ExchangeMonitor(monitor.provider).get_values(monitor_code, name_property, prettify)
         elif page == 'exchange':
             return CriptoDolar(monitor.provider).get_values(monitor_code, name_property, prettify)
+        elif page == 'ivenezuela':
+            return iVenezuela(monitor.provider).get_values(monitor_code, name_property, prettify)
