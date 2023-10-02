@@ -24,7 +24,7 @@ class ExchangeMonitor:
 
                 data = {
                     'title': json_response['name'],
-                    'price': json_response['price'],
+                    'price': str(json_response['price']).replace(',', '.'),
                     'symbol': json_response['symbol'],
                     'change': json_response['change'],
                     'percent': json_response['percent']

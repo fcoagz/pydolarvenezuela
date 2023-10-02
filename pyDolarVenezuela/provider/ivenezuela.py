@@ -37,7 +37,7 @@ def _extract_simple_data(monitors_simple):
         for key, value in title_map.items():
             if key in strong_tag.text:
                 price, symbol = _get_price_and_symbol_in_simple(strong_tag)
-                result[value.lower()] = {'title': value, 'price': price, 'symbol': symbol}
+                result[value.lower()] = {'title': value, 'price': price.replace(',', '.'), 'symbol': symbol}
     return result
 
 def _extract_image_data(image_monitors):
