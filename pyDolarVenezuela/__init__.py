@@ -4,6 +4,7 @@ from pyDolarVenezuela.tools import currency_converter
 from .provider import Provider
 
 import json
+from cachetools import cached, TTLCache
 from colorama import Fore
 
 version = '1.3.3'
@@ -24,7 +25,7 @@ def getdate():
     return t.get_time_zone()
 
 class Monitor:
-    def __init__(self, provider: pages.Monitor) -> None:
+    def __init__(self, provider: pages.Monitor, ) -> None:
         """
         La clase Monitor permite consultar los precios del dólar en diversos monitores en Venezuela. \n
         El método `get_value_monitors` permite acceder a los datos almacenados en el diccionario.
