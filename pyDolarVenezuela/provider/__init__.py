@@ -4,30 +4,20 @@ from .bcv import BCV
 from .criptodolar import CriptoDolar
 from .exchangemonitor import ExchangeMonitor
 from .ivenezuela import iVenezuela
-
-from urllib.parse import urlparse
-
-def get_name_the_page(url: str):
-    parsed_url = urlparse(url)
-    domain_parts = parsed_url.netloc.split('.')
-
-    if len(domain_parts) == 2:
-        return domain_parts[0]
-    else:
-        main_domain = domain_parts[-3] if not domain_parts[-3] == 'www' else domain_parts[-2]
-    
-    return main_domain
+from .dpedidos import Dpedidos
 
 class Provider:
     @classmethod
     def select_monitor(self, monitor: Monitor, monitor_code: str = None, name_property: str = None, prettify: bool = False):
-        page = get_name_the_page(monitor.provider)
+        page = monitor.name
 
-        if page == 'bcv':
+        if page == 'Banco Central de Venezuela':
             return BCV(monitor.provider).get_values(monitor_code, name_property, prettify)
-        elif page == 'exchangemonitor':
+        elif page == 'Exchange Monitor':
             return ExchangeMonitor(monitor.provider).get_values(monitor_code, name_property, prettify)
-        elif page == 'exchange':
+        elif page == 'Cripto Dolar':
             return CriptoDolar(monitor.provider).get_values(monitor_code, name_property, prettify)
-        elif page == 'ivenezuela':
+        elif page == 'iVenezuela':
             return iVenezuela(monitor.provider).get_values(monitor_code, name_property, prettify)
+        elif page == 'Monitor Dolar Venezuela':
+            return Dpedidos(monitor.provider).get_values(monitor_code, name_property, prettify)
