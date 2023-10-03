@@ -4,10 +4,9 @@ from pyDolarVenezuela.tools import currency_converter
 from .provider import Provider
 
 import json
-from cachetools import cached, TTLCache
 from colorama import Fore
 
-version = '1.3.3'
+version = '1.3.4'
 
 def check_dependence_version():
     response = network.get("https://pypi.org/pypi/pydolarvenezuela/json")
