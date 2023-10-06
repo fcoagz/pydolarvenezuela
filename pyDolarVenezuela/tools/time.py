@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from babel.dates import format_date, format_time, get_timezone
+from babel.dates import format_date, format_time
 from pytz import timezone
 
 class TimeDollar(object):
