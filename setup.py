@@ -20,7 +20,8 @@ INSTALL_REQUIRES = [
       'bs4',
       'beautifulsoup4',
       'babel',
-      'colorama'
+      'colorama',
+      'pytz'
       ]
 
 CLASSIFIERS = [

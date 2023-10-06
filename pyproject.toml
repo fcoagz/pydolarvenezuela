@@ -25,7 +25,8 @@ dependencies = [
       'bs4',
       'beautifulsoup4',
       'babel',
-      'colorama'
+      'colorama',
+      'pytz'
       ]
 
 [project.urls]
