@@ -80,7 +80,7 @@ class iVenezuela:
             monitor_data = self.data[monitor_code.lower()]
             if name_property:
                 value = monitor_data[name_property]
-                return value
+                return f'Bs. {value}' if prettify and name_property == 'price' else value
             return monitor_data
         except KeyError:
             raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
