@@ -1,13 +1,7 @@
 from pyDolarVenezuela import network
+from pyDolarVenezuela.utils import monitors_exchange
 
 import json
-
-monitors = ["dolar-em", "monitor_dolar_venezuela", "enparalelovzla", "monitor_dolar_vzla", "petro",
-"bcv", "remesas_zoom", "italcambio","bancamiga","banco_de_venezuela","banco-exterior",
-"banplus","bnc","banesco","bbva_provincial","mercantil","otras_instituciones",
-"binance","airtm","reserve","syklo","yadio",
-"dolartoday","mkambio" ,"cambios-r&a" ,"paypal" ,"zinli" ,
-"skrill" ,"amazon_gift_card"]
 
 class ExchangeMonitor:
     def __init__(self, url: str) -> None:
@@ -16,7 +10,7 @@ class ExchangeMonitor:
     def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = True):
         results = []
 
-        for monitor in monitors:
+        for monitor in monitors_exchange:
             if not monitor_code or monitor.lower() == monitor_code.lower():
                 params   = {'country': 've', 'type': monitor.replace('_', '-')}
                 response = network.get(self.url, params=params)

@@ -1,9 +1,8 @@
 from pyDolarVenezuela import network
-from pyDolarVenezuela.tools import TimeDollar
+from pyDolarVenezuela.tools import time
+from pyDolarVenezuela.utils import monitors
 
 import json
-
-monitors = {'binance': 'Binance', 'dolartoday': 'DolarToday', 'yadio': 'Yadio', 'airtm': 'Airtm', 'cambiosrya': 'Cambios R&A', 'mkambio': 'Mkambio', 'bcv': 'BCV', 'promediovip': 'EnParaleloVzlaVip', 'prom_epv': 'EnParalelovzla'}
 
 class Dpedidos:
     def __init__(self, url: str) -> None:
@@ -13,7 +12,6 @@ class Dpedidos:
         self.json_response = json_response['result'][0]
     
     def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = True):
-        t = TimeDollar()
         result = {}
 
         for key, title in monitors.items():
@@ -24,10 +22,10 @@ class Dpedidos:
                 }
 
                 if key == 'prom_epv':
-                    data['last_update'] = t.get_time(f"{self.json_response['fecha_epv']} {'13' if self.json_response['hora_epv'] == '1' else self.json_response['hora_epv']}:00", True)
+                    data['last_update'] = time.get_time(f"{self.json_response['fecha_epv']} {'13' if self.json_response['hora_epv'] == '1' else self.json_response['hora_epv']}:00")
                 
                 result[title.lower()] = data
-        result['last_update'] = t.get_time(f"{self.json_response['fecha']} {self.json_response['hora']}", True)
+        result['last_update'] = time.get_time(f"{self.json_response['fecha']} {self.json_response['hora']}")
 
         if not monitor_code:
             return result

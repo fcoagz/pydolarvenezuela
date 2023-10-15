@@ -1,5 +1,5 @@
 from pyDolarVenezuela import network
-from pyDolarVenezuela.tools import TimeDollar
+from pyDolarVenezuela.tools import time
 
 import json
 
@@ -23,17 +23,16 @@ class CriptoDolar:
         self.json_response = json.loads(response)
     
     def _load(self):
-        t = TimeDollar()
         self.data = {}
 
         for monitor in self.json_response:
             if 'bolivar' in monitor['type'] or 'bancove' in monitor['type']:
                 data = {
                     'title': _convert_dollar_name_to_monitor_name(monitor['name']),
-                    'price': monitor['price'],
+                    'price': round(monitor['price'], 2),
                     'price_old': monitor['priceOld'],
                     'type': 'bank' if monitor['type'] == 'bancove' else 'monitor',
-                    'last_update': t.get_time(monitor['updatedAt']),
+                    'last_update': time.get_time_standard(monitor['updatedAt']),
                 }
 
                 self.data[_convert_specific_format(data['title'])] = data

@@ -1,12 +1,12 @@
-from pyDolarVenezuela import pages
-from pyDolarVenezuela import network
-from pyDolarVenezuela.tools import currency_converter
+from pyDolarVenezuela import network, pages
+from pyDolarVenezuela.tools import get_time_zone as getdate, currency_converter
+
 from .provider import Provider
 
 import json
 from colorama import Fore
 
-version = '1.3.6'
+version = '1.3.7'
 
 def check_dependence_version():
     response = network.get("https://pypi.org/pypi/pydolarvenezuela/json")
@@ -17,14 +17,8 @@ def check_dependence_version():
 
 check_dependence_version()
 
-def getdate():
-    from pyDolarVenezuela.tools import TimeDollar
-    t = TimeDollar()
-
-    return t.get_time_zone()
-
 class Monitor:
-    def __init__(self, provider: pages.Monitor, ) -> None:
+    def __init__(self, provider: pages.Monitor) -> None:
         """
         La clase Monitor permite consultar los precios del dólar en diversos monitores en Venezuela. \n
         El método `get_value_monitors` permite acceder a los datos almacenados en el diccionario.
@@ -33,7 +27,7 @@ class Monitor:
             raise TypeError("El parámetro debe ser un objeto del tipo Monitor.")
         
         self.provider = provider
-
+    
     def get_value_monitors(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         """
         El parámetro `monitor_code` indica el código del monitor del cual se desea obtener información, \
