@@ -17,3 +17,11 @@ monitors_exchange = ["dolar-em", "monitor_dolar_venezuela", "enparalelovzla", "m
 "binance","airtm","reserve","syklo","yadio",
 "dolartoday","mkambio" ,"cambios-r&a" ,"paypal" ,"zinli" ,
 "skrill" ,"amazon_gift_card"]
+
+time_units = {
+    "semana": "weeks", "semanas": "weeks",
+    "día": "days", "días": "days",
+    "horas": "hours", "hora": "hours",
+    "minutos": "minutes", "minuto": "minutes",
+    "segundos": "seconds", "segundo": "seconds"
+}

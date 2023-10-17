@@ -6,7 +6,7 @@ from .provider import Provider
 import json
 from colorama import Fore
 
-version = '1.3.7'
+version = '1.3.8'
 
 def check_dependence_version():
     response = network.get("https://pypi.org/pypi/pydolarvenezuela/json")

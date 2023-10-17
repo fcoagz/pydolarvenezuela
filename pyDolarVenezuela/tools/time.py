@@ -2,6 +2,8 @@ from babel.dates import format_date, format_time
 from datetime import datetime, timedelta
 from pytz import timezone
 
+from pyDolarVenezuela.utils import time_units
+
 standard_time_zone = timezone('America/Caracas')
 
 def get_time(date_string: str):
@@ -11,6 +13,38 @@ def get_time(date_string: str):
     datetime_obj = datetime.strptime(date_string, '%Y-%m-%d %H:%M')
     
     return datetime_obj.strftime('%d/%m/%Y, %I:%M %p')
+
+def get_formatted_time(date_string: str):
+    """
+    Formatear string a strdatetime. Solo que esta formateada primeramente como (Hace una Hora).
+    """
+    datetime_obj = datetime.now(standard_time_zone)
+    listdate = date_string.split(' ')
+
+    if len(listdate) == 3:
+        time = listdate[-1]
+
+        if listdate[1] == "un" or listdate[1] == "una":
+            hms = 1
+        else:
+            hms = int(listdate[1])
+        
+        duration = timedelta(**{time_units[time]: hms})
+        exact_time = datetime_obj - duration
+
+        if time == "día" or time == "días":
+            return exact_time.strftime("%d/%m/%Y") 
+            
+        return exact_time.strftime("%d/%m/%Y, %I:%M %p")
+        
+    elif len(listdate) == 5:
+        duration = timedelta(days=30)
+
+        exact_time = datetime_obj - duration
+        return exact_time.strftime("%d/%m/%Y")
+        
+    else:
+        return None 
 
 def get_time_standard(date_string: str):
     """
