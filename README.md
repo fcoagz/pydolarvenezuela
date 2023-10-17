@@ -25,7 +25,7 @@ Para utilizar la librería, debes importar el módulo `pages`, donde encontrará
 from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela, Dpedidos
 from pyDolarVenezuela import Monitor
 
-monitor = Monitor(CriptoDolar)
+monitor = Monitor(ExchangeMonitor)
 ```
 El método `get_value_monitors()` se utiliza después de crear una instancia del objeto Monitor y permite acceder a los datos almacenados en el diccionario. Utiliza los parámetros `monitor_code`, name_property y `prettify` para obtener valores específicos y mostrarlos en formato monetario con símbolo de Bolívares si es necesario.
 
@@ -33,7 +33,7 @@ El método `get_value_monitors()` se utiliza después de crear una instancia del
 from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela, Dpedidos
 from pyDolarVenezuela import Monitor
 
-monitor = Monitor(CriptoDolar)
+monitor = Monitor(ExchangeMonitor)
 
 # Obtener los valores de todos los monitores
 valores_dolar = monitor.get_value_monitors()
@@ -51,7 +51,7 @@ from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela
 from pyDolarVenezuela import Monitor
 from pyDolarVenezuela import currency_converter
 
-monitor = Monitor(CriptoDolar)
+monitor = Monitor(ExchangeMonitor)
 
 information_dolar = monitor.get_value_monitors("enparalelovzla")
 price_in_dolares = currency_converter(
