@@ -1,6 +1,8 @@
 from pyDolarVenezuela import network
 from bs4 import BeautifulSoup
 
+endpoint = 'venezuela/dolar/precio-dolar-venezuela-{0}-{1}-{2}-{3}-oficial-bcv-paralelo-monitor-dolartoday/'
+
 def _get_price_and_symbol_in_simple(strong_tag: BeautifulSoup):
     price = str(strong_tag.find_next('strong').text).split('Bs.')[-1][:-1].strip()
     symbol = str(strong_tag.find_next('strong').text).split('Bs.')[-1][-1]
@@ -59,6 +61,7 @@ def _extract_image_data(image_monitors):
 
 class iVenezuela:
     def __init__(self, url: str) -> None:
+        self.url = url
         response  = network.get(url + 'precio-dolar-venezuela-dolartoday-monitor-oficial-bcv-hoy-tipo-de-cambio/')
         self.soup = BeautifulSoup(response, "html.parser")
     
@@ -67,8 +70,20 @@ class iVenezuela:
 
         for page in section_information_dollar.find_all('p', 'has-text-align-center'):
             if page.find('a'):
-                self.data = _get_values_monitors(page.find('strong').find('a')['href'])
-                self.data['date'] = ' '.join(page.find('a').text.split('hoy  ')[1::])
+                href = page.find('strong').find('a')['href']
+                date_text = page.find('a').text.split('hoy  ')[1::]
+                
+                self.data = _get_values_monitors(href)
+                self.data['date'] = ' '.join(date_text)
+                        
+            elif 'Precio Dólar VENEZUELA' in page.text:
+                date_words = str(page.text).split()[-5:]
+                date_words.pop(2)
+
+                href = self.url + endpoint.format(*date_words)
+
+                self.data = _get_values_monitors(href)
+                self.data['date'] = ' '.join(date_words)
     
     def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         self._load()
