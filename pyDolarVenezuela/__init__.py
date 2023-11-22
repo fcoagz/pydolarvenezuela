@@ -1,12 +1,12 @@
-from pyDolarVenezuela import network, pages
-from pyDolarVenezuela.tools import get_time_zone as getdate, currency_converter
-
-from .provider import Provider
+from . import network
+from .pages import Monitor as Page
+from .tools import get_time_zone as getdate, currency_converter
+from .provider import select_monitor
 
 import json
 from colorama import Fore
 
-version = '1.3.9'
+version = '1.4.0'
 
 def check_dependence_version():
     response = network.get("https://pypi.org/pypi/pydolarvenezuela/json")
@@ -18,22 +18,29 @@ def check_dependence_version():
 check_dependence_version()
 
 class Monitor:
-    def __init__(self, provider: pages.Monitor) -> None:
+    def __init__(self, provider: Page, currency: str = 'USD') -> None:
         """
-        La clase Monitor permite consultar los precios del dólar en diversos monitores en Venezuela. \n
-        El método `get_value_monitors` permite acceder a los datos almacenados en el diccionario.
+        La clase `Monitor` proporciona funcionalidades para consultar los precios de diversos monitores en Venezuela.
+
+        Parámetros:
+        - `provider`: La página de la que se accederán los datos.
+        - `currency`: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
         """
-        if not isinstance(provider, pages.Monitor):
-            raise TypeError("El parámetro debe ser un objeto del tipo Monitor.")
+        if not isinstance(provider, Page):
+            raise TypeError("The parameter must be an object of type Monitor.")
         
         self.provider = provider
+        self.currency = currency.lower()
     
     def get_value_monitors(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
         """
-        El parámetro `monitor_code` indica el código del monitor del cual se desea obtener información, \
-        mientras que el parámetro `prettify` permite mostrar los precios en formato de moneda con el símbolo de Bolívares. \
-        Si se proporciona un nombre de propiedad válido, se devolverá el valor correspondiente para ese monitor.
-        """
-        return Provider.select_monitor(self.provider, monitor_code, name_property, prettify)
+        El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
+
+        Parámetros:
+        - `monitor_code`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+        - `name_property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
+        - `prettify`: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
+        """ 
+        return select_monitor(self.provider, self.currency, monitor_code, name_property, prettify)
 
 __all__ = ['pages', 'currency_converter', 'getdate', 'Monitor']

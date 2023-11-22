@@ -85,7 +85,7 @@ class iVenezuela:
                 self.data = _get_values_monitors(href)
                 self.data['date'] = ' '.join(date_words)
     
-    def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = False):
+    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
         self._load()
 
         if not monitor_code:

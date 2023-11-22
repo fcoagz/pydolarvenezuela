@@ -13,11 +13,12 @@ def _get_time(soup: BeautifulSoup):
     return date.text.strip().replace('  ', ' ')
 
 class BCV:
-    def __init__(self, url: str) -> None:
-        response = requests.get(url, verify=False)
+    def __init__(self, url: str, currency: str) -> None:
+        response      = requests.get(url, verify=False)
         response.raise_for_status()
 
-        self.soup = BeautifulSoup(response.content, 'html.parser')
+        self.soup     = BeautifulSoup(response.content, 'html.parser')
+        self.currency = currency
 
     def _load(self) -> None:
         section_tipo_de_cambio_oficial = self.soup.find("div", "view-tipo-de-cambio-oficial-del-bcv")
@@ -32,7 +33,7 @@ class BCV:
                 "price_old": _get_rate_by_id(values['id'], section_tipo_de_cambio_oficial)
             }
 
-    def get_values(self, currency_code: str = None, name_property: str = None, prettify: bool = True):
+    def get_values(self, currency_code: str, name_property: str, prettify: bool):
         self._load()
 
         if not currency_code:

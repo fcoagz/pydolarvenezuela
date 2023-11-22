@@ -8,7 +8,7 @@ def get(url: str, params: dict = None, verify: bool = True):
     return response.content
 
 def curl(url: str, impersonate: str = "chrome110"):
-    response = cffi.get(url, impersonate=impersonate)
+    response = cffi.get(url, impersonate=impersonate, timeout=10.0)
     response.raise_for_status()
 
     return response.content

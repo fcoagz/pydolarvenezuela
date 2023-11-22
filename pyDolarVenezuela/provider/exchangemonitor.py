@@ -1,8 +1,7 @@
-from pyDolarVenezuela import network
-from pyDolarVenezuela.tools import time
+from .. import network
+from ..tools import time
 
 from bs4 import BeautifulSoup
-import json
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -14,8 +13,9 @@ def _get_values_monitors(soup: BeautifulSoup):
     return [value for value in soup]
 
 class ExchangeMonitor:
-    def __init__(self, url: str) -> None:
-        response = network.curl(url + "dolar-venezuela")
+    def __init__(self, url: str, currency: str) -> None:
+        response = (network.curl(url + "dolar-venezuela") if currency == 'usd'
+                    else network.curl(url + "dolar-venezuela/EUR"))
         self.soup = BeautifulSoup(response, "html.parser")
     
     def _load(self):
@@ -50,7 +50,7 @@ class ExchangeMonitor:
 
             self.data[_convert_specific_format(name)] = data
     
-    def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = True):
+    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
         self._load()
 
         if not monitor_code:

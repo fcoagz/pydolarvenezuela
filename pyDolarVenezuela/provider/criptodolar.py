@@ -10,23 +10,25 @@ def _convert_specific_format(text: str, character: str = '_') -> str:
     return text
 
 def _convert_dollar_name_to_monitor_name(monitor_name: str):
-    if monitor_name.split(' ')[0] == 'Dólar' and monitor_name != 'Dólar Today':
-        if monitor_name == 'Dólar Monitor':
+    if monitor_name.split(' ')[0] in ['Dólar', 'Euro'] and monitor_name not in ['Dólar Today', 'Euro Today']:
+        if monitor_name in ['Dólar Monitor', 'Euro Monitor']:
             return 'EnParaleloVzla'
         else:
             return monitor_name.split(' ')[1]
     return monitor_name
 
 class CriptoDolar:
-    def __init__(self, url: str) -> None:
-        response           = network.get(url + "coins/latest")
+    def __init__(self, url: str, currency: str) -> None:
+        response           = (network.get(url + "coins/latest") if currency == 'usd'
+                              else network.get(url + "coins/latest", {'type': 'bolivar', 'base': 'eur'}))
         self.json_response = json.loads(response)
+        self.currency = currency
     
     def _load(self):
         self.data = {}
 
         for monitor in self.json_response:
-            if 'bolivar' in monitor['type'] or 'bancove' in monitor['type']:
+            if monitor['type'] in ['bolivar', 'bancove']:
                 data = {
                     'title': _convert_dollar_name_to_monitor_name(monitor['name']),
                     'price': round(monitor['price'], 2),
@@ -37,7 +39,7 @@ class CriptoDolar:
 
                 self.data[_convert_specific_format(data['title'])] = data
     
-    def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = True):
+    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
         self._load()
 
         if not monitor_code:

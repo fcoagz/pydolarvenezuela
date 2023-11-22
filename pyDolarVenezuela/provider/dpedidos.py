@@ -5,13 +5,14 @@ from pyDolarVenezuela.utils import monitors
 import json
 
 class Dpedidos:
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: str, currency: str) -> None:
         response           = network.get(url + 'minmaxhistorial')
-        json_response = json.loads(response)
+        json_response      = json.loads(response)
 
         self.json_response = json_response['result'][0]
+        self.currency      = currency
     
-    def get_values(self, monitor_code: str = None, name_property: str = None, prettify: bool = True):
+    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
         result = {}
 
         for key, title in monitors.items():

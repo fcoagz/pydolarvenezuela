@@ -1,4 +1,5 @@
 .vercel
 dist
 pyDolarVenezuela.egg-info
+pyDolarVenezuela/assets
 __pycache__
