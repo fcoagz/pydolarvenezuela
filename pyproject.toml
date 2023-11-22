@@ -1,34 +1,44 @@
 [project]
 name = "pyDolarVenezuela"
 version = "1.4.0"
-authors = [
-  { name="Francisco Griman", email="grihardware@gmail.com" },
+dependencies = [
+  "requests",
+  "curl_cffi",
+  "bs4",
+  "beautifulsoup4",
+  "babel",
+  "pytz",
+  "colorama",
 ]
-description = "esta es una librería en python que te permite consultar los precios del dólar en diferentes monitores en Venezuela y el dolar oficial BCV."
-readme = "README.md"
 requires-python = ">=3.9"
+authors = [
+  {name = "Francisco Griman", email = "grihardware@gmail.com"}
+]
+description = "Esta librería en Python consulta los precios del dólar y/o euro en diversos monitores en Venezuela, además de la tasa de cambio oficial BCV."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = [
+  "dolarmonitor",
+  "dolartoday",
+  "enparalelovzla",
+  "bcv",
+  "venezuela",
+  "dolarparalelo",
+  "dolarcambio",
+  "dolarvenezuela",
+  "dolartodayvenezuela",
+  "dolaroficial",
+  "dolarlibre",
+  "dolarinformal",
+  "dolarparalelovzla",
+  "dolarbcv",
+  "dolarenvenezuela"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-keywords = [
-    "dolarmonitor",
-    "dolartoday",
-    "enparalelovzla",
-    "bcv",
-    "venezuela"
-]
-dependencies = [
-      'requests',
-      'curl_cffi',
-      'bs4',
-      'beautifulsoup4',
-      'babel',
-      'colorama',
-      'pytz'
-      ]
-
 [project.urls]
 "Homepage" = "https://github.com/fcoagz/pydolarvenezuela"
 "Bug Tracker" = "https://github.com/fcoagz/pydolarvenezuela/issues"
