@@ -1,4 +1,4 @@
-![Portada pyDolarVenezuela](https://github.com/fcoagz/pydolarvenezuela/blob/main/static/pyDolarVenezuela.jpg)
+![Portada pyDolarVenezuela](https://github.com/fcoagz/pydolarvenezuela/blob/main/static/pyDolarVenezuela.jpg?raw=true)
 
 pyDolarVenezuela es una librería de Python que te brinda la posibilidad de obtener los valores del dólar en distintos monitores en Venezuela, así como las tasas de cambio proporcionadas por el Banco Central de Venezuela. Esta librería consulta diversas páginas web que ofrecen información actualizada sobre el valor del dólar:
 
@@ -19,21 +19,33 @@ pip install pyDolarVenezuela
 ```
 
 ## Uso
-Para utilizar la librería, debes importar el módulo `pages`, donde encontrarás las variables que contienen la información sobre la página de donde obtendrás los valores. Además, deberás importar la clase `Monitor`, cuyo parámetro será la página que deseas utilizar.
+Debes importar el módulo `pages`, donde encontrarás una variedad de atributos que contienen información sobre una página específica de la que deseas obtener los datos. Adicionalmente deberás importar la clase `Monitor`, cuyos parámetros será la página que deseas utilizar y la moneda en la que se expresarán los precios (`USD`, `EUR`).
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela, Dpedidos
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
 from pyDolarVenezuela import Monitor
 
-monitor = Monitor(ExchangeMonitor)
+monitor = Monitor(ExchangeMonitor, 'USD')
 ```
-El método `get_value_monitors()` se utiliza después de crear una instancia del objeto Monitor y permite acceder a los datos almacenados en el diccionario. Utiliza los parámetros `monitor_code`, name_property y `prettify` para obtener valores específicos y mostrarlos en formato monetario con símbolo de Bolívares si es necesario.
+
+El parámetro `currency` de la clase `Monitor` por defecto tiene el valor: `USD`, verifique que la página de la que desea obtener los datos pueda expresar precios en `EUR`.
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela, Dpedidos
+print(ExchangeMonitor.currencies)
+
+>> ['usd', 'eur']
+```
+El método `get_value_monitors` se utiliza después de crear una instancia del objeto Monitor y permite el acceso a los datos almacenados en el diccionario. Los siguientes parámetros serían los siguientes:
+
+- `monitor_code`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+- `name_property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
+- `prettify`: Muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
+
+```python
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
 from pyDolarVenezuela import Monitor
 
-monitor = Monitor(ExchangeMonitor)
+monitor = Monitor(ExchangeMonitor, 'USD')
 
 # Obtener los valores de todos los monitores
 valores_dolar = monitor.get_value_monitors()
@@ -47,15 +59,15 @@ print(valor_dolar)
 La función `currency_converter` convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, iVenezuela, Dpedidos
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
 from pyDolarVenezuela import Monitor
 from pyDolarVenezuela import currency_converter
 
-monitor = Monitor(ExchangeMonitor)
+monitor = Monitor(ExchangeMonitor, 'USD')
 
 information_dolar = monitor.get_value_monitors("enparalelovzla")
 price_in_dolares = currency_converter(
-    type='VES', # VES | USD
+    type='VES', # VES | USD | EUR
     value=1000, # Bs. 1000
     monitor=information_dolar # Datos del dolar
 )
