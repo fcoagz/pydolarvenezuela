@@ -4,7 +4,6 @@ version = "1.4.0"
 dependencies = [
   "requests",
   "curl_cffi",
-  "bs4",
   "beautifulsoup4",
   "babel",
   "pytz",

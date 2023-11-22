@@ -17,7 +17,6 @@ LONG_DESC_TYPE = "text/markdown"
 INSTALL_REQUIRES = [
       'requests',
       'curl_cffi',
-      'bs4',
       'beautifulsoup4',
       'babel',
       'colorama',
