@@ -8,7 +8,7 @@ def currency_converter(type: str, value, monitor: dict):
         if isinstance(value, int) or isinstance(value, float):
             if type == 'VES':
                 return value / float(price_monitor)
-            elif type == 'USD':
+            elif type in ['USD', 'EUR']:
                 return value * float(price_monitor)
             else:
                 raise ValueError(f"The type must be USD or VES not {type}")
