@@ -19,7 +19,7 @@ def _convert_dollar_name_to_monitor_name(monitor_name: str):
 
 class CriptoDolar:
     def __init__(self, url: str, currency: str) -> None:
-        response           = (network.get(url + "coins/latest") if currency == 'usd'
+        response           = (network.get(url + "coins/latest", {'type': 'bolivar', 'base': 'usd'}) if currency == 'usd'
                               else network.get(url + "coins/latest", {'type': 'bolivar', 'base': 'eur'}))
         self.json_response = json.loads(response)
         self.currency = currency
