@@ -22,20 +22,24 @@ monitor_classes = {
     }
 }
 
-def select_monitor(provider: Monitor,
-                   currency: str,
-                   monitor_code: str,
-                   name_property: str,
-                   prettify: bool):
-    
+def select_monitor(provider: Monitor, **kwargs):
+    currency = kwargs.get('currency')
+    monitor_code = kwargs.get('monitor_code')
+    name_property = kwargs.get('name_property')
+    prettify = kwargs.get('prettify', False)
+
     if currency not in ['usd', 'eur']:
-        raise ValueError(f"The type must be 'usd' or 'eur' not {currency}")
+        raise ValueError(f"The currency type must be 'usd' or 'eur', not {currency}")
 
     try:
         monitor_class = monitor_classes.get(currency).get(provider.name)
         if monitor_class is not None:
-            return monitor_class(provider.provider, currency).get_values(monitor_code, name_property, prettify)
+            return monitor_class(provider.provider, currency).get_values(
+                monitor_code=monitor_code,
+                name_property=name_property, 
+                prettify=prettify
+            )
         else:
-            raise ValueError(f"Provider not supported")
+            raise ValueError("Provider not supported")
     except Exception as e:
         raise e
