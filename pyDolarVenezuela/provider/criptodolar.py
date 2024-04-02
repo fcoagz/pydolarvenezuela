@@ -1,7 +1,6 @@
-from pyDolarVenezuela import network
-from pyDolarVenezuela.tools import time
-
 import json
+from .. import network
+from ..tools import time
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -39,7 +38,11 @@ class CriptoDolar:
 
                 self.data[_convert_specific_format(data['title'])] = data
     
-    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
+    def get_values(self, **kwargs):
+        monitor_code = kwargs.get('monitor_code')
+        name_property = kwargs.get('name_property')
+        prettify = kwargs.get('prettify', False)
+        
         self._load()
 
         if not monitor_code:

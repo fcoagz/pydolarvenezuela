@@ -1,7 +1,7 @@
+from bs4 import BeautifulSoup
+
 from .. import network
 from ..tools import time
-
-from bs4 import BeautifulSoup
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -32,6 +32,7 @@ class ExchangeMonitor:
             if price.count('.') == 2:
                 price = price.replace('.', '', 1)
 
+            price = float(price)
             last_update = time.get_formatted_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
             symbol = str(result.find('p', "cambio-por").text)[0] if not str(result.find('p', "cambio-por").text)[0] == ' ' else ''
             color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
@@ -50,7 +51,11 @@ class ExchangeMonitor:
 
             self.data[_convert_specific_format(name)] = data
     
-    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
+    def get_values(self, **kwargs):
+        monitor_code = kwargs.get('monitor_code')
+        name_property = kwargs.get('name_property')
+        prettify = kwargs.get('prettify', False)
+        
         self._load()
 
         if not monitor_code:

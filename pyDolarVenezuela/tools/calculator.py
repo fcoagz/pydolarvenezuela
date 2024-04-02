@@ -1,4 +1,6 @@
-def currency_converter(type: str, value, monitor: dict):
+from typing import Literal
+
+def currency_converter(type: Literal['VES', 'USD', 'EUR'], value, monitor: dict):
     """
     Convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
     """

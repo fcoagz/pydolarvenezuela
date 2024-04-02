@@ -1,4 +1,4 @@
-from pyDolarVenezuela import network
+from .. import network
 from bs4 import BeautifulSoup
 
 endpoint = 'venezuela/dolar/precio-dolar-venezuela-{0}-{1}-{2}-{3}-oficial-bcv-paralelo-monitor-dolartoday/'
@@ -85,7 +85,11 @@ class iVenezuela:
                 self.data = _get_values_monitors(href)
                 self.data['date'] = ' '.join(date_words)
     
-    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
+    def get_values(self, **kwargs):
+        monitor_code = kwargs.get('monitor_code')
+        name_property = kwargs.get('name_property')
+        prettify = kwargs.get('prettify', False)
+        
         self._load()
 
         if not monitor_code:

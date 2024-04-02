@@ -1,8 +1,8 @@
-from pyDolarVenezuela import network
-from pyDolarVenezuela.tools import time
-from pyDolarVenezuela.utils import monitors
-
 import json
+
+from .. import network
+from ..tools import time
+from ..utils import monitors
 
 class Dpedidos:
     def __init__(self, url: str, currency: str) -> None:
@@ -12,7 +12,11 @@ class Dpedidos:
         self.json_response = json_response['result'][0]
         self.currency      = currency
     
-    def get_values(self, monitor_code: str, name_property: str, prettify: bool):
+    def get_values(self, **kwargs):
+        monitor_code = kwargs.get('monitor_code')
+        name_property = kwargs.get('name_property')
+        prettify = kwargs.get('prettify', False)
+        
         result = {}
 
         for key, title in monitors.items():

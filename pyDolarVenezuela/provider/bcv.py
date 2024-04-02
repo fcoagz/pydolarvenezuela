@@ -1,7 +1,7 @@
-from pyDolarVenezuela.utils import currencies
-
 import requests
 from bs4 import BeautifulSoup
+
+from ..utils import currencies
 
 requests.packages.urllib3.disable_warnings()
 
@@ -9,8 +9,8 @@ def _get_rate_by_id(tag_id: str, soup: BeautifulSoup):
     return float(soup.find(id=tag_id).find("strong").text.strip().replace(',', '.'))
 
 def _get_time(soup: BeautifulSoup):
-    date = soup.find("span", "date-display-single")
-    return date.text.strip().replace('  ', ' ')
+    date = soup.find("span", "date-display-single").get('content')
+    return date.split('T')[0].replace('-', '/')
 
 class BCV:
     def __init__(self, url: str, currency: str) -> None:
@@ -33,7 +33,11 @@ class BCV:
                 "price_old": _get_rate_by_id(values['id'], section_tipo_de_cambio_oficial)
             }
 
-    def get_values(self, currency_code: str, name_property: str, prettify: bool):
+    def get_values(self, **kwargs):
+        currency_code = kwargs.get('monitor_code')
+        name_property = kwargs.get('name_property')
+        prettify = kwargs.get('prettify', False)
+        
         self._load()
 
         if not currency_code:
@@ -42,6 +46,8 @@ class BCV:
         try:
             monitor_data = self.rates[currency_code.lower()]
             if name_property:
+                if name_property == 'last_update':
+                    return self.rates['last_update']
                 value = monitor_data[name_property]
                 return f'Bs. {value}' if prettify and name_property == 'price' else value
             return monitor_data
