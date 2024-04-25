@@ -28,6 +28,36 @@ from pyDolarVenezuela import Monitor
 monitor = Monitor(ExchangeMonitor, 'USD')
 ```
 
+pyDolarVenezuela utiliza [Redis](https://github.com/redis/redis-py), un motor de base de datos en memoria, para almacenar y procesar datos. Esto nos ayuda para calcular el cambio, el porcentaje, el color y el símbolo, y se devuelven los datos actualizados.
+
+```python
+from pyDolarVenezuela import Monitor, Redis
+from pyDolarVenezuela.models.pages import BCV, CriptoDolar, ExchangeMonitor
+
+# Defecto
+db = Redis(
+    host='localhost',
+    port=6379
+)
+
+monitor = Monitor(CriptoDolar, 'USD', db=db)
+
+```
+Si prefieres utilizar [Redis Cloud](https://app.redislabs.com/) en lugar de una instancia local de `Redis`, puedes hacerlo cambiando el host y el puerto cuando creas la instancia de `Redis`.
+
+```python
+db = Redis(
+    host='redis-cloud-host',
+    port='redis-cloud-port',
+    password='*************'
+)
+```
+
+```
+Aunque Redis puede funcionar en Windows, no es una versión oficial. Para un entorno de producción estable, se recomienda instalar Redis en Linux o utilizar Redis Cloud.
+```
+
+
 El parámetro `currency` de la clase `Monitor` por defecto tiene el valor: `USD`, verifique que la página de la que desea obtener los datos pueda expresar precios en `EUR`.
 
 ```python
@@ -35,6 +65,7 @@ print(ExchangeMonitor.currencies)
 
 >> ['usd', 'eur']
 ```
+
 El método `get_value_monitors` se utiliza después de crear una instancia del objeto Monitor y permite el acceso a los datos almacenados en el diccionario. Los siguientes parámetros serían los siguientes:
 
 - `monitor_code`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
