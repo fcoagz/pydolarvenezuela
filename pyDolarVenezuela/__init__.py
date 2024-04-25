@@ -3,12 +3,13 @@ from typing import Literal
 from colorama import Fore
 
 from . import network
+from .models import pages
 from .models.pages import Monitor as Page
 from .data.redis import Redis
 from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor
 
-version = '1.4.2'
+version = '1.4.3'
 
 class CheckVersion:
     check = True
