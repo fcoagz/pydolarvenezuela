@@ -8,7 +8,7 @@ from .dpedidos import Dpedidos
 from ..data.redis import Cache
 from ..models.database import Redis
 from ..models.pages import Monitor
-from ..models.pages import BCV as B, CriptoDolar as C, Dpedidos as D, ExchangeMonitor as E, iVenezuela as I 
+from ..pages import BCV as B, CriptoDolar as C, Dpedidos as D, ExchangeMonitor as E, iVenezuela as I 
 
 monitor_classes = {
     'usd': {
