@@ -1,6 +1,6 @@
 [project]
 name = "pyDolarVenezuela"
-version = "1.4.2"
+version = "1.4.3"
 dependencies = [
   "requests",
   "curl_cffi",
@@ -8,6 +8,7 @@ dependencies = [
   "babel",
   "pytz",
   "colorama",
+  "redis",
 ]
 requires-python = ">=3.9"
 authors = [

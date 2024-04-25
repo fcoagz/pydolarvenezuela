@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '1.4.2'
+VERSION = '1.4.3'
 PACKAGE_NAME = 'pyDolarVenezuela' 
 AUTHOR = 'Francisco Griman'
 AUTHOR_EMAIL = 'grihardware@gmail.com'
@@ -20,7 +20,8 @@ INSTALL_REQUIRES = [
       'beautifulsoup4',
       'babel',
       'colorama',
-      'pytz'
+      'pytz',
+      'redis'
       ]
 
 CLASSIFIERS = [
