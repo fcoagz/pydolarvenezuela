@@ -3,7 +3,8 @@ from typing import Literal
 from colorama import Fore
 
 from . import network
-from .pages import Monitor as Page
+from .models.pages import Monitor as Page
+from .data.redis import Redis
 from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor
 
@@ -21,7 +22,7 @@ class CheckVersion:
                 print(f"{Fore.GREEN}New version: {latest_version}.{Fore.RESET} {Fore.RED}Current version {version}.{Fore.RESET} write the following command: pip install --upgrade pyDolarVenezuela\n")
 
 class Monitor:
-    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD') -> None:
+    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Redis = None) -> None:
         """
         La clase `Monitor` proporciona funcionalidades para consultar los precios de diversos monitores en Venezuela.
 
@@ -37,6 +38,7 @@ class Monitor:
         
         self.provider = provider
         self.currency = currency.lower()
+        self.db       = db
     
     def get_value_monitors(self, monitor_code: str = None, name_property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
         """
@@ -49,6 +51,7 @@ class Monitor:
         """ 
         return select_monitor(
             self.provider,
+            db=self.db,
             currency=self.currency,
             monitor_code=monitor_code,
             name_property=name_property,
