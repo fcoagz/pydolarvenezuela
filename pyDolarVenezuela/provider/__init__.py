@@ -43,33 +43,51 @@ def select_monitor(provider: Monitor, db: Redis, **kwargs):
                 key = f'{currency}:{provider.name}'
                 cache = Cache(db)
 
-                if not cache.get_data(key):
+                existing_data = cache.get_data(key)
+
+                if not existing_data:
                     cache.set_data(key, json.dumps(response), db.ttl)
+                else:
+                    existing_data_dict: dict[str, dict] = json.loads(existing_data)
+                    for name in existing_data_dict:
+                        if not name == 'last_update':
+                            if existing_data_dict[name]['price'] != response[name]['price']:
+                                price = existing_data_dict[name]['price']
+                                new_price = response[name]['price']
+                                change  = round(float(new_price - price), 2)
+                                percent = f'{round(float((change / new_price) * 100 if price != 0 else 0), 2)}%'
+                                symbol  = "" if change == 0 else "▲" if change >= 0 else "▼"
+                                color   = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
+                                last_update = None if provider.name == B.name else response[name]['last_update']
+
+                                if not provider.name == B.name:
+                                    existing_data_dict[name].update({
+                                        'price': new_price,
+                                        'change': change,
+                                        'percent': percent,
+                                        'color': color,
+                                        'symbol': symbol,
+                                        'last_update': last_update
+                                    })
+                                else:
+                                    existing_data_dict[name].update({
+                                        'price': new_price,
+                                        'change': change,
+                                        'percent': percent,
+                                        'color': color,
+                                        'symbol': symbol,
+                                    })
                 
-                get_data = dict(json.loads(cache.get_data(key)))
-                for name in get_data:
-                    if not name == 'last_update':
-                        price   = get_data[name]['price']
-                        change  = round(float(response[name]['price'] - price), 2)
-                        percent = f'{round(float((change / price) * 100 if price != 0 else 0), 2)}%'
-                        symbol  = "" if change == 0 else "▲" if change >= 0 else "▼"
-                        color   = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-                        
-                        get_data[name].update({
-                            'price': price,
-                            'change': change,
-                            'percent': percent,
-                            'color': color,
-                            'symbol': symbol
-                        })
-                        
-                    cache.set_data(key, json.dumps(get_data), db.ttl)
-                
+                cache.set_data(key, json.dumps(existing_data_dict), db.ttl)
+                existing_data_dict: dict[str, dict] = json.loads(
+                    cache.get_data(key)
+                )
+
                 if not monitor_code:
-                    return get_data
+                    return existing_data_dict
                 
                 try:
-                    monitor_data = get_data[monitor_code.lower()]
+                    monitor_data = existing_data_dict[monitor_code.lower()]
                     if name_property:
                         value = monitor_data[name_property]
                         return f'Bs. {value}' if prettify and name_property == 'price' else value
