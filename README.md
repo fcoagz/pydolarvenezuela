@@ -32,7 +32,7 @@ pyDolarVenezuela utiliza [Redis](https://github.com/redis/redis-py), un motor de
 
 ```python
 from pyDolarVenezuela import Monitor, Redis
-from pyDolarVenezuela.models.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
 
 # Defecto
 db = Redis(
