@@ -8,7 +8,7 @@ from .data.redis import Redis
 from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor
 
-version = '1.4.6'
+version = '1.4.7'
 
 class CheckVersion:
     check = True
