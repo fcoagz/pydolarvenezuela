@@ -9,8 +9,17 @@ from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor
 
 version = '1.4.8'
+"""
+Versión actual de la biblioteca    
+"""
 
 class CheckVersion:
+    """
+    Verificar actualización de la biblioteca    
+    ```py
+    check: bool = True
+    ```
+    """
     check = True
 
     @classmethod
