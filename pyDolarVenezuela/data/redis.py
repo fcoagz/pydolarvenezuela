@@ -15,5 +15,8 @@ class Cache:
         if ttl is not None:
             self.r.expire(key, ttl)
     
+    def delete_data(self, key: str):
+        self.r.delete(key)
+    
     def get_data(self, key: str) -> Any:
         return self.r.get(key)
