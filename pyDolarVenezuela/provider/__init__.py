@@ -50,7 +50,7 @@ def select_monitor(provider: Monitor, db: Redis, **kwargs):
                 for name in get_data:
                     if not name == 'last_update':
                         price   = get_data[name]['price']
-                        change  = round(float(price - response[name]['price']), 2)
+                        change  = round(float(response[name]['price'] - price), 2)
                         percent = f'{round(float((change / price) * 100 if price != 0 else 0), 2)}%'
                         symbol  = "" if change == 0 else "▲" if change >= 0 else "▼"
                         color   = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
