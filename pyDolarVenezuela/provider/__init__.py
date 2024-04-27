@@ -51,32 +51,33 @@ def select_monitor(provider: Monitor, db: Redis, **kwargs):
                     existing_data_dict: dict[str, dict] = json.loads(existing_data)
                     for name in existing_data_dict:
                         if not name == 'last_update':
-                            if existing_data_dict[name]['price'] != response[name]['price']:
-                                price = existing_data_dict[name]['price']
-                                new_price = response[name]['price']
-                                change  = round(float(new_price - price), 2)
-                                percent = f'{round(float((change / new_price) * 100 if price != 0 else 0), 2)}%'
-                                symbol  = "" if change == 0 else "▲" if change >= 0 else "▼"
-                                color   = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-                                last_update = None if provider.name == B.name else response[name]['last_update']
+                            if name in existing_data_dict and name in response:
+                                if existing_data_dict[name]['price'] != response[name]['price']:
+                                    price = existing_data_dict[name]['price']
+                                    new_price = response[name]['price']
+                                    change  = round(float(new_price - price), 2)
+                                    percent = f'{round(float((change / new_price) * 100 if price != 0 else 0), 2)}%'
+                                    symbol  = "" if change == 0 else "▲" if change >= 0 else "▼"
+                                    color   = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
+                                    last_update = None if provider.name == B.name else response[name]['last_update']
 
-                                if not provider.name == B.name:
-                                    existing_data_dict[name].update({
-                                        'price': new_price,
-                                        'change': change,
-                                        'percent': percent,
-                                        'color': color,
-                                        'symbol': symbol,
-                                        'last_update': last_update
-                                    })
-                                else:
-                                    existing_data_dict[name].update({
-                                        'price': new_price,
-                                        'change': change,
-                                        'percent': percent,
-                                        'color': color,
-                                        'symbol': symbol,
-                                    })
+                                    if not provider.name == B.name:
+                                        existing_data_dict[name].update({
+                                            'price': new_price,
+                                            'change': change,
+                                            'percent': percent,
+                                            'color': color,
+                                            'symbol': symbol,
+                                            'last_update': last_update
+                                        })
+                                    else:
+                                        existing_data_dict[name].update({
+                                            'price': new_price,
+                                            'change': change,
+                                            'percent': percent,
+                                            'color': color,
+                                            'symbol': symbol,
+                                        })
                 
                 cache.set_data(key, json.dumps(existing_data_dict), db.ttl)
                 existing_data_dict: dict[str, dict] = json.loads(
