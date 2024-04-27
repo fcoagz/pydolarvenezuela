@@ -78,7 +78,9 @@ def select_monitor(provider: Monitor, db: Redis, **kwargs):
                                             'color': color,
                                             'symbol': symbol,
                                         })
-                
+                        else:
+                            existing_data_dict[name] = response[name]
+                            
                 cache.set_data(key, json.dumps(existing_data_dict), db.ttl)
                 existing_data_dict: dict[str, dict] = json.loads(
                     cache.get_data(key)
