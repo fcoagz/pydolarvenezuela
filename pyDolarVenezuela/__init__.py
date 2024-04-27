@@ -8,7 +8,7 @@ from .data.redis import Redis
 from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor
 
-version = '1.4.9'
+version = '1.5.0'
 """
 Versión actual de la biblioteca    
 """
