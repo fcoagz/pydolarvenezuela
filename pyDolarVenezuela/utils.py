@@ -6,6 +6,37 @@ currencies = {
     "usd": {"name": "Dólar estadounidense", "id": "dolar"}
 }
 
+code_currencies = {
+    'USD': 'Dólar estadounidense',
+    'DKK': 'Corona danesa',
+    'COP': 'Peso colombiano',
+    'NOK': 'Corona noruega',
+    'GBP': 'Libra esterlina',
+    'SEK': 'Corona sueca',
+    'CLP': 'Peso chileno',
+    'CHF': 'Franco suizo',
+    'HKD': 'Dólar de Hong Kong',
+    'TWD': 'Nuevo dólar taiwanés',
+    'BRL': 'Real brasileño',
+    'CAD': 'Dólar canadiense',
+    'EUR': 'Euro',
+    'BOB': 'Boliviano',
+    'NIO': 'Córdoba nicaragüense',
+    'ARS': 'Peso argentino',
+    'CNY': 'Yuan chino',
+    'ILS': 'Nuevo séquel israelí',
+    'JPY': 'Yen japonés',
+    'PEN': 'Sol peruano',
+    'DOP': 'Peso dominicano',
+    'TTD': 'Dólar de Trinidad y Tobago',
+    'UYU': 'Peso uruguayo',
+    'ANG': 'Florín antillano neerlandés',
+    'AUD': 'Dólar australiano'
+}
+
+currencies_list = ['usd', 'dkk', 'cop', 'nok', 'gbp', 'sek', 'clp', 'chf', 'hkd', 'twd', 'brl', 'cad',
+                   'eur', 'bob', 'nio', 'ars', 'cny', 'ils', 'jpy', 'pen', 'dop', 'ttd', 'uyu', 'ang', 'aud']
+
 monitors = {'binance': 'Binance', 'dolartoday': 'DolarToday',
             'yadio': 'Yadio', 'airtm': 'Airtm', 'cambiosrya': 'Cambios R&A',
             'mkambio': 'Mkambio', 'bcv': 'BCV', 'promediovip': 'EnParaleloVzlaVip',
