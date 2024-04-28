@@ -18,11 +18,11 @@ class BCV:
         self.soup = BeautifulSoup(response, 'html.parser')
 
     def _load(self) -> None:
-        section_tipo_de_cambio_oficial = self.soup.find("div", "view-tipo-de-cambio-oficial-del-bcv")
-        
         self.rates = {}
-        banks = []
+        section_tipo_de_cambio_oficial = self.soup.find("div", "view-tipo-de-cambio-oficial-del-bcv")
         section_sistema_bancario = self.soup.find("div", "table-responsive")
+
+        banks = []
         for bank in section_sistema_bancario.find('tbody').find_all('tr'):
             title = str(bank.find('td', 'views-field views-field-views-conditional').text).strip()
 

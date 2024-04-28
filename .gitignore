@@ -3,3 +3,4 @@ dist
 pyDolarVenezuela.egg-info
 pyDolarVenezuela/assets
 __pycache__
+app.py
