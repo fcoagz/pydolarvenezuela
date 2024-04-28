@@ -49,7 +49,7 @@ class Monitor:
         self.currency = currency.lower()
         self.db       = db
     
-    def get_value_monitors(self, monitor_code: str = None, name_property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
+    def get_value_monitors(self, monitor_code: str = None, name_property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False, **kwargs):
         """
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
 
@@ -64,5 +64,6 @@ class Monitor:
             currency=self.currency,
             monitor_code=monitor_code,
             name_property=name_property,
-            prettify=prettify
+            prettify=prettify,
+            bcv_banks=kwargs
         )
