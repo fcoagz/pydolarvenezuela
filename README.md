@@ -88,7 +88,7 @@ print(valor_dolar)
 La función `currency_converter` convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
 
 ```python
-from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor
+from pyDolarVenezuela.pages import BCV, CriptoDolar, ExchangeMonitor, Italcambio
 from pyDolarVenezuela import Monitor
 from pyDolarVenezuela import currency_converter
 
