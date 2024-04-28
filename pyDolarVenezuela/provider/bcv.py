@@ -14,33 +14,27 @@ def _get_time(soup: BeautifulSoup):
 
 class BCV:
     def __init__(self, url: str, **kwargs) -> None:
-        self.with_banks = kwargs.get('bcv_banks')
-        
-        if self.with_banks:
-            response = get(f'{url}tasas-informativas-sistema-bancario', verify=False)
-        else:
-            response = get(url, verify=False)
+        response = get(f'{url}tasas-informativas-sistema-bancario', verify=False)
         self.soup = BeautifulSoup(response, 'html.parser')
 
     def _load(self) -> None:
         section_tipo_de_cambio_oficial = self.soup.find("div", "view-tipo-de-cambio-oficial-del-bcv")
         
         self.rates = {}
-        if self.with_banks:
-            section_sistema_bancario = self.soup.find("div", "table-responsive")
-            banks = []
-            for bank in section_sistema_bancario.find('tbody').find_all('tr'):
-                title = str(bank.find('td', 'views-field views-field-views-conditional').text).strip()
+        banks = []
+        section_sistema_bancario = self.soup.find("div", "table-responsive")
+        for bank in section_sistema_bancario.find('tbody').find_all('tr'):
+            title = str(bank.find('td', 'views-field views-field-views-conditional').text).strip()
 
-                if title not in [bank['title'] for bank in banks]:
-                    price = float(str(bank.find('td', 'views-field views-field-field-tasa-venta').text).replace(',', '.'))
+            if title not in [bank['title'] for bank in banks]:
+                price = float(str(bank.find('td', 'views-field views-field-field-tasa-venta').text).replace(',', '.'))
 
-                    banks.append({
-                        'title': title,
-                        'price_old': price,
-                        'price': round(price, 2),
-                        'last_update': str(bank.find('td', 'views-field views-field-field-fecha-del-indicador').text).strip().replace('-', '/')
-                    })
+                banks.append({
+                    'title': title,
+                    'price_old': price,
+                    'price': round(price, 2),
+                    'last_update': str(bank.find('td', 'views-field views-field-field-fecha-del-indicador').text).strip().replace('-', '/')
+                })
             self.rates['banks'] = banks
         
         self.rates['last_update'] = _get_time(section_tipo_de_cambio_oficial)
