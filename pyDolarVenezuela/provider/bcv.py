@@ -1,6 +1,6 @@
-import requests
 from bs4 import BeautifulSoup
 
+from ..network import requests, get
 from ..utils import currencies
 
 requests.packages.urllib3.disable_warnings()
@@ -13,12 +13,9 @@ def _get_time(soup: BeautifulSoup):
     return date.split('T')[0].replace('-', '/')
 
 class BCV:
-    def __init__(self, url: str, currency: str) -> None:
-        response      = requests.get(url, verify=False)
-        response.raise_for_status()
-
-        self.soup     = BeautifulSoup(response.content, 'html.parser')
-        self.currency = currency
+    def __init__(self, url: str, *args) -> None:
+        response      = get(url, verify=False)
+        self.soup     = BeautifulSoup(response, 'html.parser')
 
     def _load(self) -> None:
         section_tipo_de_cambio_oficial = self.soup.find("div", "view-tipo-de-cambio-oficial-del-bcv")
