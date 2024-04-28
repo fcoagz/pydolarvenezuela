@@ -2,21 +2,17 @@ import json
 from .bcv import BCV
 from .criptodolar import CriptoDolar
 from .exchangemonitor import ExchangeMonitor
-from .ivenezuela import iVenezuela
-from .dpedidos import Dpedidos
 
 from ..data.redis import Cache
 from ..models.database import Redis
 from ..models.pages import Monitor
-from ..pages import BCV as B, CriptoDolar as C, Dpedidos as D, ExchangeMonitor as E, iVenezuela as I 
+from ..pages import BCV as B, CriptoDolar as C, ExchangeMonitor as E
 
 monitor_classes = {
     'usd': {
         B.name: BCV,
         C.name: CriptoDolar,
-        E.name: ExchangeMonitor,
-        D.name: Dpedidos,
-        I.name: iVenezuela
+        E.name: ExchangeMonitor
     },
     'eur': {
         B.name: BCV,
