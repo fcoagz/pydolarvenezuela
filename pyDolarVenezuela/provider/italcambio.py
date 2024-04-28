@@ -3,7 +3,7 @@ from ..utils import code_currencies
 from bs4 import BeautifulSoup
 
 class Italcambio:
-    def __init__(self, url: str, **kwargs) -> None:
+    def __init__(self, url: str, *args) -> None:
         response = get(url)
         self.soup = BeautifulSoup(response, 'html.parser')
 
