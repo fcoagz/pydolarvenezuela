@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-
 from .. import network
 from ..tools import time
 
