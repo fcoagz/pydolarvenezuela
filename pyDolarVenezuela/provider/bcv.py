@@ -33,23 +33,6 @@ class BCV:
                 "price_old": _get_rate_by_id(values['id'], section_tipo_de_cambio_oficial)
             }
 
-    def get_values(self, **kwargs):
-        currency_code = kwargs.get('monitor_code')
-        name_property = kwargs.get('name_property')
-        prettify = kwargs.get('prettify', False)
-        
+    def get_values(self):
         self._load()
-
-        if not currency_code:
-            return self.rates
-        
-        try:
-            monitor_data = self.rates[currency_code.lower()]
-            if name_property:
-                if name_property == 'last_update':
-                    return self.rates['last_update']
-                value = monitor_data[name_property]
-                return f'Bs. {value}' if prettify and name_property == 'price' else value
-            return monitor_data
-        except KeyError:
-            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
+        return self.rates

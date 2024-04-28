@@ -38,21 +38,6 @@ class CriptoDolar:
 
                 self.data[_convert_specific_format(data['title'])] = data
     
-    def get_values(self, **kwargs):
-        monitor_code = kwargs.get('monitor_code')
-        name_property = kwargs.get('name_property')
-        prettify = kwargs.get('prettify', False)
-        
+    def get_values(self):
         self._load()
-
-        if not monitor_code:
-            return self.data
-        
-        try:
-            monitor_data = self.data[monitor_code.lower()]
-            if name_property:
-                value = monitor_data[name_property]
-                return f'Bs. {value}' if prettify and name_property == 'price' else value
-            return monitor_data
-        except KeyError:
-            raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
+        return self.data
