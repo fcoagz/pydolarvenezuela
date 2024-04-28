@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
 @dataclass
-class Monitor:
+class Page:
     """
-    Monitor instance
+    Page instance
     """
     name: str
     provider: str

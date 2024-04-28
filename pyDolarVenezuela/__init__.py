@@ -3,7 +3,7 @@ from typing import Literal
 from colorama import Fore
 
 from . import network
-from .models.pages import Monitor as Page
+from .models.pages import Page
 from .data.redis import Redis
 from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor

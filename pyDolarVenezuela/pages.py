@@ -1,18 +1,18 @@
-from .models.pages import Monitor
+from .models.pages import Page
 
-BCV = Monitor(
+BCV = Page(
     name="Banco Central de Venezuela",
     provider="http://www.bcv.org.ve/",
     currencies=['usd', 'eur', 'cny', 'try', 'rub']
 )
 
-CriptoDolar = Monitor(
+CriptoDolar = Page(
     name="Cripto Dolar",
     provider="https://exchange.vcoud.com/",
     currencies=['usd', 'eur']
 )
 
-ExchangeMonitor = Monitor(
+ExchangeMonitor = Page(
     name="Exchange Monitor",
     provider="https://exchangemonitor.net/",
     currencies=['usd', 'eur']

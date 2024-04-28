@@ -5,7 +5,7 @@ from .exchangemonitor import ExchangeMonitor
 
 from ..data.redis import Cache
 from ..models.database import Redis
-from ..models.pages import Monitor
+from ..models.pages import Page
 from ..pages import BCV as B, CriptoDolar as C, ExchangeMonitor as E
 
 monitor_classes = [
@@ -29,7 +29,7 @@ monitor_classes = [
     }
 ]
 
-def select_monitor(provider: Monitor, db: Redis, **kwargs):
+def select_monitor(provider: Page, db: Redis, **kwargs):
     global data
         
     currency = kwargs.get('currency')
