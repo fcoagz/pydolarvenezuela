@@ -32,7 +32,6 @@ class CriptoDolar:
                     'title': _convert_dollar_name_to_monitor_name(monitor['name']),
                     'price': round(monitor['price'], 2),
                     'price_old': monitor['priceOld'],
-                    'type': 'bank' if monitor['type'] == 'bancove' else 'monitor',
                     'last_update': time.get_time_standard(monitor['updatedAt']),
                 }
 
