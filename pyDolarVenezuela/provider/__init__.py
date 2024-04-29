@@ -75,7 +75,7 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
             last_update = last_data[i].get('last_update', None)
             change = float(str(change).replace('-', ' '))
 
-            if not last_update:
+            if last_update:
                 existing_data_dict[i].update({
                     'price': new_price,
                     'change': change,
