@@ -68,6 +68,7 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
         if existing_data_dict[i]['price'] != last_data[i]['price']:
             price = existing_data_dict[i]['price']
             new_price = last_data[i]['price']
+            price_old = last_data[i].get('price_old', None)
             change  = round(float(new_price - price), 2)
             percent = float(f'{round(float((change / new_price) * 100 if price != 0 else 0), 2)}'.replace('-', ' '))
             symbol  = "" if change == 0 else "▲" if change >= 0 else "▼"
@@ -75,22 +76,22 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
             last_update = last_data[i].get('last_update', None)
             change = float(str(change).replace('-', ' '))
 
-            if last_update:
-                existing_data_dict[i].update({
+            existing_data_dict[i].update({
                     'price': new_price,
                     'change': change,
                     'percent': percent,
                     'color': color,
                     'symbol': symbol,
+            })
+
+            if last_update and price_old is not None:
+                existing_data_dict[i].update({
+                    'price_old': price_old,
                     'last_update': last_update
                 })
             else:
                 existing_data_dict[i].update({
-                    'price': new_price,
-                    'change': change,
-                    'percent': percent,
-                    'color': color,
-                    'symbol': symbol,
+                    'last_update': last_update
                 })
 
     try:
