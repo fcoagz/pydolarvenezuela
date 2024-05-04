@@ -83,13 +83,13 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
                     'color': color,
                     'symbol': symbol,
             })
-
+    
             if last_update and price_old is not None:
                 existing_data_dict[i].update({
                     'price_old': price_old,
                     'last_update': last_update
                 })
-            else:
+            elif last_update is not None:
                 existing_data_dict[i].update({
                     'last_update': last_update
                 })
@@ -106,7 +106,7 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
             if db is not None:
                 key = f'{currency}:{provider.name}'
                 cache = Cache(db)
-
+                
                 existing_data = cache.get_data(key)
 
                 if not existing_data:
