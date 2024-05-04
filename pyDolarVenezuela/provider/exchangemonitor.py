@@ -35,8 +35,8 @@ class ExchangeMonitor:
             last_update = time.get_formatted_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
             symbol = str(result.find('p', "cambio-por").text)[0] if not str(result.find('p', "cambio-por").text)[0] == ' ' else ''
             color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-            percent = str(result.find('p', "cambio-por").text)[1:].strip()
-            change = str(result.find('p', "cambio-num").text)
+            percent = float(str(result.find('p', "cambio-por").text)[1:].strip().replace(',', '.').replace('%', ''))
+            change = float(str(result.find('p', "cambio-num").text).replace(',', '.'))
 
             data = {
                 'title': name,
