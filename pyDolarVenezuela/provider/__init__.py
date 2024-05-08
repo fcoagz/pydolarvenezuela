@@ -41,9 +41,9 @@ monitor_classes = [
 def select_monitor(provider: Page, db: Redis, **kwargs):
     global data
         
-    currency = kwargs.get('currency')
-    monitor_code = kwargs.get('monitor_code')
-    name_property = kwargs.get('name_property')
+    currency = kwargs.get('currency', None)
+    monitor_code = kwargs.get('monitor_code', None)
+    name_property = kwargs.get('name_property', None)
     prettify = kwargs.get('prettify', False)
 
     if currency not in currencies_list:
@@ -118,9 +118,10 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
                         if name in existing_data_dict and name in data:
                             _update_item(existing_data_dict, name, data)
                     else:
-                        if name == 'banks' and name in data:
-                            for i in range(len(existing_data_dict[name])):
-                                _update_item(existing_data_dict[name], i, data[name])
+                        if name == 'banks':
+                            for i, bank in enumerate(existing_data_dict[name]):
+                                if i < len(data[name]) and bank['title'] == data[name][i]['title']:
+                                    _update_item(existing_data_dict[name], i, data[name])
                         elif name == 'last_update':
                             existing_data_dict[name] = data[name]
                             
