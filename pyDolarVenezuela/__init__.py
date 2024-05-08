@@ -8,7 +8,7 @@ from .data.redis import Redis
 from .tools import get_time_zone as getdate, currency_converter
 from .provider import select_monitor
 
-version = '1.5.4'
+version = '1.5.5'
 """
 Versión actual de la biblioteca    
 """
@@ -49,6 +49,13 @@ class Monitor:
         self.currency = currency.lower()
         self.db       = db
     
+    def get_all_monitors(self):
+        return select_monitor(
+            self.provider,
+            db=self.db,
+            currency=self.currency
+        )
+
     def get_value_monitors(self, monitor_code: str = None, name_property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
         """
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
