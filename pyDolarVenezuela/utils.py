@@ -61,22 +61,27 @@ time_units = {
 
 path_images = [
     {
-        "title": "dollar",
+        "title": "usd",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093823/bcv/uppdtt4fzbhnwq5cu9br.png",
         "provider": "bcv"
     },
     {
-        "title": "euro",
+        "title": "try",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716099345/bcv/zowkdfsqlmiafsksgdwb.png",
+        "provider": "bcv"
+    },
+    {
+        "title": "eur",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093824/bcv/epzeuzakymrxe1ygwvvp.png",
         "provider": "bcv"
     },
     {
-        "title": "rublo",
+        "title": "rub",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093824/bcv/nyuavxoe4edpahvuzciv.png",
         "provider": "bcv"
     },
     {
-        "title": "yuan",
+        "title": "cny",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093825/bcv/wqfalezwajdzzj6lqe8g.png",
         "provider": "bcv"
     },
