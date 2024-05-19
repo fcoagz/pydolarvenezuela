@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from .. import network
 from ..tools import time
+from ..utils import list_monitors_images
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -37,6 +38,7 @@ class ExchangeMonitor:
             color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
             percent = float(str(result.find('p', "cambio-por").text)[1:].strip().replace(',', '.').replace('%', ''))
             change = float(str(result.find('p', "cambio-num").text).replace(',', '.'))
+            image = next((image.image for image in list_monitors_images if image.provider == 'exchangemonitor' and image.title == _convert_specific_format(name)), None)
 
             data = {
                 'title': name,
@@ -45,7 +47,8 @@ class ExchangeMonitor:
                 'percent': percent,
                 'change': change,
                 'color': color,
-                'symbol': symbol
+                'symbol': symbol,
+                'image': image
             }
 
             self.data[_convert_specific_format(name)] = data

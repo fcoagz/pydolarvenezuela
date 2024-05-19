@@ -1,6 +1,7 @@
 import json
 from .. import network
 from ..tools import time
+from ..utils import list_monitors_images
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -28,11 +29,13 @@ class CriptoDolar:
 
         for monitor in self.json_response:
             if monitor['type'] in ['bolivar', 'bancove']:
+                image = next((image.image for image in list_monitors_images if image.provider == 'criptodolar' and image.title == _convert_specific_format(_convert_dollar_name_to_monitor_name(monitor['name']))), None)
                 data = {
                     'title': _convert_dollar_name_to_monitor_name(monitor['name']),
                     'price': round(monitor['price'], 2),
                     'price_old': monitor['priceOld'],
                     'last_update': time.get_time_standard(monitor['updatedAt']),
+                    'image': image
                 }
 
                 self.data[_convert_specific_format(data['title'])] = data

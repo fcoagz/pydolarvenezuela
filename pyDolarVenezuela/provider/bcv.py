@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
 from ..network import requests, get
-from ..utils import currencies
+from ..utils import currencies, list_monitors_images
 
 requests.packages.urllib3.disable_warnings()
 
@@ -40,10 +40,12 @@ class BCV:
         self.rates['last_update'] = _get_time(section_tipo_de_cambio_oficial)
 
         for code, values in currencies.items():
+            image = next((image.image for image in list_monitors_images if image.provider == 'bcv' and image.title == code), None)
             self.rates[code] = {
                 "title": values['name'],
                 "price": round(_get_rate_by_id(values['id'], section_tipo_de_cambio_oficial), 2),
-                "price_old": _get_rate_by_id(values['id'], section_tipo_de_cambio_oficial)
+                "price_old": _get_rate_by_id(values['id'], section_tipo_de_cambio_oficial),
+                "image": image
             }
 
     def get_values(self):
