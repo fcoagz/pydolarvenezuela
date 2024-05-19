@@ -29,7 +29,8 @@ class CriptoDolar:
 
         for monitor in self.json_response:
             if monitor['type'] in ['bolivar', 'bancove']:
-                image = next((image.image for image in list_monitors_images if image.provider == 'criptodolar' and image.title == _convert_specific_format(_convert_dollar_name_to_monitor_name(monitor['name']))), None)
+                image = next((image.image for image in list_monitors_images if image.provider == 'criptodolar' and image.title == _convert_specific_format(
+                    _convert_dollar_name_to_monitor_name(monitor['name']))), None)
                 data = {
                     'title': _convert_dollar_name_to_monitor_name(monitor['name']),
                     'price': round(monitor['price'], 2),
