@@ -65,6 +65,14 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
             raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
 
     def _update_item(existing_data_dict: dict, i: Any, last_data: dict):
+        for key in list(existing_data_dict[i].keys()):
+            if key not in last_data[i]:
+                del existing_data_dict[i][key]
+        
+        for key in last_data[i].keys():
+            if key not in existing_data_dict[i]:
+                existing_data_dict[i][key] = last_data[i][key]
+
         if existing_data_dict[i]['price'] != last_data[i]['price']:
             price = existing_data_dict[i]['price']
             new_price = last_data[i]['price']
