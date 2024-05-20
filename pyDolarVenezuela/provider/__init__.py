@@ -1,11 +1,13 @@
 import json
 from typing import Any
+from dataclasses import asdict
 from .bcv import BCV
 from .criptodolar import CriptoDolar
 from .exchangemonitor import ExchangeMonitor
 from .italcambio import Italcambio
 
 from ..data.redis import Cache
+from ..models.monitor import MonitorDB
 from ..models.database import Redis
 from ..models.pages import Page
 from ..pages import BCV as B, CriptoDolar as C, ExchangeMonitor as E, Italcambio as I
@@ -65,14 +67,11 @@ def select_monitor(provider: Page, db: Redis, **kwargs):
             raise KeyError("Does not match any of the properties that were provided in the dictionary. Most information: https://github.com/fcoagz/pyDolarVenezuela")
 
     def _update_item(existing_data_dict: dict, i: Any, last_data: dict):
+        structure_monitor = asdict(MonitorDB(**existing_data_dict[i]))
         for key in list(existing_data_dict[i].keys()):
-            if key not in last_data[i]:
+            if structure_monitor[key] is None:
                 del existing_data_dict[i][key]
         
-        for key in last_data[i].keys():
-            if key not in existing_data_dict[i]:
-                existing_data_dict[i][key] = last_data[i][key]
-
         if existing_data_dict[i]['price'] != last_data[i]['price']:
             price = existing_data_dict[i]['price']
             new_price = last_data[i]['price']
