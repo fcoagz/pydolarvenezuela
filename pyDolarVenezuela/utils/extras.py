@@ -1,4 +1,4 @@
-from .models.images import Image
+from ..models.images import Image
 
 currencies = {
     "eur": {"name": "Euro", "id": "euro"},

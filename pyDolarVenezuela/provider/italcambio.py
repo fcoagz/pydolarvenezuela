@@ -1,8 +1,8 @@
 from datetime import datetime
 from bs4 import BeautifulSoup
 from ..network import get
-from ..tools.time import standard_time_zone
-from ..utils import code_currencies
+from ..utils.time import standard_time_zone
+from ..utils.extras import code_currencies
 
 class Italcambio:
     def __init__(self, url: str, **kwargs) -> None:

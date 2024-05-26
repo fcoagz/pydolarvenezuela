@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
 from ..network import requests, get
-from ..utils import currencies, list_monitors_images
+from ..utils.extras import currencies, list_monitors_images
 
 requests.packages.urllib3.disable_warnings()
 

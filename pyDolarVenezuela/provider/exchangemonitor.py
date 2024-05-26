@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from .. import network
-from ..tools import time
-from ..utils import list_monitors_images
+from ..utils import time
+from ..utils.extras import list_monitors_images
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}

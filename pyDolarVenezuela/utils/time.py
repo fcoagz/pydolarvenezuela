@@ -2,7 +2,7 @@ from babel.dates import format_date, format_time
 from datetime import datetime, timedelta
 from pytz import timezone
 
-from pyDolarVenezuela.utils import time_units
+from .extras import time_units
 
 standard_time_zone = timezone('America/Caracas')
 
