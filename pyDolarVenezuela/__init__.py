@@ -5,8 +5,8 @@ from colorama import Fore
 from . import network
 from .models.pages import Page
 from .data.redis import Redis
-from .tools import get_time_zone as getdate, currency_converter
-from .provider import select_monitor
+from .utils import get_time_zone as getdate, currency_converter
+from .provider import Provider
 
 version = '1.5.8'
 """
@@ -38,6 +38,7 @@ class Monitor:
         Parámetros:
         - `provider`: La página de la que se accederán los datos.
         - `currency`: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
+        - `db`: 
         """
 
         if CheckVersion.check:
@@ -48,28 +49,22 @@ class Monitor:
         self.provider = provider
         self.currency = currency.lower()
         self.db       = db
+        self.select_monitor = Provider(provider, currency, db)
     
     def get_all_monitors(self):
-        return select_monitor(
-            self.provider,
-            db=self.db,
-            currency=self.currency
-        )
+        return self.select_monitor._get_values_specifics()
 
-    def get_value_monitors(self, monitor_code: str = None, name_property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
+    def get_value_monitors(self, type_monitor: str = None, property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
         """
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
 
         Parámetros:
-        - `monitor_code`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
-        - `name_property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
+        - `type_monitor`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+        - `property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
         - `prettify`: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
-        return select_monitor(
-            self.provider,
-            db=self.db,
-            currency=self.currency,
-            monitor_code=monitor_code,
-            name_property=name_property,
-            prettify=prettify
+        return self.select_monitor._get_values_specifics(
+            type_monitor,
+            property,
+            prettify
         )
