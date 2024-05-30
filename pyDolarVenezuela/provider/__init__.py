@@ -1,6 +1,7 @@
 import json
 from typing import Any
 from dataclasses import asdict
+from .alcambio import AlCambio
 from .bcv import BCV
 from .criptodolar import CriptoDolar
 from .exchangemonitor import ExchangeMonitor
@@ -10,9 +11,10 @@ from ..data.redis import Cache
 from ..models.monitor import Monitor
 from ..models.database import Redis
 from ..models.pages import Page
-from ..pages import BCV as B, CriptoDolar as C, ExchangeMonitor as E, Italcambio as I
+from ..pages import AlCambio as A, BCV as B, CriptoDolar as C, ExchangeMonitor as E, Italcambio as I
 
 monitor_classes = {
+    A.name: {'currency': A.currencies, 'provider': AlCambio},
     B.name: {'currency': B.currencies, 'provider': BCV},
     C.name: {'currency': C.currencies, 'provider': CriptoDolar},
     E.name: {'currency': E.currencies, 'provider': ExchangeMonitor},
