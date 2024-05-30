@@ -8,7 +8,7 @@ from .data.redis import Redis
 from .utils import get_time_zone as getdate, currency_converter
 from .provider import Provider
 
-version = '1.5.8'
+version = '1.5.9'
 """
 Versión actual de la biblioteca    
 """
