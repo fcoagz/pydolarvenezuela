@@ -38,7 +38,7 @@ class Monitor:
         Parámetros:
         - `provider`: La página de la que se accederán los datos.
         - `currency`: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
-        - `db`: 
+        - `db`: Base de datos con Redis. 
         """
 
         if CheckVersion.check:
