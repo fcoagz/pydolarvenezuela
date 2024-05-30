@@ -61,6 +61,16 @@ time_units = {
 
 path_images = [
     {
+        "title": "bcv",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1717042862/alcambio/pff3ahlx2ilvcf48ijne.png",
+        "provider": "alcambio"
+    },
+    {
+        "title": "enparalelovzla",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1717042885/alcambio/pzlgnhggdwgkzzg3ndfs.png",
+        "provider": "alcambio"
+    },
+    {
         "title": "usd",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093823/bcv/uppdtt4fzbhnwq5cu9br.png",
         "provider": "bcv"
