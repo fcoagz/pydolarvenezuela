@@ -1,6 +1,7 @@
 import json
 from .. import network
 from ..utils import time
+from ..utils.extras import list_monitors_images
 
 headers = {
     "accept": "*/*",
@@ -77,10 +78,12 @@ class AlCambio:
                 key = 'enparalelovzla' if not rate['official'] else 'bcv'
                 name = 'EnParaleloVzla' if not rate['official'] else 'BCV'
                 date = time.get_formatted_timestamp(country_conversions['dateParalelo'] if not rate['official'] else country_conversions['dateBcv'])
+                image = next((image.image for image in list_monitors_images if image.provider == 'alcambio' and image.title == key), None)
                 self.rates[key] = {
                     'title': name,
                     'price': rate['baseValue'],
-                    'date': date
+                    'last_update': date,
+                    'image': image
                 }
                 rate_types.remove(rate['type'])
 
