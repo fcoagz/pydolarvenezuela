@@ -14,8 +14,8 @@ def _get_values_monitors(soup: BeautifulSoup):
 
 class ExchangeMonitor:
     def __init__(self, url: str, currency: str, **kwargs) -> None:
-        response = (network.curl(url + "dolar-venezuela") if currency == 'usd'
-                    else network.curl(url + "dolar-venezuela/EUR"))
+        response = (network.curl('GET', url + "dolar-venezuela") if currency == 'usd'
+                    else network.curl('GET', url + "dolar-venezuela/EUR"))
         self.soup = BeautifulSoup(response, "html.parser")
     
     def _load(self):
