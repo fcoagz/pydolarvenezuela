@@ -42,6 +42,7 @@ class Provider:
 
         if self.db is not None:
             key = f'{self.currency}:{self.page.name}'
+            self._redis.delete_data(key)
             if not self._redis.get_data(key):
                 self._redis.set_data(key, json.dumps(values), self.db.ttl)
 
@@ -84,9 +85,10 @@ class Provider:
         ```
         """
         structure_monitor = asdict(Monitor(**old_data[i]))
-        for key in list(old_data[i].keys()):
+        for key in list(structure_monitor.keys()):
             if structure_monitor[key] is None:
-                del old_data[i][key]
+                del structure_monitor[key]
+        old_data[i] = structure_monitor
         
         if old_data[i]['price'] != new_data[i]['price']:
             old_price = old_data[i]['price']
