@@ -60,7 +60,7 @@ class Provider:
                 elif property == 'last_update':
                     old_data[property] = values[property]
 
-            self._redis.set_data(key, json.dumps(values), self.db.ttl)
+            self._redis.set_data(key, json.dumps(old_data), self.db.ttl)
             values = json.loads(self._redis.get_data(key))
             
         return values 
