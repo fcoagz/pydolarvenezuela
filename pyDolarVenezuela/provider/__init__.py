@@ -42,7 +42,7 @@ class Provider:
 
         if self.db is not None:
             key = f'{self.currency}:{self.page.name}'
-            self._redis.delete_data(key)
+            
             if not self._redis.get_data(key):
                 self._redis.set_data(key, json.dumps(values), self.db.ttl)
 
