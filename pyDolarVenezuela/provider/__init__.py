@@ -55,9 +55,8 @@ class Provider:
                         pass
                 elif property == 'banks': # Comparación de propiedades de los datos BCV
                     banks = values[property]
-                    for i, bank in enumerate(old_data[property]):
-                        if i < len(banks) and bank['title'] == banks[i]['title']:
-                            self._update_item(old_data[property], banks, i)
+                    for i, _ in enumerate(banks):
+                        self._update_item(old_data[property], banks, i)
                 elif property == 'last_update':
                     old_data[property] = values[property]
 
@@ -66,6 +65,38 @@ class Provider:
             
         return values 
     
+    def _update_price(self, old_data: dict, new_data: dict, i: Any):
+        old_price = old_data[i]['price']
+        new_price = new_data[i]['price']
+        price_old = new_data[i].get('price_old', None) # Valor preciso
+        change    = round(float(new_price - old_price), 2)
+        percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
+        symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
+        color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
+        last_update = new_data[i].get('last_update', None)
+
+        change = float(str(change).replace('-', ' '))
+
+        old_data[i].update({
+            'price': new_price,
+            'change': change,
+            'percent': percent,
+            'color': color,
+            'symbol': symbol,
+        })
+        
+        # Comprueba si los atributos tienen valor. se agregan y/o actualizan
+        if last_update and price_old:
+            old_data[i].update({
+                'price_old': price_old,
+                'last_update': last_update
+            })
+            
+        elif last_update: 
+            old_data[i].update({
+                'last_update': last_update
+            })
+
     def _update_item(self, old_data: dict, new_data: dict, i: Any):
         """
         Evalúa la estructura de cada monitor en `old_data`. Elimina los atributos que sean `None` (Cada estructura es diferente según el proveedor) y realiza los cálculos necesarios.
@@ -84,43 +115,30 @@ class Provider:
             symbol: Optional[str] = "" 
         ```
         """
-        structure_monitor = asdict(Monitor(**old_data[i]))
-        for key in list(structure_monitor.keys()):
-            if structure_monitor[key] is None:
-                del structure_monitor[key]
-        old_data[i] = structure_monitor
         
-        if old_data[i]['price'] != new_data[i]['price']:
-            old_price = old_data[i]['price']
-            new_price = new_data[i]['price']
-            price_old = new_data[i].get('price_old', None) # Valor preciso
-            change    = round(float(new_price - old_price), 2)
-            percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
-            symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
-            color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-            last_update = new_data[i].get('last_update', None)
+        if isinstance(i, str) or isinstance(i, int) and i < len(old_data):
+            structure_monitor = asdict(Monitor(**old_data[i]))
+            for key in list(structure_monitor.keys()):
+                if structure_monitor[key] is None:
+                    del structure_monitor[key]
+            old_data[i] = structure_monitor
 
-            change = float(str(change).replace('-', ' '))
-
-            old_data[i].update({
-                'price': new_price,
-                'change': change,
-                'percent': percent,
-                'color': color,
-                'symbol': symbol,
-            })
-            
-            # Comprueba si los atributos tienen valor. se agregan y/o actualizan
-            if last_update and price_old:
-                old_data[i].update({
-                    'price_old': price_old,
-                    'last_update': last_update
-                })
-                
-            elif last_update: 
-                old_data[i].update({
-                    'last_update': last_update
-                })
+        # Ambos consultan si el precio es diferente para realizar cambios.
+        # Hay diferentes datos que se distribuyeron como list, {str: dict}.
+        if isinstance(i, int): # Actualiza los datos de 'old_data' con los datos de 'new_data' basándose en el título del item.
+            title_items = [item['title'] for item in old_data]
+            if new_data[i]['title'] in title_items:
+                index_old_data = title_items.index(new_data[i]['title'])
+                if old_data[index_old_data]['price'] != new_data[i]['price']:
+                    self._update_price(old_data, new_data, index_old_data)
+            else:
+                old_data.append(new_data[i])
+        else: # Actualiza los datos de 'old_data' con los datos de 'new_data' basándose en el key del item.
+            if i in old_data: 
+                if old_data[i]['price'] != new_data[i]['price']:
+                    self._update_price(old_data, new_data, i)
+            else:
+                old_data[i] = new_data[i]
 
     def _get_values_specifics(self, type_monitor: str = None, property: str = None, prettify: bool = False):
         data = self._load_data()
