@@ -1,34 +1,20 @@
-import json
 from typing import Literal
-from colorama import Fore
-
-from . import network
+from . import pages
 from .models.pages import Page
 from .data.redis import Redis
 from .utils import get_time_zone as getdate, currency_converter
 from .provider import Provider
+from .version import CheckVersion, __version__
 
-version = '1.6.1'
-"""
-Versión actual de la biblioteca    
-"""
-
-class CheckVersion:
-    """
-    Verificar actualización de la biblioteca    
-    ```py
-    check: bool = True
-    ```
-    """
-    check = True
-
-    @classmethod
-    def _check_dependence_version(self):
-            response = network.get("https://pypi.org/pypi/pydolarvenezuela/json")
-            latest_version = json.loads(response)["info"]["version"]
-
-            if version != latest_version:
-                print(f"{Fore.GREEN}New version: {latest_version}.{Fore.RESET} {Fore.RED}Current version {version}.{Fore.RESET} write the following command: pip install --upgrade pyDolarVenezuela\n")
+__all__ = (
+    "Monitor",
+    "pages",
+    "Redis",
+    "getdate",
+    "currency_converter",
+    "CheckVersion",
+    "__version__"
+)
 
 class Monitor:
     def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Redis = None) -> None:
