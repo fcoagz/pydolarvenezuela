@@ -7,9 +7,9 @@ def get(url: str, params: dict = None, verify: bool = True):
     Realiza una solicitud HTTP GET utilizando la biblioteca requests.
 
     Args:
-        url (str): La URL a la que se enviará la solicitud GET.
-        params (dict, opcional): Parámetros que se incluirán en la solicitud. Por defecto es None.
-        verify (bool, opcional): Si se debe verificar el certificado SSL. Por defecto es True.
+        - url (str): La URL a la que se enviará la solicitud GET.
+        - params (dict, opcional): Parámetros que se incluirán en la solicitud. Por defecto es None.
+        - verify (bool, opcional): Si se debe verificar el certificado SSL. Por defecto es True.
 
     Returns:
         bytes: El contenido de la respuesta en formato de bytes.
@@ -24,11 +24,11 @@ def curl(method: Literal['GET', 'POST'], url: str, headers: dict = None, json: d
     Realiza una solicitud HTTP utilizando cffi y permite la opción de impersonar un navegador.
 
     Args:
-        method (Literal['GET', 'POST']): El método HTTP a utilizar (GET o POST).
-        url (str): La URL a la que se enviará la solicitud.
-        headers (dict, opcional): Encabezados HTTP a incluir en la solicitud. Por defecto es None.
-        json (dict, opcional): Datos JSON a incluir en la solicitud. Por defecto es None.
-        impersonate (str, opcional): El navegador a impersonar. Por defecto es "chrome110".
+        - method (Literal['GET', 'POST']): El método HTTP a utilizar (GET o POST).
+        - url (str): La URL a la que se enviará la solicitud.
+        - headers (dict, opcional): Encabezados HTTP a incluir en la solicitud. Por defecto es None.
+        - json (dict, opcional): Datos JSON a incluir en la solicitud. Por defecto es None.
+        - impersonate (str, opcional): El navegador a impersonar. Por defecto es "chrome110".
 
     Returns:
         bytes: El contenido de la respuesta en formato de bytes.
