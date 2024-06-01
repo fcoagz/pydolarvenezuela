@@ -86,16 +86,15 @@ class Provider:
         })
         
         # Comprueba si los atributos tienen valor. se agregan y/o actualizan
-        if last_update and price_old:
+        if price_old is not None:
             old_data[i].update({
-                'price_old': price_old,
-                'last_update': last_update
-            })
-            
-        elif last_update: 
+                'price_old': price_old
+        })
+         
+        if last_update is not None: 
             old_data[i].update({
                 'last_update': last_update
-            })
+        })
 
     def _update_item(self, old_data: dict, new_data: dict, i: Any):
         """
