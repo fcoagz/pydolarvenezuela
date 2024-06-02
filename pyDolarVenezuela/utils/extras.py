@@ -266,6 +266,11 @@ path_images = [
         "provider": "exchangemonitor"
     },
     {
+        "title": "monitor_dolar_venezuela",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093852/exchangemonitor/kih3nvrygbratbtzvvew.webp",
+        "provider": "exchangemonitor"
+    },
+    {
         "title": "monitor_dolar",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093852/exchangemonitor/kih3nvrygbratbtzvvew.webp",
         "provider": "exchangemonitor"
