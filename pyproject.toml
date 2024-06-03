@@ -1,6 +1,6 @@
 [project]
 name = "pyDolarVenezuela"
-version = "1.6.3"
+version = "1.6.4"
 dependencies = [
   "requests",
   "curl_cffi",
@@ -35,8 +35,10 @@ keywords = [
   "dolarenvenezuela"
 ]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: Apache-2.0 license",
     "Operating System :: OS Independent",
 ]
 [project.urls]
