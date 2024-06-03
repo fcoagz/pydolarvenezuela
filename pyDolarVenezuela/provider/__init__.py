@@ -55,7 +55,7 @@ class Provider:
                         pass
                 elif property == 'banks': # Comparación de propiedades de los datos BCV
                     banks = values[property]
-                    for i, _ in enumerate(banks):
+                    for i in range(len(banks)):
                         self._update_item(old_data[property], banks, i)
                 elif property == 'last_update':
                     old_data[property] = values[property]
@@ -115,7 +115,7 @@ class Provider:
         ```
         """
         
-        if isinstance(i, str) or isinstance(i, int) and i < len(old_data):
+        if isinstance(i, str) or (isinstance(i, int) and i <= len(old_data) - 1):
             structure_monitor = asdict(Monitor(**old_data[i]))
             for key in list(structure_monitor.keys()):
                 if structure_monitor[key] is None:
@@ -127,7 +127,7 @@ class Provider:
         if isinstance(i, int): # Actualiza los datos de 'old_data' con los datos de 'new_data' basándose en el título del item.
             title_items = [item['title'] for item in old_data]
             if new_data[i]['title'] in title_items:
-                index_old_data = title_items.index(new_data[i]['title'])
+                index_old_data = title_items.index(new_data[i]['title']) # Encuentra la posición donde se almacena el elemento en la lista
                 if old_data[index_old_data]['price'] != new_data[i]['price']:
                     self._update_price(old_data, new_data, index_old_data)
             else:
