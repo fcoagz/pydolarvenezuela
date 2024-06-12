@@ -128,7 +128,7 @@ class Provider:
             title_items = [item['title'] for item in old_data]
             if new_data[i]['title'] in title_items:
                 index_old_data = title_items.index(new_data[i]['title']) # Encuentra la posición donde se almacena el elemento en la lista
-                if old_data[index_old_data]['price'] != new_data[i]['price']:
+                if index_old_data < len(new_data) and old_data[index_old_data]['price'] != new_data[i]['price']:
                     self._update_price(old_data, new_data, index_old_data)
             else:
                 old_data.append(new_data[i])
