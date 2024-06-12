@@ -2,7 +2,7 @@ import json
 from colorama import Fore
 from . import network
 
-__version__ = '1.6.4'
+__version__ = '1.6.5'
 """
 Versión actual de la biblioteca    
 """
