@@ -1,5 +1,5 @@
 import json
-from typing import Any
+from typing import Any, Union
 from dataclasses import asdict
 from .alcambio import AlCambio
 from .bcv import BCV
@@ -65,19 +65,31 @@ class Provider:
             
         return values 
     
-    def _update_price(self, old_data: dict, new_data: dict, i: Any):
-        old_price = old_data[i]['price']
-        new_price = new_data[i]['price']
-        price_old = new_data[i].get('price_old', None) # Valor preciso
+    def _update_price(self, old_data: Union[list, dict], new_data: Union[list, dict], index: Any, index_extra: Any = None):
+        """
+        Actualiza el precio y otros atributos en `old_data` basándose en la información de `new_data`.
+
+        Args:
+        - `old_data`: El diccionario que contiene los datos antiguos a actualizar.
+        - `new_data`: El diccionario que contiene los nuevos datos.
+        - `index`: La clave para acceder a los datos en `old_data`.
+        - `index_extra`: Una clave opcional para acceder a los datos en `new_data`. Por defecto es `None`. 
+        Si no se proporciona, se usará el valor de `index`.
+        """        
+        index_key = index_extra if index_extra is not None else index
+
+        old_price = old_data[index]['price']
+        new_price = new_data[index_key]['price']
+        price_old = new_data[index_key].get('price_old', None) # Valor preciso
         change    = round(float(new_price - old_price), 2)
         percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
         symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
         color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-        last_update = new_data[i].get('last_update', None)
+        last_update = new_data[index_key].get('last_update', None)
 
         change = float(str(change).replace('-', ' '))
 
-        old_data[i].update({
+        old_data[index].update({
             'price': new_price,
             'change': change,
             'percent': percent,
@@ -87,16 +99,16 @@ class Provider:
         
         # Comprueba si los atributos tienen valor. se agregan y/o actualizan
         if price_old is not None:
-            old_data[i].update({
+            old_data[index].update({
                 'price_old': price_old
         })
          
         if last_update is not None: 
-            old_data[i].update({
+            old_data[index].update({
                 'last_update': last_update
         })
 
-    def _update_item(self, old_data: dict, new_data: dict, i: Any):
+    def _update_item(self, old_data: Union[list, dict], new_data: Union[list, dict], i: Any):
         """
         Evalúa la estructura de cada monitor en `old_data`. Elimina los atributos que sean `None` (Cada estructura es diferente según el proveedor) y realiza los cálculos necesarios.
 
@@ -129,7 +141,8 @@ class Provider:
             if new_data[i]['title'] in title_items:
                 index_old_data = title_items.index(new_data[i]['title']) # Encuentra la posición donde se almacena el elemento en la lista
                 if index_old_data < len(new_data) and old_data[index_old_data]['price'] != new_data[i]['price']:
-                    self._update_price(old_data, new_data, index_old_data)
+                    # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
+                    self._update_price(old_data, new_data, index_old_data, i)
             else:
                 old_data.append(new_data[i])
         else: # Actualiza los datos de 'old_data' con los datos de 'new_data' basándose en el key del item.
