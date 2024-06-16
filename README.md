@@ -12,6 +12,10 @@ pyDolarVenezuela es una librería de Python que te brinda la posibilidad de obte
 
 pyDolarVenezuela tiene como objetivo principal brindar una solución eficiente y confiable para acceder a información relevante sobre el valor del dólar en Venezuela, ofreciendo así una herramienta valiosa para desarrolladores interesados en trabajar en este ámbito.
 
+## Actividad
+
+![Alt](https://repobeats.axiom.co/api/embed/4ee3c595fcdb3081e280a1e8f4f81af9767a37f7.svg "Repobeats analytics image")
+
 ## Instalación
 ``` sh
 pip install pyDolarVenezuela
@@ -104,3 +108,9 @@ price_in_dolares = currency_converter(
 
 print(price_in_dolares)  # Imprime algo como 28.22466836014677
 ```
+
+## Contributores
+
+<a href="https://github.com/fcoagz/pydolarvenezuela/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fcoagz/pydolarvenezuela"/>
+</a>
