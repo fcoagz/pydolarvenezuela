@@ -158,14 +158,26 @@ class Provider:
             return data
         
         try:
-            monitor_data = data[type_monitor.lower()]
+            if self.page.name == B.name and type_monitor.lower() in [bank['title'].lower() for bank in data['banks']]:
+                monitor_data = next((bank for bank in data['banks'] if bank['title'].lower() == type_monitor.lower()), None)
+            else:
+                monitor_data = data.get(type_monitor.lower())
+            
+            if not monitor_data:
+                raise KeyError(f'Type monitor "{type_monitor}" not found.')
+
             if property:
+                if property not in monitor_data:
+                    raise KeyError(f'Property "{property}" not found in type monitor "{type_monitor}".')
+                
                 if property == 'last_update' and self.page.name == B.name:
                     return monitor_data[property]
+                
                 value = monitor_data[property]
                 return f'Bs. {value}' if prettify and property == 'price' else value
+            
             return monitor_data
-        except KeyError:
-            raise KeyError('Property not found. https://github.com/fcoagz/pyDolarVenezuela')
+        except KeyError as e:
+            raise KeyError(f'{e} https://github.com/fcoagz/pyDolarVenezuela')
         except Exception as e:
             raise e
