@@ -59,6 +59,44 @@ time_units = {
     "segundos": "seconds", "segundo": "seconds"
 }
 
+# https://github.com/joseaugustosoto/venezuelaBanks thank you <3
+bank_dict = {
+    "Banco Central de Venezuela": "bcv",
+    "Banco de Venezuela": "bdv",
+    "Banco Venezolano de Crédito": "bvc",
+    "Mercantil Banco": "mercantil",
+    "BBVA Provincial": "provincial",
+    "Bancaribe": "bancaribe",
+    "Banco Exterior": "exterior",
+    "Banco Occidental de Descuento": "bod",
+    "Banco Caroní": "caroní",
+    "Banesco": "banesco",
+    "Banco Sofitasa": "sofitasa",
+    "Banco Plaza": "plaza",
+    "Banco de la Gente Emprendedora": "bangente",
+    "Banco Fondo Común": "bfc",
+    "100% Banco": "100%_banco",
+    "DelSur": "delsur",
+    "Banco del Tesoro": "tesoro",
+    "Banco Agrícola de Venezuela": "bav",
+    "Bancrecer": "bancrecer",
+    "Mi Banco": "mi_banco",
+    "Banco Activo": "activo",
+    "Bancamiga": "bancamiga",
+    "Banco Internacional de Desarrollo": "b.i.d",
+    "Banplus": "banplus",
+    "Banco Bicentenario": "bicentenario",
+    "Banco de la Fuerza Armada Nacional Bolivariana": "banfanb",
+    "N58 Banco Digital": "n58",
+    "Citibank": "citi",
+    "Banco Nacional de Crédito": "bnc",
+    "Instituto Municipal de Crédito Popular": "imcp",
+    "Banco Mercantil": "mercantil_banco",
+    "Otras Instituciones": "otras_instituciones",
+    "Banco Nacional de Crédito BNC": "bnc",
+    "BanCaribe": "bancaribe"
+}
+
 path_images = [
     {
         "title": "bcv",
