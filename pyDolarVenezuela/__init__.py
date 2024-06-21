@@ -1,6 +1,6 @@
-from typing import Literal
+from typing import Literal, Union
 from . import pages
-from .data.redis import Redis
+from .models.database import LocalDatabase, Database
 from .models.pages import Page
 from .provider import Provider
 from .utils import currency_converter
@@ -10,7 +10,8 @@ from .version import CheckVersion, __version__
 __all__ = (
     "Monitor",
     "pages",
-    "Redis",
+    "LocalDatabase",
+    "Database",
     "getdate",
     "currency_converter",
     "CheckVersion",
@@ -18,7 +19,7 @@ __all__ = (
 )
 
 class Monitor:
-    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Redis = None) -> None:
+    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Union[LocalDatabase, Database] = None) -> None:
         """
         La clase `Monitor` proporciona funcionalidades para consultar los precios de diversos monitores en Venezuela.
 
