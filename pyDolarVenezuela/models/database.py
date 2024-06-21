@@ -1,14 +1,28 @@
+from typing import Optional
 from dataclasses import dataclass
 
-@dataclass
-class Redis:
+@dataclass 
+class Database:
     """
-    Redis instance
+    Database instance
     """
-    host: str = 'localhost'
-    port: int = 6379
-    password: str = None
-    ttl: int = None
+    motor: str
+    host: str
+    database: str
+    port: str
+    user: str
+    password: str
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}(host={self.host!r}, port={self.port!r}, password={self.password!r}, ttl={self.ttl!r})'
+        return f'{self.__class__.__name__}(host={self.host!r}, database={self.database!r}, port={self.port!r}, user={self.user!r}, password={self.password!r})'
+    
+@dataclass
+class LocalDatabase:
+    """
+    Local database instance
+    """
+    motor: Optional[str] = 'sqlite'
+    url: Optional[str] = 'database.db'
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}(database={self.database!r}, url={self.url!r})'
