@@ -13,21 +13,23 @@ class Italcambio:
         section_currencies_italcambio = self.soup.find('div', 'container-fluid compra')
         monitors_amounts = [x.text for x in section_currencies_italcambio.find_all('p', 'small')]
 
-        self.rates = {}
+        self.rates = []
         for i in range(len(monitors_amounts)):
             if i%2 == 0:
                 title = code_currencies[monitors_amounts[i]]
+                key = monitors_amounts[i].lower()
                 price_old = float(str(monitors_amounts[i-1]).split()[-1])
                 price = round(price_old, 2)
                 dt = datetime.now(standard_time_zone)
                 dt_tostring = dt.strftime('%d/%m/%Y, %I:%M %p')
     
-                self.rates[monitors_amounts[i].lower()] = {
+                self.rates.append({
+                    'key': key,
                     'title': title,
                     'price': price,
                     'price_old': price_old,
                     'last_update': dt_tostring
-                }
+                })
     
     def get_values(self):
         self._load()
