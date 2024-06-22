@@ -1,6 +1,6 @@
 ![Portada pyDolarVenezuela](https://github.com/fcoagz/pydolarvenezuela/blob/main/static/pyDolarVenezuela.jpg?raw=true)
 
-pyDolarVenezuela es una librería de Python que te brinda la posibilidad de obtener los valores del dólar en distintos monitores en Venezuela, así como las tasas de cambio proporcionadas por el Banco Central de Venezuela. Esta librería consulta diversas páginas web que ofrecen información actualizada sobre el valor del dólar:
+pyDolarVenezuela es una librería de Python diseñada para facilitar la obtención de los valores del dólar en distintos monitores en Venezuela. Esta herramienta te permite acceder a información actualizada proveniente de diversas páginas web que publican el valor del dólar en tiempo real:
 
 | Página Web | URL | Estado
 |------------|-------------|-------------|
@@ -12,16 +12,44 @@ pyDolarVenezuela es una librería de Python que te brinda la posibilidad de obte
 
 pyDolarVenezuela tiene como objetivo principal brindar una solución eficiente y confiable para acceder a información relevante sobre el valor del dólar en Venezuela, ofreciendo así una herramienta valiosa para desarrolladores interesados en trabajar en este ámbito.
 
+## Base de datos
+
+[![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
+
+pyDolarVenezuela utiliza [Supabase](https://supabase.com) para la integración de la base de datos Postgres. También puede implementar otro servidor de base de datos si lo prefiere o localmente.
+
+```python
+from pyDolarVenezuela import LocalDatabase, Database
+
+local = LocalDatabase(
+    motor='sqlite',
+    url='database.db' # Ubicación de la base de datos
+)
+
+db_server = Database(
+    motor='postgresql',
+    host='postgres-cloud-host',
+    port='postgres-cloud-port',
+    user='postgres-cloud-user',
+    password='your-secure-password',
+    database='postgres-cloud-database-name'
+)
+```
+
+**Nota:** Se pueda utilizar con SQLAlchemy.
+
 ## Actividad
 
 ![Alt](https://repobeats.axiom.co/api/embed/4ee3c595fcdb3081e280a1e8f4f81af9767a37f7.svg "Repobeats analytics image")
 
 ## Instalación
+
 ``` sh
 pip install pyDolarVenezuela
 ```
 
 ## Uso
+
 Debes importar el módulo `pages`, donde encontrarás una variedad de atributos que contienen información sobre una página específica de la que deseas obtener los datos. Adicionalmente deberás importar la clase `Monitor`, cuyos parámetros será la página que deseas utilizar y la moneda en la que se expresarán los precios (`USD`, `EUR`).
 
 ```python
@@ -31,35 +59,21 @@ from pyDolarVenezuela import Monitor
 monitor = Monitor(ExchangeMonitor, 'USD')
 ```
 
-pyDolarVenezuela utiliza [Redis](https://github.com/redis/redis-py), un motor de base de datos en memoria, para almacenar y procesar datos. Esto nos ayuda para calcular el cambio, el porcentaje, el color y el símbolo, y se devuelven los datos actualizados.
+Si deseas utilizar una base de datos (lo cual es útil para calcular el cambio, el porcentaje, el color y el símbolo, y se devuelven los datos actualizados):
+
 
 ```python
 from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, ExchangeMonitor, Italcambio
-from pyDolarVenezuela import Monitor, Redis
+from pyDolarVenezuela import Monitor, LocalDatabase
 
-# Defecto
-db = Redis(
-    host='localhost',
-    port=6379
+local = LocalDatabase(
+    motor='sqlite',
+    url='database.db'
 )
 
-monitor = Monitor(CriptoDolar, 'USD', db=db)
+monitor = Monitor(CriptoDolar, 'USD', db=local)
 
 ```
-Si prefieres utilizar [Redis Cloud](https://app.redislabs.com/) en lugar de una instancia local de `Redis`, puedes hacerlo cambiando el host y el puerto cuando creas la instancia de `Redis`.
-
-```python
-db = Redis(
-    host='redis-cloud-host',
-    port='redis-cloud-port',
-    password='*************'
-)
-```
-
-```
-Aunque Redis puede funcionar en Windows, no es una versión oficial. Para un entorno de producción estable, se recomienda instalar Redis en Linux o utilizar Redis Cloud.
-```
-
 
 El parámetro `currency` de la clase `Monitor` por defecto tiene el valor: `USD`, verifique que la página de la que desea obtener los datos pueda expresar precios en `EUR`.
 
@@ -71,8 +85,8 @@ print(ExchangeMonitor.currencies)
 
 El método `get_value_monitors` se utiliza después de crear una instancia del objeto Monitor y permite el acceso a los datos almacenados en el diccionario. Los siguientes parámetros serían los siguientes:
 
-- `monitor_code`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
-- `name_property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
+- `type_monitor`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+- `property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
 - `prettify`: Muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
 
 ```python
@@ -82,7 +96,7 @@ from pyDolarVenezuela import Monitor
 monitor = Monitor(ExchangeMonitor, 'USD')
 
 # Obtener los valores de todos los monitores
-valores_dolar = monitor.get_value_monitors()
+valores_dolar = monitor.get_all_monitors()
 
 # Obtener el valor del dólar en EnParaleloVzla
 valor_dolar = monitor.get_value_monitors("enparalelovzla", "price", prettify=True)
