@@ -8,6 +8,9 @@ from ..models.monitor import Monitor as SchemaMonitor
 
 class SettingsDB:
     def __init__(self, connection) -> None:
+        """
+        Configuracion de la base de datos.
+        """
         self.engine = get_connection(connection)
         create_tables(self.engine)
 
