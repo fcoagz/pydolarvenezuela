@@ -8,7 +8,8 @@ dependencies = [
   "babel",
   "pytz",
   "colorama",
-  "redis",
+  "psycopg2",
+  "sqlalchemy"
 ]
 requires-python = ">=3.9"
 authors = [

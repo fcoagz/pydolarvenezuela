@@ -21,7 +21,8 @@ INSTALL_REQUIRES = [
       'babel',
       'colorama',
       'pytz',
-      'redis'
+      'psycopg2',
+      'sqlalchemy'
       ]
 
 CLASSIFIERS = [
