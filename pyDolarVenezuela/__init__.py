@@ -1,4 +1,5 @@
 from typing import Any, List, Dict, Literal, Union
+from datetime import timedelta
 from . import pages
 from .models.database import LocalDatabase, Database
 from .models.pages import Page
@@ -19,7 +20,7 @@ __all__ = (
 )
 
 class Monitor:
-    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Union[LocalDatabase, Database] = None) -> None:
+    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Union[LocalDatabase, Database] = None, ttl: timedelta = timedelta(minutes=10)) -> None:
         """
         La clase `Monitor` proporciona funcionalidades para consultar los precios de diversos monitores en Venezuela.
 
@@ -27,6 +28,7 @@ class Monitor:
         - provider: La página de la que se accederán los datos.
         - currency: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
         - db: La base de datos en la que se almacenarán los datos. Por defecto es `None`.
+        - ttl: Tiempo de vida del cache. Por defecto es `360seg`
         """
 
         if CheckVersion.check:
@@ -34,6 +36,10 @@ class Monitor:
         if not isinstance(provider, Page):
             raise TypeError("The parameter must be an object of type Monitor.")
         
+        from .storage import Cache
+        
+        self.cache = Cache(ttl=ttl)
+        self.key   = f'{provider.name}:{currency}'
         self.provider = provider
         self.currency = currency.lower()
         self.db       = db
@@ -43,7 +49,10 @@ class Monitor:
         """
         El método `get_all_monitors` permite obtener todos los monitores disponibles.
         """
-        return self.select_monitor.get_values_specifics()
+        if not self.cache.get(self.key):
+            result = self.select_monitor.get_values_specifics()
+            self.cache.set(self.key, result)
+        return self.cache.get(self.key)
 
     def get_value_monitors(self,
                            type_monitor: str = None,
@@ -57,8 +66,7 @@ class Monitor:
         - property: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
         - prettify: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
-        return self.select_monitor.get_values_specifics(
-            type_monitor,
-            property,
-            prettify
-        )
+        if not self.cache.get(self.key):
+            result = self.select_monitor.get_values_specifics(type_monitor, property, prettify)
+            self.cache.set(self.key, result)
+        return self.cache.get(self.key)
