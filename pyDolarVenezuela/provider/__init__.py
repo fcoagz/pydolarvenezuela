@@ -26,8 +26,8 @@ def model_to_dict(model, exclude: List[str] = None):
     excluyendo los atributos especificados.
     
     Args:
-    - `model`: La instancia del modelo de SQLAlchemy.
-    - `exclude`: Lista de nombres de atributos a excluir del diccionario.
+    - model: La instancia del modelo de SQLAlchemy.
+    - exclude: Lista de nombres de atributos a excluir del diccionario.
     """
     exclude = exclude or []
     return {
@@ -82,10 +82,10 @@ class Provider:
         Actualiza el precio y otros atributos en `old_data` basándose en la información de `new_data`.
 
         Args:
-        - `old_data`: la lista de elementos de datos antiguos.
-        - `new_data`: la lista de nuevos elementos de datos.
-        - `index`: El índice del elemento a actualizar.
-        - `index_extra`: Una clave opcional para acceder a los datos en `new_data`. Por defecto es `None`. 
+        - old_data: la lista de elementos de datos antiguos.
+        - new_data: la lista de nuevos elementos de datos.
+        - index: El índice del elemento a actualizar.
+        - index_extra: Una clave opcional para acceder a los datos en `new_data`. Por defecto es `None`. 
         Si no se proporciona, se usará el valor de `index`.
         """        
         index_key = index_extra if index_extra is not None else index
@@ -119,9 +119,9 @@ class Provider:
         Actualiza un elemento en la lista `old_data` con el elemento `new_data` correspondiente en el índice `i`.
 
         Args:
-        - `old_data`: la lista de elementos de datos antiguos.
-        - `new_data`: la lista de nuevos elementos de datos.
-        - `i`: El índice del elemento a actualizar.
+        - old_data: la lista de elementos de datos antiguos.
+        - new_data: la lista de nuevos elementos de datos.
+        - i: El índice del elemento a actualizar.
         """
         title_items = [item.title for item in old_data]
         if new_data[i].title in title_items:

@@ -24,9 +24,9 @@ class Monitor:
         La clase `Monitor` proporciona funcionalidades para consultar los precios de diversos monitores en Venezuela.
 
         Args:
-        - `provider`: La página de la que se accederán los datos.
-        - `currency`: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
-        - `db`: Base de datos con Redis. Por defecto es `None`
+        - provider: La página de la que se accederán los datos.
+        - currency: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
+        - db: La base de datos en la que se almacenarán los datos. Por defecto es `None`.
         """
 
         if CheckVersion.check:
@@ -47,9 +47,9 @@ class Monitor:
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
 
         Args:
-        - `type_monitor`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
-        - `property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
-        - `prettify`: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
+        - type_monitor: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+        - property: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
+        - prettify: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
         return self.select_monitor._get_values_specifics(
             type_monitor,
