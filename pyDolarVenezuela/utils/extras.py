@@ -229,8 +229,28 @@ path_images = [
         "provider": "exchangemonitor"
     },
     {
+        "title": "bancaribe",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023856/exchangemonitor/burnekr9pidop4wz3xrx.webp",
+        "provider": "exchangemonitor"
+    },
+    {
+        "title": "banco_de_venezuela",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023820/exchangemonitor/zlz0iuhw3me4ldhu9k1g.webp",
+        "provider": "exchangemonitor"
+    },
+    {
         "title": "banco_exterior",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093842/exchangemonitor/eyf90rndgix2ayfirptz.webp",
+        "provider": "exchangemonitor"
+    },
+    {
+        "title": "banca_plaza",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023752/exchangemonitor/aqmehn1enysonjsihed3.webp",
+        "provider": "exchangemonitor"
+    },
+        {
+        "title": "banplus",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023923/exchangemonitor/vg4gibg5y4ziyloejlrl.webp",
         "provider": "exchangemonitor"
     },
     {
