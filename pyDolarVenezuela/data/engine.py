@@ -4,6 +4,9 @@ from .models import Base
 from ..models.database import Database, LocalDatabase
 
 def get_engine(connection: Union[Database, LocalDatabase]):
+    """
+    Obtiene un motor de base de datos (engine) de SQLAlchemy según el tipo de conexión proporcionada.
+    """
     if isinstance(connection, Database):
         return create_engine(f'{connection.motor}://{connection.user}:{connection.password}@{connection.host}:{connection.port}/{connection.database}')
     elif isinstance(connection, LocalDatabase):
@@ -16,6 +19,9 @@ def get_connection(connection: Union[Database, LocalDatabase]):
     return engine
 
 def create_tables(engine):
+    """
+    Crea todas las tablas definidas en los modelos utilizando el motor de base de datos proporcionado.
+    """
     try:
         Base.metadata.create_all(engine)
     except Exception as e:
