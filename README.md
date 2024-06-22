@@ -12,7 +12,9 @@ pyDolarVenezuela es una librería de Python diseñada para facilitar la obtenci�
 
 pyDolarVenezuela tiene como objetivo principal brindar una solución eficiente y confiable para acceder a información relevante sobre el valor del dólar en Venezuela, ofreciendo así una herramienta valiosa para desarrolladores interesados en trabajar en este ámbito.
 
-## Base de datos
+## Características
+
+### Base de datos
 
 [![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
 
@@ -37,6 +39,19 @@ db_server = Database(
 ```
 
 **Nota:** Se pueda utilizar con SQLAlchemy.
+
+### Almacenamiento en caché
+
+Proporciona almacenamiento en caché integrado para una rápida recuperación de datos para mejorar el rendimiento al realizar solicitudes a la misma fuente. Puedes configurar el tiempo de espera si lo deseas.
+
+```python
+from datetime import timedelta
+from pyDolarVenezuela import Monitor
+
+monitor = Monitor(..., ttl=timedelta(minutes=5))
+```
+
+Por defecto son 10 minutos para que la próxima vez que solicites recargue los datos
 
 ## Actividad
 
