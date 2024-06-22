@@ -126,7 +126,8 @@ class Provider:
         title_items = [item.title for item in old_data]
         if new_data[i].title in title_items:
             index_old_data = title_items.index(new_data[i].title)
-            if index_old_data < len(old_data) and old_data[index_old_data].price != new_data[i].price:
+            if old_data[index_old_data].price != new_data[i].price:
+                # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
                 self._update_price(old_data, new_data, index_old_data, i)
         else:
             self._connection.create_monitor(self.page_id, Monitor(**new_data[i]))
