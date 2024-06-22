@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from sqlalchemy.orm import Session
 
 from .models import Page, Monitor, Currency
@@ -12,6 +12,9 @@ class SettingsDB:
         create_tables(self.engine)
 
     def get_or_create_page(self, page: SchemaPage):
+        """
+        Obtiene el ID de la página, en caso contrario la crea y también devuelve el ID.
+        """
         with Session(self.engine) as session:
             existing_page = session.query(Page).filter(Page.name == page.name).first()
             if existing_page:
@@ -23,6 +26,9 @@ class SettingsDB:
                 return new_page.id
 
     def get_or_create_currency(self, currency: str):
+        """
+        Obtiene el ID de la moneda, en caso contrario la crea y también devuelve el ID.
+        """
         with Session(self.engine) as session:
             existing_currency = session.query(Currency).filter(Currency.symbol == currency).first()
             if existing_currency:
@@ -35,6 +41,9 @@ class SettingsDB:
 
 
     def create_monitor(self, page_id: int, currency_id: int, monitor: SchemaMonitor):
+        """
+        Generar un monitor en la base de datos especificando el id de la página y la moneda.
+        """
         with Session(self.engine) as session:
             existing_monitor = session.query(Monitor).filter(
                 Monitor.page_id == page_id,
@@ -47,7 +56,10 @@ class SettingsDB:
                 session.add(new_monitor)
                 session.commit()
 
-    def create_monitors(self, page_id: int, currency_id: int, monitors: List[SchemaMonitor]):
+    def create_monitors_or_one(self, page_id: int, currency_id: int, monitors: Union[List[SchemaMonitor], SchemaMonitor]):
+        """
+        Generar varios monitores en la base de datos especificando el id de la página y la moneda.
+        """
         with Session(self.engine) as session:
             for monitor in monitors:
                 existing_monitor = session.query(Monitor).filter(
@@ -63,10 +75,16 @@ class SettingsDB:
             session.commit()
 
     def update_monitor(self, id: int, monitor: SchemaMonitor):
+        """
+        Actualiza un monitor en la base de datos según el ID proporcionado.
+        """
         with Session(self.engine) as session:
             session.query(Monitor).filter(Monitor.id == id).update(monitor.__dict__)
             session.commit()
     
     def get_monitors(self, name: str) -> List[Monitor]:
+        """
+        Obtiene todos los monitores de una página según el nombre de la misma.
+        """
         with Session(self.engine) as session:
             return session.query(Monitor).filter(Monitor.page_id == session.query(Page).filter(Page.name == name).first().id).all()
