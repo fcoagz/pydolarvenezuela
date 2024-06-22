@@ -166,3 +166,4 @@ cython_debug/
 pyDolarVenezuela.egg-info
 app.py
 example.json
+database.db
