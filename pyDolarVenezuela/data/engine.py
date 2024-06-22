@@ -5,13 +5,11 @@ from ..models.database import Database, LocalDatabase
 
 def get_engine(connection: Union[Database, LocalDatabase]):
     if isinstance(connection, Database):
-        engine = create_engine(f'{connection.motor}://{connection.user}:{connection.password}@{connection.host}:{connection.port}/{connection.database}')
+        return create_engine(f'{connection.motor}://{connection.user}:{connection.password}@{connection.host}:{connection.port}/{connection.database}')
     elif isinstance(connection, LocalDatabase):
-        engine = create_engine(f'{connection.motor}:///{connection.url}')
+        return create_engine(f'{connection.motor}:///{connection.url}')
     else:
         raise ValueError("The connection must be a Database or LocalDatabase object")
-
-    return engine
 
 def get_connection(connection: Union[Database, LocalDatabase]):
     engine = get_engine(connection)
