@@ -40,6 +40,9 @@ class Monitor:
         self.select_monitor = Provider(provider, currency, db)
     
     def get_all_monitors(self):
+        """
+        El método `get_all_monitors` permite obtener todos los monitores disponibles.
+        """
         return self.select_monitor._get_values_specifics()
 
     def get_value_monitors(self, type_monitor: str = None, property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
