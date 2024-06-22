@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, Any, List, Dict
 from .alcambio import AlCambio
 from .bcv import BCV
 from .criptodolar import CriptoDolar
@@ -20,7 +20,7 @@ monitor_classes = {
     I.name: {'currency': I.currencies, 'provider': Italcambio},
 }
 
-def model_to_dict(model, exclude: List[str] = None):
+def model_to_dict(model, exclude: List[str] = None) -> Dict[Any, Any]:
     """
     Convierte una instancia del modelo de SQLAlchemy en un diccionario,
     excluyendo los atributos especificados.
@@ -77,7 +77,7 @@ class Provider:
             values = self._connection.get_monitors(self.page.name)
         return values 
     
-    def _update_price(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], index: int, index_extra: int = None):
+    def _update_price(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], index: int, index_extra: int = None) -> None:
         """
         Actualiza el precio y otros atributos en `old_data` basándose en la información de `new_data`.
 
@@ -114,7 +114,7 @@ class Provider:
             symbol=symbol
         ))
 
-    def _update_item(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], i: int):
+    def _update_item(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], i: int) -> None:
         """
         Actualiza un elemento en la lista `old_data` con el elemento `new_data` correspondiente en el índice `i`.
 
@@ -132,7 +132,10 @@ class Provider:
         else:
             self._connection.create_monitor(self.page_id, Monitor(**new_data[i]))
 
-    def _get_values_specifics(self, type_monitor: str = None, property: str = None, prettify: bool = False):
+    def get_values_specifics(self,
+                              type_monitor: str = None,
+                              property: str = None,
+                              prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         data = self._load_data()
         
         if not type_monitor:

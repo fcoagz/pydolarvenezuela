@@ -1,6 +1,6 @@
-from typing import Literal
+from typing import Literal, Union
 
-def currency_converter(type: Literal['VES', 'USD', 'EUR'], value, monitor: dict):
+def currency_converter(type: Literal['VES', 'USD', 'EUR'], value, monitor: dict) -> Union[float, None]:
     """
     Convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
     """

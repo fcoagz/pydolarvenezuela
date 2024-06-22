@@ -1,4 +1,5 @@
-from typing import List, Union
+from typing import Any, List, Union
+from sqlalchemy import Column, Integer
 from sqlalchemy.orm import Session
 
 from .models import Page, Monitor, Currency
@@ -14,7 +15,7 @@ class SettingsDB:
         self.engine = get_connection(connection)
         create_tables(self.engine)
 
-    def get_or_create_page(self, page: SchemaPage):
+    def get_or_create_page(self, page: SchemaPage) -> Union[Any, Column[Integer]]:
         """
         Obtiene el ID de la página, en caso contrario la crea y también devuelve el ID.
         """
@@ -28,7 +29,7 @@ class SettingsDB:
                 session.commit()
                 return new_page.id
 
-    def get_or_create_currency(self, currency: str):
+    def get_or_create_currency(self, currency: str) -> Union[Any, Column[Integer]]:
         """
         Obtiene el ID de la moneda, en caso contrario la crea y también devuelve el ID.
         """
@@ -43,7 +44,7 @@ class SettingsDB:
                 return new_currency.id
 
 
-    def create_monitor(self, page_id: int, currency_id: int, monitor: SchemaMonitor):
+    def create_monitor(self, page_id: int, currency_id: int, monitor: SchemaMonitor) -> None:
         """
         Generar un monitor en la base de datos especificando el id de la página y la moneda.
         """
@@ -59,7 +60,7 @@ class SettingsDB:
                 session.add(new_monitor)
                 session.commit()
 
-    def create_monitors(self, page_id: int, currency_id: int, monitors: List[SchemaMonitor]):
+    def create_monitors(self, page_id: int, currency_id: int, monitors: List[SchemaMonitor]) -> None:
         """
         Generar varios monitores en la base de datos especificando el id de la página y la moneda.
         """
@@ -77,7 +78,7 @@ class SettingsDB:
             
             session.commit()
 
-    def update_monitor(self, id: int, monitor: SchemaMonitor):
+    def update_monitor(self, id: int, monitor: SchemaMonitor) -> None:
         """
         Actualiza un monitor en la base de datos según el ID proporcionado.
         """

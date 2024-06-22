@@ -1,4 +1,4 @@
-from typing import Literal, Union
+from typing import Any, List, Dict, Literal, Union
 from . import pages
 from .models.database import LocalDatabase, Database
 from .models.pages import Page
@@ -39,13 +39,16 @@ class Monitor:
         self.db       = db
         self.select_monitor = Provider(provider, currency, db)
     
-    def get_all_monitors(self):
+    def get_all_monitors(self) -> List[Dict[str, Any]]:
         """
         El método `get_all_monitors` permite obtener todos los monitores disponibles.
         """
-        return self.select_monitor._get_values_specifics()
+        return self.select_monitor.get_values_specifics()
 
-    def get_value_monitors(self, type_monitor: str = None, property: Literal['title', 'price', 'last_update'] = None, prettify: bool = False):
+    def get_value_monitors(self,
+                           type_monitor: str = None,
+                           property: Literal['title', 'price', 'last_update'] = None,
+                           prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
 
@@ -54,7 +57,7 @@ class Monitor:
         - property: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
         - prettify: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
-        return self.select_monitor._get_values_specifics(
+        return self.select_monitor.get_values_specifics(
             type_monitor,
             property,
             prettify
