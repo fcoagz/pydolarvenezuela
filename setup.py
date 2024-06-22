@@ -21,7 +21,7 @@ INSTALL_REQUIRES = [
       'babel',
       'colorama',
       'pytz',
-      'psycopg2',
+      'psycopg2-binary',
       'sqlalchemy'
       ]
 
