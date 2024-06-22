@@ -59,7 +59,7 @@ class SettingsDB:
                 session.add(new_monitor)
                 session.commit()
 
-    def create_monitors_or_one(self, page_id: int, currency_id: int, monitors: Union[List[SchemaMonitor], SchemaMonitor]):
+    def create_monitors(self, page_id: int, currency_id: int, monitors: List[SchemaMonitor]):
         """
         Generar varios monitores en la base de datos especificando el id de la página y la moneda.
         """
