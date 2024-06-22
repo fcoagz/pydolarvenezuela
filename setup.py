@@ -21,6 +21,7 @@ INSTALL_REQUIRES = [
       'babel',
       'colorama',
       'pytz',
+      'cachetools',
       'psycopg2-binary',
       'sqlalchemy'
       ]
