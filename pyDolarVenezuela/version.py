@@ -25,4 +25,9 @@ class CheckVersion:
         latest_version = json.loads(response)["info"]["version"]
 
         if __version__ != latest_version:
-            print(f"{Fore.GREEN}New version: {latest_version}.{Fore.RESET} {Fore.RED}Current version {__version__}.{Fore.RESET} write the following command: pip install --upgrade pyDolarVenezuela\n")
+            print(f"""
+{Fore.GREEN}New version: {latest_version}.{Fore.RESET} {Fore.RED}Current version {__version__}.{Fore.RESET} write the following command: pip install --upgrade pyDolarVenezuela
+
+Recommended:
+- See the improvements: https://github.com/fcoagz/pydolarvenezuela/releases/tag/v{latest_version}
+- Docs: https://github.com/fcoagz/pydolarvenezuela#""")
