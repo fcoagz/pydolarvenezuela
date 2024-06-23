@@ -22,11 +22,12 @@ class ExchangeMonitor:
         section_dolar_venezuela = self.soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
         _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
 
-        self.data = {}
+        self.data = []
         for scraping_monitor in _scraping_monitors:
             result = scraping_monitor.find("div", "module-table module-table-fecha")
 
             name  = result.find("h6", "nombre").text
+            key = _convert_specific_format(name)
             price = str(result.find('p', "precio").text).replace(',', '.')
 
             if price.count('.') == 2:
@@ -41,6 +42,7 @@ class ExchangeMonitor:
             image = next((image.image for image in list_monitors_images if image.provider == 'exchangemonitor' and image.title == _convert_specific_format(name)), None)
 
             data = {
+                'key': key,
                 'title': name,
                 'price': price,
                 'last_update': last_update,
@@ -51,7 +53,7 @@ class ExchangeMonitor:
                 'image': image
             }
 
-            self.data[_convert_specific_format(name)] = data
+            self.data.append(data)
     
     def get_values(self):
         self._load()

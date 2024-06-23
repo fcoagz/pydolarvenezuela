@@ -8,7 +8,9 @@ dependencies = [
   "babel",
   "pytz",
   "colorama",
-  "redis",
+  "cachetools",
+  "psycopg2-binary",
+  "sqlalchemy"
 ]
 requires-python = ">=3.9"
 authors = [

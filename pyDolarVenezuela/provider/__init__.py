@@ -1,16 +1,15 @@
-import json
-from typing import Any, Union
-from dataclasses import asdict
+from typing import Union, Any, List, Dict
 from .alcambio import AlCambio
 from .bcv import BCV
 from .criptodolar import CriptoDolar
 from .exchangemonitor import ExchangeMonitor
 from .italcambio import Italcambio
 
-from ..data.redis import Cache
-from ..models.monitor import Monitor
-from ..models.database import Redis
+from ..data.main import SettingsDB
+from ..data.models import Monitor as SchemaMonitorDB
 from ..models.pages import Page
+from ..models.monitor import Monitor
+from ..models.database import LocalDatabase, Database
 from ..pages import AlCambio as A, BCV as B, CriptoDolar as C, ExchangeMonitor as E, Italcambio as I
 
 monitor_classes = {
@@ -21,162 +20,145 @@ monitor_classes = {
     I.name: {'currency': I.currencies, 'provider': Italcambio},
 }
 
+def model_to_dict(model, exclude: List[str] = None) -> Dict[Any, Any]:
+    """
+    Convierte una instancia del modelo de SQLAlchemy en un diccionario,
+    excluyendo los atributos especificados.
+    
+    Args:
+    - model: La instancia del modelo de SQLAlchemy.
+    - exclude: Lista de nombres de atributos a excluir del diccionario.
+    """
+    exclude = exclude or []
+    return {
+        column.name: getattr(model, column.name)
+        for column in model.__table__.columns
+        if column.name not in exclude
+    }
+
 class Provider:
     def __init__(self,
                 page: Page, 
                 currency: str, 
-                db: Redis = None) -> None:
+                database: Union[LocalDatabase, Database] = None) -> None:
         if currency.lower() not in page.currencies:
             raise ValueError(f"The currency type must be 'usd', 'eur'..., not {currency}")
         
         self.page = page
         self.currency = currency.lower()
-        self.db = db
+        self.database = database
 
-        if self.db is not None:
-            self._redis = Cache(self.db)
+        if self.database is not None:
+            self._connection = SettingsDB(self.database)
 
     def _load_data(self):
         monitor_class = monitor_classes.get(self.page.name).get('provider')
         values = monitor_class(url=self.page.provider, currency=self.currency).get_values()
 
-        if self.db is not None:
-            key = f'{self.currency}:{self.page.name}'
-            
-            if not self._redis.get_data(key):
-                self._redis.set_data(key, json.dumps(values), self.db.ttl)
+        if self.database is not None:
+            self.page_id = self._connection.get_or_create_page(self.page)
+            self.currency_id = self._connection.get_or_create_currency(self.currency)
 
-            old_data = json.loads(self._redis.get_data(key))
-            for property in old_data:
-                if property not in ('banks', 'last_update'):
-                    try:
-                        self._update_item(old_data, values, property)
-                    except KeyError:
-                        pass
-                elif property == 'banks': # Comparación de propiedades de los datos BCV
-                    banks = values[property]
-                    for i in range(len(banks)):
-                        self._update_item(old_data[property], banks, i)
-                elif property == 'last_update':
-                    old_data[property] = values[property]
+            self._connection.create_monitors(self.page_id, self.currency_id, [
+                Monitor(**item) if not item.get('banks') else Monitor(**bank)
+                for item in values
+                for bank in item.get('banks', [item]) 
+            ])
 
-            self._redis.set_data(key, json.dumps(old_data), self.db.ttl)
-            values = json.loads(self._redis.get_data(key))
-            
+            old_data = self._connection.get_monitors(self.page.name)
+            new_data = [
+                    Monitor(**item) if not item.get('banks') else Monitor(**bank)
+                    for item in values
+                    for bank in item.get('banks', [item]) 
+                ]
+            for i in range(len(new_data)):
+                self._update_item(old_data, new_data, i)
+
+            values = self._connection.get_monitors(self.page.name)
         return values 
     
-    def _update_price(self, old_data: Union[list, dict], new_data: Union[list, dict], index: Any, index_extra: Any = None):
+    def _update_price(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], index: int, index_extra: int = None) -> None:
         """
         Actualiza el precio y otros atributos en `old_data` basándose en la información de `new_data`.
 
         Args:
-        - `old_data`: El diccionario que contiene los datos antiguos a actualizar.
-        - `new_data`: El diccionario que contiene los nuevos datos.
-        - `index`: La clave para acceder a los datos en `old_data`.
-        - `index_extra`: Una clave opcional para acceder a los datos en `new_data`. Por defecto es `None`. 
+        - old_data: la lista de elementos de datos antiguos.
+        - new_data: la lista de nuevos elementos de datos.
+        - index: El índice del elemento a actualizar.
+        - index_extra: Una clave opcional para acceder a los datos en `new_data`. Por defecto es `None`. 
         Si no se proporciona, se usará el valor de `index`.
         """        
         index_key = index_extra if index_extra is not None else index
 
-        old_price = old_data[index]['price']
-        new_price = new_data[index_key]['price']
-        price_old = new_data[index_key].get('price_old', None) # Valor preciso
+        old_price = old_data[index].price
+        new_price = new_data[index_key].price
+        price_old = new_data[index_key].price_old # Valor preciso
         change    = round(float(new_price - old_price), 2)
         percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
         symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
         color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-        last_update = new_data[index_key].get('last_update', None)
-
+        last_update = new_data[index_key].last_update
         change = float(str(change).replace('-', ' '))
+        image  = new_data[index_key].image
 
-        old_data[index].update({
-            'price': new_price,
-            'change': change,
-            'percent': percent,
-            'color': color,
-            'symbol': symbol,
-        })
-        
-        # Comprueba si los atributos tienen valor. se agregan y/o actualizan
-        if price_old is not None:
-            old_data[index].update({
-                'price_old': price_old
-        })
-         
-        if last_update is not None: 
-            old_data[index].update({
-                'last_update': last_update
-        })
+        self._connection.update_monitor(old_data[index].id, Monitor(
+            key=old_data[index].key,
+            title=old_data[index].title,
+            price=new_price,
+            price_old=price_old,
+            last_update=last_update,
+            image=image,
+            percent=percent,
+            change=change,
+            color=color,
+            symbol=symbol
+        ))
 
-    def _update_item(self, old_data: Union[list, dict], new_data: Union[list, dict], i: Any):
+    def _update_item(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], i: int) -> None:
         """
-        Evalúa la estructura de cada monitor en `old_data`. Elimina los atributos que sean `None` (Cada estructura es diferente según el proveedor) y realiza los cálculos necesarios.
+        Actualiza un elemento en la lista `old_data` con el elemento `new_data` correspondiente en el índice `i`.
 
-        Estructura inicial (para la primera vez):
-        ```python
-        class Monitor:
-            title: str  
-            price: float  
-            price_old: Optional[float] = None 
-            last_update: Optional[str] = None  
-            image: Optional[str] = None  
-            percent: Optional[float] = 0.0
-            change: Optional[float] = 0.0  
-            color: Optional[str] = "neutral" 
-            symbol: Optional[str] = "" 
-        ```
+        Args:
+        - old_data: la lista de elementos de datos antiguos.
+        - new_data: la lista de nuevos elementos de datos.
+        - i: El índice del elemento a actualizar.
         """
-        
-        if isinstance(i, str) or (isinstance(i, int) and i <= len(old_data) - 1):
-            structure_monitor = asdict(Monitor(**old_data[i]))
-            for key in list(structure_monitor.keys()):
-                if structure_monitor[key] is None:
-                    del structure_monitor[key]
-            old_data[i] = structure_monitor
+        title_items = [item.title for item in old_data]
+        if new_data[i].title in title_items:
+            index_old_data = title_items.index(new_data[i].title)
+            if old_data[index_old_data].price != new_data[i].price:
+                # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
+                self._update_price(old_data, new_data, index_old_data, i)
+        else:
+            self._connection.create_monitor(self.page_id, Monitor(**new_data[i]))
 
-        # Ambos consultan si el precio es diferente para realizar cambios.
-        # Hay diferentes datos que se distribuyeron como list, {str: dict}.
-        if isinstance(i, int): # Actualiza los datos de 'old_data' con los datos de 'new_data' basándose en el título del item.
-            title_items = [item['title'] for item in old_data]
-            if new_data[i]['title'] in title_items:
-                index_old_data = title_items.index(new_data[i]['title']) # Encuentra la posición donde se almacena el elemento en la lista
-                if index_old_data < len(new_data) and old_data[index_old_data]['price'] != new_data[i]['price']:
-                    # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
-                    self._update_price(old_data, new_data, index_old_data, i)
-            else:
-                old_data.append(new_data[i])
-        else: # Actualiza los datos de 'old_data' con los datos de 'new_data' basándose en el key del item.
-            if i in old_data: 
-                if old_data[i]['price'] != new_data[i]['price']:
-                    self._update_price(old_data, new_data, i)
-            else:
-                old_data[i] = new_data[i]
-
-    def _get_values_specifics(self, type_monitor: str = None, property: str = None, prettify: bool = False):
+    def get_values_specifics(self,
+                              type_monitor: str = None,
+                              property: str = None,
+                              prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         data = self._load_data()
-        if not type_monitor:
-            return data
         
+        if not type_monitor:
+            return [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data]
+
+        type_monitor_lower = type_monitor.lower()
+
         try:
-            if self.page.name == B.name and type_monitor.lower() in [bank['title'].lower() for bank in data['banks']]:
-                monitor_data = next((bank for bank in data['banks'] if bank['title'].lower() == type_monitor.lower()), None)
-            else:
-                monitor_data = data.get(type_monitor.lower())
-            
+            monitor_data = next((monitor for monitor in data if monitor.key == type_monitor_lower), None)
+
             if not monitor_data:
                 raise KeyError(f'Type monitor "{type_monitor}" not found.')
 
             if property:
-                if property not in monitor_data:
+                property_value = getattr(monitor_data, property, None)
+                if property_value is None:
                     raise KeyError(f'Property "{property}" not found in type monitor "{type_monitor}".')
                 
-                if property == 'last_update' and self.page.name == B.name:
-                    return monitor_data[property]
-                
-                value = monitor_data[property]
-                return f'Bs. {value}' if prettify and property == 'price' else value
-            
-            return monitor_data
+                if prettify and property == 'price':
+                    return f'Bs. {property_value}'
+                return property_value
+
+            return model_to_dict(monitor_data, exclude=['id', 'page_id', 'currency_id'])
         except KeyError as e:
             raise KeyError(f'{e} https://github.com/fcoagz/pyDolarVenezuela')
         except Exception as e:

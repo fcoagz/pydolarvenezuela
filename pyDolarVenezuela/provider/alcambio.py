@@ -69,7 +69,7 @@ class AlCambio:
         self.json_response = json.loads(response)
     
     def _load(self):
-        self.rates = {}
+        self.rates = []
         country_conversions = self.json_response['data']['getCountryConversions']
         rate_types = ['PRIMARY', 'SECONDARY']
 
@@ -79,12 +79,13 @@ class AlCambio:
                 name = 'EnParaleloVzla' if not rate['official'] else 'BCV'
                 date = time.get_formatted_timestamp(country_conversions['dateParalelo'] if not rate['official'] else country_conversions['dateBcv'])
                 image = next((image.image for image in list_monitors_images if image.provider == 'alcambio' and image.title == key), None)
-                self.rates[key] = {
+                self.rates.append({
+                    'key': key,
                     'title': name,
                     'price': rate['baseValue'],
                     'last_update': date,
                     'image': image
-                }
+                })
                 rate_types.remove(rate['type'])
 
             if not rate_types:
