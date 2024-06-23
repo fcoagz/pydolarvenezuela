@@ -65,18 +65,16 @@ class SettingsDB:
         Generar varios monitores en la base de datos especificando el id de la página y la moneda.
         """
         with Session(self.engine) as session:
-            for monitor in monitors:
-                existing_monitor = session.query(Monitor).filter(
+            existing_monitor = session.query(Monitor).filter(
                     Monitor.page_id == page_id,
-                    Monitor.currency_id == currency_id,
-                    Monitor.title == monitor.title
+                    Monitor.currency_id == currency_id
                 ).first()
-                
-                if not existing_monitor:
-                    new_monitor = Monitor(page_id=page_id, currency_id=currency_id, **monitor.__dict__)
-                    session.add(new_monitor)
-            
-            session.commit()
+
+            if not existing_monitor:
+                new_monitors = [Monitor(page_id=page_id, currency_id=currency_id, **monitor.__dict__)
+                                for monitor in monitors]
+                session.add_all(new_monitors)
+                session.commit()
 
     def update_monitor(self, id: int, monitor: SchemaMonitor) -> None:
         """
