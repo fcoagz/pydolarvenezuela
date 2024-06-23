@@ -84,9 +84,9 @@ class SettingsDB:
             session.query(Monitor).filter(Monitor.id == id).update(monitor.__dict__)
             session.commit()
     
-    def get_monitors(self, name: str) -> List[Monitor]:
+    def get_monitors(self, page_id: int, currency_id: int) -> List[Monitor]:
         """
-        Obtiene todos los monitores de una página según el nombre de la misma.
+        Obtiene todos los monitores de una página según el ID de la página y la moneda.
         """
         with Session(self.engine) as session:
-            return session.query(Monitor).filter(Monitor.page_id == session.query(Page).filter(Page.name == name).first().id).all()
+            return session.query(Monitor).filter(Monitor.page_id == page_id, Monitor.currency_id == currency_id).all()

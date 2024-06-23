@@ -65,7 +65,7 @@ class Provider:
                 for bank in item.get('banks', [item]) 
             ])
 
-            old_data = self._connection.get_monitors(self.page.name)
+            old_data = self._connection.get_monitors(self.page_id, self.currency_id)
             new_data = [
                     Monitor(**item) if not item.get('banks') else Monitor(**bank)
                     for item in values
@@ -74,7 +74,7 @@ class Provider:
             for i in range(len(new_data)):
                 self._update_item(old_data, new_data, i)
 
-            values = self._connection.get_monitors(self.page.name)
+            values = self._connection.get_monitors(self.page_id, self.currency_id)
         return values 
     
     def _update_price(self, old_data: List[SchemaMonitorDB], new_data: List[Monitor], index: int, index_extra: int = None) -> None:
