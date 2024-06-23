@@ -2,6 +2,10 @@ from typing import Literal
 import requests
 from curl_cffi import requests as cffi
 
+_headers = {
+    'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36'
+}
+
 def get(url: str, params: dict = None, verify: bool = True):
     """
     Realiza una solicitud HTTP GET utilizando la biblioteca requests.
@@ -14,7 +18,7 @@ def get(url: str, params: dict = None, verify: bool = True):
     Returns:
         bytes: El contenido de la respuesta en formato de bytes.
     """
-    response = requests.get(url, params=params, verify=verify, timeout=10.0)
+    response = requests.get(url, params=params, verify=verify, timeout=10.0, headers=_headers)
     response.raise_for_status()
     
     return response.content
@@ -33,6 +37,9 @@ def curl(method: Literal['GET', 'POST'], url: str, headers: dict = None, json: d
     Returns:
         bytes: El contenido de la respuesta en formato de bytes.
     """
+    if headers is None:
+        headers = _headers
+        
     response = cffi.request(method=method, url=url, impersonate=impersonate, headers=headers, json=json, timeout=10.0)
     response.raise_for_status()
 
