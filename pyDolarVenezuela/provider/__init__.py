@@ -126,7 +126,7 @@ class Provider:
         title_items = [item.title for item in old_data]
         if new_data[i].title in title_items:
             index_old_data = title_items.index(new_data[i].title)
-            if self.page.name != I.name:
+            if self.page.name not in [I.name, E.name]:
                 if old_data[index_old_data].last_update != new_data[i].last_update:
                     # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
                     self._update_price(old_data, new_data, index_old_data, i)
