@@ -138,8 +138,11 @@ class Provider:
                               prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         data = self._load_data()
         
+        if self.database is not None:
+            data = [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data]
+
         if not type_monitor:
-            return [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data]
+            return data
 
         type_monitor_lower = type_monitor.lower()
 
@@ -158,7 +161,7 @@ class Provider:
                     return f'Bs. {property_value}'
                 return property_value
 
-            return model_to_dict(monitor_data, exclude=['id', 'page_id', 'currency_id'])
+            return monitor_data
         except KeyError as e:
             raise KeyError(f'{e} https://github.com/fcoagz/pyDolarVenezuela')
         except Exception as e:
