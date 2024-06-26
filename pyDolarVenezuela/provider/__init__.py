@@ -126,9 +126,13 @@ class Provider:
         title_items = [item.title for item in old_data]
         if new_data[i].title in title_items:
             index_old_data = title_items.index(new_data[i].title)
-            if old_data[index_old_data].price != new_data[i].price:
-                # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
-                self._update_price(old_data, new_data, index_old_data, i)
+            if self.page.name != I.name:
+                if old_data[index_old_data].last_update != new_data[i].last_update:
+                    # 'index_old_data' es la posición en old_data y 'i' es la posición en new_data.
+                    self._update_price(old_data, new_data, index_old_data, i)
+            else:
+                if old_data[index_old_data].price != new_data[i].price:
+                    self._update_price(old_data, new_data, index_old_data, i)
         else:
             self._connection.create_monitor(self.page_id, Monitor(**new_data[i]))
 
@@ -147,7 +151,7 @@ class Provider:
         type_monitor_lower = type_monitor.lower()
 
         try:
-            monitor_data = next((monitor for monitor in data if monitor.key == type_monitor_lower), None)
+            monitor_data = next((monitor for monitor in data if monitor['key'] == type_monitor_lower), None)
 
             if not monitor_data:
                 raise KeyError(f'Type monitor "{type_monitor}" not found.')
