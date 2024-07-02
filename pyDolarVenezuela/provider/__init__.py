@@ -134,7 +134,7 @@ class Provider:
                 if old_data[index_old_data].price != new_data[i].price:
                     self._update_price(old_data, new_data, index_old_data, i)
         else:
-            self._connection.create_monitor(self.page_id, new_data[i])
+            self._connection.create_monitor(self.page_id, self.currency_id, new_data[i])
 
     def get_values_specifics(self,
                               type_monitor: str = None,
