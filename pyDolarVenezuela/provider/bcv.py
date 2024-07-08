@@ -22,22 +22,20 @@ class BCV:
         section_tipo_de_cambio_oficial = self.soup.find('div', 'view-tipo-de-cambio-oficial-del-bcv')
         section_sistema_bancario = self.soup.find('div', 'table-responsive')
 
-        banks = []
         for bank in section_sistema_bancario.find('tbody').find_all('tr'):
             title = str(bank.find('td', 'views-field views-field-views-conditional').text).strip()
             key   = bank_dict.get(title)
 
-            if title not in [bank['title'] for bank in banks]:
+            if title not in [bank['title'] for bank in self.rates]:
                 price = float(str(bank.find('td', 'views-field views-field-field-tasa-venta').text).replace(',', '.'))
 
-                banks.append({
+                self.rates.append({
                     'key': key,
                     'title': title,
                     'price_old': price,
                     'price': round(price, 2),
                     'last_update': str(bank.find('td', 'views-field views-field-field-fecha-del-indicador').text).strip().replace('-', '/')
                 })
-        self.rates.append({'banks': banks})
 
         for code, values in currencies.items():
             image = next((image.image for image in list_monitors_images if image.provider == 'bcv' and image.title == code), None)
