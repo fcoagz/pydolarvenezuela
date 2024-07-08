@@ -59,18 +59,10 @@ class Provider:
             self.page_id = self._connection.get_or_create_page(self.page)
             self.currency_id = self._connection.get_or_create_currency(self.currency)
 
-            self._connection.create_monitors(self.page_id, self.currency_id, [
-                Monitor(**item) if not item.get('banks') else Monitor(**bank)
-                for item in values
-                for bank in item.get('banks', [item]) 
-            ])
+            self._connection.create_monitors(self.page_id, self.currency_id, [Monitor(**item) for item in values])
 
             old_data = self._connection.get_monitors(self.page_id, self.currency_id)
-            new_data = [
-                    Monitor(**item) if not item.get('banks') else Monitor(**bank)
-                    for item in values
-                    for bank in item.get('banks', [item]) 
-                ]
+            new_data = [Monitor(**item) for item in values]
             for i in range(len(new_data)):
                 self._update_item(old_data, new_data, i)
 
