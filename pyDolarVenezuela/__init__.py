@@ -1,8 +1,7 @@
 from typing import Any, List, Dict, Literal, Union
 from datetime import timedelta
 from . import pages
-from .models.database import LocalDatabase, Database
-from .models.pages import Page
+from .models import Page, LocalDatabase, Database
 from .provider import Provider
 from .utils import currency_converter
 from .utils import get_time_zone as getdate
