@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 
 from .models import Page, Monitor, Currency
 from .engine import get_connection, create_tables
-from ..models.pages import Page as SchemaPage
-from ..models.monitor import Monitor as SchemaMonitor
+from ..models import Page as SchemaPage
+from ..models import Monitor as SchemaMonitor
 
 class SettingsDB:
     def __init__(self, connection) -> None:

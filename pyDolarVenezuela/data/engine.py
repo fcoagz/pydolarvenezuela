@@ -1,7 +1,7 @@
 from typing import Union
 from sqlalchemy import create_engine
 from .models import Base
-from ..models.database import Database, LocalDatabase
+from ..models import Database, LocalDatabase
 
 # https://github.com/orgs/supabase/discussions/27071 Using SQLAlchemy with Supabase
 def get_engine(connection: Union[Database, LocalDatabase]):
