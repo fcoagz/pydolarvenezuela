@@ -30,10 +30,10 @@ class Monitor:
         - ttl: Tiempo de vida del cache. Por defecto es `360seg`
         """
 
-        if CheckVersion.check:
-            CheckVersion._check_dependence_version()
         if not isinstance(provider, Page):
             raise TypeError("The parameter must be an object of type Monitor.")
+        if CheckVersion.check:
+            CheckVersion._check_dependence_version()
         
         from .storage import Cache
         
