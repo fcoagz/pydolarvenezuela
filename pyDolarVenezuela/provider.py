@@ -94,9 +94,9 @@ class Provider:
         """
         index_key = index_extra if index_extra is not None else index
 
-        old_price = old_data[index].price
-        new_price = new_data[index_key].price
-        price_old = new_data[index_key].price_old
+        old_price = old_data[index_key].price
+        new_price = new_data[index].price
+        price_old = new_data[index].price_old
         change    = round(float(new_price - old_price), 2)
         percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
         symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
