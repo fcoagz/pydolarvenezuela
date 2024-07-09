@@ -1,4 +1,4 @@
-from .models.pages import Page
+from .models import Page
 
 BCV = Page(
     name="Banco Central de Venezuela",
