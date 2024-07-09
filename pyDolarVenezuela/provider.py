@@ -64,50 +64,47 @@ class Provider:
 
             old_data = self._connection.get_monitors(self.page_id, self.currency_id)
             new_data = [Monitor(**item) for item in values]
-            title_items = [item.title for item in old_data]
+            key_items = [item.key for item in old_data]
             
             for i in range(len(new_data)):
-                if new_data[i].title not in title_items:
+                if new_data[i].key not in key_items:
                     self._connection.create_monitor(self.page_id, self.currency_id, new_data[i])
                 else:
-                    index_old_data = title_items.index(new_data[i].title)
+                    index_old_data = key_items.index(new_data[i].key)
                 
                     if self.page.name not in [I.name, E.name]:
                         if old_data[index_old_data].last_update != new_data[i].last_update:
-                            self._update_item(old_data, new_data, i, index_old_data)
+                            self._update_item(old_data[index_old_data], new_data[i])
                     else:
                         if old_data[index_old_data].price != new_data[i].price:
-                            self._update_item(old_data, new_data, i, index_old_data)
+                            self._update_item(old_data[index_old_data], new_data[i])
             
             values = self._connection.get_monitors(self.page_id, self.currency_id)
         return values
     
-    def _update_item(self, old_data: List[MonitorModel], new_data: List[Monitor], index: int, index_extra: int = None) -> None:
+    def _update_item(self, old_monitor: MonitorModel, new_monitor: Monitor) -> None:
         """
         Actualiza el objecto Monitor en la base de datos.
 
         Args:
-        - old_data: Lista de monitores antiguos.
-        - new_data: Lista de nuevos monitores.
-        - index: Índice del monitor a actualizar.
-        - index_extra: Índice extra del monitor a actualizar.
+        - old_monitor: Monitor Antiguo.
+        - new_monitor: Monitor nuevo. Datos obtenidos recientes.
         """
-        index_key = index_extra if index_extra is not None else index
 
-        old_price = old_data[index_key].price
-        new_price = new_data[index].price
-        price_old = new_data[index].price_old
+        old_price = old_monitor.price
+        new_price = new_monitor.price
+        price_old = new_monitor.price_old
         change    = round(float(new_price - old_price), 2)
         percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
         symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
         color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-        last_update = new_data[index_key].last_update
+        last_update = new_monitor.last_update
         change = float(str(change).replace('-', ' '))
-        image  = new_data[index_key].image
+        image  = new_monitor.image
 
         monitor = Monitor(
-            key=old_data[index].key,
-            title=old_data[index].title,
+            key=new_monitor.key,
+            title=new_monitor.title,
             price=new_price,
             price_old=price_old,
             last_update=last_update,
@@ -118,7 +115,7 @@ class Provider:
             symbol=symbol
         )
         
-        self._connection.update_monitor(old_data[index].id, monitor)
+        self._connection.update_monitor(old_monitor.id, monitor)
     
     def get_values_specifics(self, type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
