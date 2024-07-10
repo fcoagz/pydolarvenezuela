@@ -1,7 +1,11 @@
+from typing import Any, Dict, List
 from bs4 import BeautifulSoup
+
 from .. import network
 from ..utils import time
 from ..utils.extras import list_monitors_images
+from ._base import Base
+from ..pages import ExchangeMonitor as ExchangeMonitorPage
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -12,17 +16,19 @@ def _convert_specific_format(text: str, character: str = '_') -> str:
 def _get_values_monitors(soup: BeautifulSoup):
     return [value for value in soup]
 
-class ExchangeMonitor:
-    def __init__(self, url: str, currency: str, **kwargs) -> None:
-        response = (network.curl('GET', url + "dolar-venezuela") if currency == 'usd'
-                    else network.curl('GET', url + "dolar-venezuela/EUR"))
-        self.soup = BeautifulSoup(response, "html.parser")
-    
-    def _load(self):
-        section_dolar_venezuela = self.soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
-        _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
+class ExchangeMonitor(Base):
+    PAGE = ExchangeMonitorPage
 
-        self.data = []
+    @classmethod
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
+        url = f'{cls.PAGE.provider}dolar-venezuela' if not kwargs.get('currency') == 'usd' else f'{cls.PAGE.provider}dolar-venezuela/EUR'
+        response = network.curl('GET', url)
+        soup = BeautifulSoup(response, 'html.parser')
+            
+        section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
+        _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
+        data = []
+
         for scraping_monitor in _scraping_monitors:
             result = scraping_monitor.find("div", "module-table module-table-fecha")
 
@@ -41,7 +47,7 @@ class ExchangeMonitor:
             change = float(str(result.find('p', "cambio-num").text).replace(',', '.'))
             image = next((image.image for image in list_monitors_images if image.provider == 'exchangemonitor' and image.title == _convert_specific_format(name)), None)
 
-            data = {
+            data.append({
                 'key': key,
                 'title': name,
                 'price': price,
@@ -51,10 +57,6 @@ class ExchangeMonitor:
                 'color': color,
                 'symbol': symbol,
                 'image': image
-            }
+            })
 
-            self.data.append(data)
-    
-    def get_values(self):
-        self._load()
-        return self.data
+        return data

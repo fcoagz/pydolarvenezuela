@@ -1,7 +1,11 @@
+from typing import Any, Dict, List
 import json
+
 from .. import network
 from ..utils import time
 from ..utils.extras import list_monitors_images
+from ._base import Base
+from ..pages import CriptoDolar as CriptoDolarPage
 
 def _convert_specific_format(text: str, character: str = '_') -> str:
     acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
@@ -17,32 +21,32 @@ def _convert_dollar_name_to_monitor_name(monitor_name: str):
             return monitor_name.split(' ')[1]
     return monitor_name
 
-class CriptoDolar:
-    def __init__(self, url: str, currency: str, **kwargs) -> None:
-        response           = (network.get(url + "coins/latest", {'type': 'bolivar', 'base': 'usd'}) if currency == 'usd'
-                              else network.get(url + "coins/latest", {'type': 'bolivar', 'base': 'eur'}))
-        self.json_response = json.loads(response)
-        self.currency = currency
-    
-    def _load(self):
-        self.data = []
+class CriptoDolar(Base):
+    PAGE = CriptoDolarPage
 
-        for monitor in self.json_response:
+    @classmethod
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
+        response = network.get(f'{cls.PAGE.provider}coins/latest', {'type': 'bolivar', 'base': kwargs.get('currency', 'usd')})
+        json_response = json.loads(response)
+        data = []
+
+        for monitor in json_response:
             if monitor['type'] in ['bolivar', 'bancove']:
                 image = next((image.image for image in list_monitors_images if image.provider == 'criptodolar' and image.title == _convert_specific_format(
-                    _convert_dollar_name_to_monitor_name(monitor['name']))), None)
+                        _convert_dollar_name_to_monitor_name(monitor['name']))), None)
                 key = _convert_specific_format(_convert_dollar_name_to_monitor_name(monitor['name']))
-                data = {
-                    'key': key,
-                    'title': _convert_dollar_name_to_monitor_name(monitor['name']),
-                    'price': round(monitor['price'], 2),
-                    'price_old': monitor['priceOld'],
-                    'last_update': time.get_time_standard(monitor['updatedAt']),
-                    'image': image
-                }
+                title = _convert_dollar_name_to_monitor_name(monitor['name'])
+                price = round(monitor['price'], 2)
+                price_old   = monitor['priceOld']
+                last_update = time.get_time_standard(monitor['updatedAt'])
 
-                self.data.append(data)
-    
-    def get_values(self):
-        self._load()
-        return self.data
+                data.append({
+                    'key': key,
+                    'title': title,
+                    'price': price,
+                    'price_old': price_old,
+                    'last_update': last_update,
+                    'image': image
+                })
+
+        return data
