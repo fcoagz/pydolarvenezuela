@@ -55,7 +55,7 @@ class Provider:
         Extrae los datos y si la base de datos está declarada, actualizará cada monitor en la página que estás solicitando.
         """
         monitor_class = monitor_classes.get(self.page.name).get('provider')
-        values = monitor_class(url=self.page.provider, currency=self.currency).get_values()
+        values = monitor_class.get_values(currency=self.currency)
 
         if self.database is not None:
             self.page_id = self._connection.get_or_create_page(self.page)
