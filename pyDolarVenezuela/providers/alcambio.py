@@ -1,6 +1,10 @@
 import json
+from typing import Any, Dict, List, Union
+
 from .. import network
 from ..utils import time
+from ._base import Base
+from ..pages import AlCambio as AlCambioPage
 from ..utils.extras import list_monitors_images
 
 headers = {
@@ -63,34 +67,37 @@ data = {
     """
 }
 
-class AlCambio:
-    def __init__(self, url: str, **kwargs) -> None:
-        response = network.curl('POST', url, headers, data)
-        self.json_response = json.loads(response)
-    
-    def _load(self):
-        self.rates = []
-        country_conversions = self.json_response['data']['getCountryConversions']
-        rate_types = ['PRIMARY', 'SECONDARY']
+class AlCambio(Base):
+    PAGE = AlCambioPage
 
-        for rate in country_conversions['conversionRates']:
-            if rate['type'] in rate_types:
-                key = 'enparalelovzla' if not rate['official'] else 'bcv'
-                name = 'EnParaleloVzla' if not rate['official'] else 'BCV'
-                date = time.get_formatted_timestamp(country_conversions['dateParalelo'] if not rate['official'] else country_conversions['dateBcv'])
-                image = next((image.image for image in list_monitors_images if image.provider == 'alcambio' and image.title == key), None)
-                self.rates.append({
-                    'key': key,
-                    'title': name,
-                    'price': rate['baseValue'],
-                    'last_update': date,
-                    'image': image
-                })
-                rate_types.remove(rate['type'])
+    @classmethod
+    def _load(cls, **kwargs) -> List[Union[Dict[str, Any], None]]:
+        try:
+            response = network.curl('POST', cls.PAGE.provider, headers, data)
+            json_response = json.loads(response)
 
-            if not rate_types:
-                break
+            rates = []
+            country_conversions = json_response['data']['getCountryConversions']
+            rate_types = ['PRIMARY', 'SECONDARY']
 
-    def get_values(self):
-        self._load()
-        return self.rates
+            for rate in country_conversions['conversionRates']:
+                if rate['type'] in rate_types:
+                    key = 'enparalelovzla' if not rate['official'] else 'bcv'
+                    name = 'EnParaleloVzla' if not rate['official'] else 'BCV'
+                    date = time.get_formatted_timestamp(country_conversions['dateParalelo'] if not rate['official'] else country_conversions['dateBcv'])
+                    image = next((image.image for image in list_monitors_images if image.provider == 'alcambio' and image.title == key), None)
+                    rates.append({
+                        'key': key,
+                        'title': name,
+                        'price': rate['baseValue'],
+                        'last_update': date,
+                        'image': image
+                    })
+                    rate_types.remove(rate['type'])
+
+                if not rate_types:
+                    break
+            
+            return rates
+        except Exception as e: 
+            raise Exception(f"Error al cargar los datos de AlCambio: {e}")
