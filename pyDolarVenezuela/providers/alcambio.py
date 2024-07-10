@@ -72,32 +72,29 @@ class AlCambio(Base):
 
     @classmethod
     def _load(cls, **kwargs) -> List[Dict[str, Any]]:
-        try:
-            response = network.curl('POST', cls.PAGE.provider, headers, data)
-            json_response = json.loads(response)
+        response = network.curl('POST', cls.PAGE.provider, headers, data)
+        json_response = json.loads(response)
 
-            rates = []
-            country_conversions = json_response['data']['getCountryConversions']
-            rate_types = ['PRIMARY', 'SECONDARY']
+        rates = []
+        country_conversions = json_response['data']['getCountryConversions']
+        rate_types = ['PRIMARY', 'SECONDARY']
 
-            for rate in country_conversions['conversionRates']:
-                if rate['type'] in rate_types:
-                    key = 'enparalelovzla' if not rate['official'] else 'bcv'
-                    name = 'EnParaleloVzla' if not rate['official'] else 'BCV'
-                    date = time.get_formatted_timestamp(country_conversions['dateParalelo'] if not rate['official'] else country_conversions['dateBcv'])
-                    image = next((image.image for image in list_monitors_images if image.provider == 'alcambio' and image.title == key), None)
-                    rates.append({
-                        'key': key,
-                        'title': name,
-                        'price': rate['baseValue'],
-                        'last_update': date,
-                        'image': image
-                    })
-                    rate_types.remove(rate['type'])
+        for rate in country_conversions['conversionRates']:
+            if rate['type'] in rate_types:
+                key = 'enparalelovzla' if not rate['official'] else 'bcv'
+                name = 'EnParaleloVzla' if not rate['official'] else 'BCV'
+                date = time.get_formatted_timestamp(country_conversions['dateParalelo'] if not rate['official'] else country_conversions['dateBcv'])
+                image = next((image.image for image in list_monitors_images if image.provider == 'alcambio' and image.title == key), None)
+                rates.append({
+                    'key': key,
+                    'title': name,
+                    'price': rate['baseValue'],
+                    'last_update': date,
+                    'image': image
+                })
+                rate_types.remove(rate['type'])
 
-                if not rate_types:
+            if not rate_types:
                     break
             
-            return rates
-        except Exception as e: 
-            raise Exception(f"Error al cargar los datos de AlCambio: {e}")
+        return rates

@@ -26,30 +26,27 @@ class CriptoDolar(Base):
 
     @classmethod
     def _load(cls, **kwargs) -> List[Dict[str, Any]]:
-        try:
-            response = network.get(f'{cls.PAGE.provider}coins/latest', {'type': 'bolivar', 'base': kwargs.get('currency', 'usd')})
-            json_response = json.loads(response)
-            data = []
+        response = network.get(f'{cls.PAGE.provider}coins/latest', {'type': 'bolivar', 'base': kwargs.get('currency', 'usd')})
+        json_response = json.loads(response)
+        data = []
 
-            for monitor in json_response:
-                if monitor['type'] in ['bolivar', 'bancove']:
-                    image = next((image.image for image in list_monitors_images if image.provider == 'criptodolar' and image.title == _convert_specific_format(
+        for monitor in json_response:
+            if monitor['type'] in ['bolivar', 'bancove']:
+                image = next((image.image for image in list_monitors_images if image.provider == 'criptodolar' and image.title == _convert_specific_format(
                         _convert_dollar_name_to_monitor_name(monitor['name']))), None)
-                    key = _convert_specific_format(_convert_dollar_name_to_monitor_name(monitor['name']))
-                    title = _convert_dollar_name_to_monitor_name(monitor['name'])
-                    price = round(monitor['price'], 2)
-                    price_old   = monitor['priceOld']
-                    last_update = time.get_time_standard(monitor['updatedAt'])
+                key = _convert_specific_format(_convert_dollar_name_to_monitor_name(monitor['name']))
+                title = _convert_dollar_name_to_monitor_name(monitor['name'])
+                price = round(monitor['price'], 2)
+                price_old   = monitor['priceOld']
+                last_update = time.get_time_standard(monitor['updatedAt'])
 
-                    data.append({
-                        'key': key,
-                        'title': title,
-                        'price': price,
-                        'price_old': price_old,
-                        'last_update': last_update,
-                        'image': image
-                    })
+                data.append({
+                    'key': key,
+                    'title': title,
+                    'price': price,
+                    'price_old': price_old,
+                    'last_update': last_update,
+                    'image': image
+                })
 
-            return data
-        except Exception as e:
-            raise Exception(f"Error al cargar los datos del CriptoDolar: {e}")
+        return data

@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 from bs4 import BeautifulSoup
 
 from .. import network
@@ -21,45 +21,42 @@ class ExchangeMonitor(Base):
 
     @classmethod
     def _load(cls, **kwargs) -> List[Dict[str, Any]]:
-        try:
-            url = f'{cls.PAGE.provider}dolar-venezuela' if not kwargs.get('currency') == 'usd' else f'{cls.PAGE.provider}dolar-venezuela/EUR'
-            response = network.curl('GET', url)
-            soup = BeautifulSoup(response, 'html.parser')
+        url = f'{cls.PAGE.provider}dolar-venezuela' if not kwargs.get('currency') == 'usd' else f'{cls.PAGE.provider}dolar-venezuela/EUR'
+        response = network.curl('GET', url)
+        soup = BeautifulSoup(response, 'html.parser')
             
-            section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
-            _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
-            data = []
+        section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
+        _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
+        data = []
 
-            for scraping_monitor in _scraping_monitors:
-                result = scraping_monitor.find("div", "module-table module-table-fecha")
+        for scraping_monitor in _scraping_monitors:
+            result = scraping_monitor.find("div", "module-table module-table-fecha")
 
-                name  = result.find("h6", "nombre").text
-                key = _convert_specific_format(name)
-                price = str(result.find('p', "precio").text).replace(',', '.')
+            name  = result.find("h6", "nombre").text
+            key = _convert_specific_format(name)
+            price = str(result.find('p', "precio").text).replace(',', '.')
 
-                if price.count('.') == 2:
-                    price = price.replace('.', '', 1)
+            if price.count('.') == 2:
+                price = price.replace('.', '', 1)
 
-                price = float(price)
-                last_update = time.get_formatted_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
-                symbol = str(result.find('p', "cambio-por").text)[0] if not str(result.find('p', "cambio-por").text)[0] == ' ' else ''
-                color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-                percent = float(str(result.find('p', "cambio-por").text)[1:].strip().replace(',', '.').replace('%', ''))
-                change = float(str(result.find('p', "cambio-num").text).replace(',', '.'))
-                image = next((image.image for image in list_monitors_images if image.provider == 'exchangemonitor' and image.title == _convert_specific_format(name)), None)
+            price = float(price)
+            last_update = time.get_formatted_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
+            symbol = str(result.find('p', "cambio-por").text)[0] if not str(result.find('p', "cambio-por").text)[0] == ' ' else ''
+            color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
+            percent = float(str(result.find('p', "cambio-por").text)[1:].strip().replace(',', '.').replace('%', ''))
+            change = float(str(result.find('p', "cambio-num").text).replace(',', '.'))
+            image = next((image.image for image in list_monitors_images if image.provider == 'exchangemonitor' and image.title == _convert_specific_format(name)), None)
 
-                data.append({
-                    'key': key,
-                    'title': name,
-                    'price': price,
-                    'last_update': last_update,
-                    'percent': percent,
-                    'change': change,
-                    'color': color,
-                    'symbol': symbol,
-                    'image': image
-                })
+            data.append({
+                'key': key,
+                'title': name,
+                'price': price,
+                'last_update': last_update,
+                'percent': percent,
+                'change': change,
+                'color': color,
+                'symbol': symbol,
+                'image': image
+            })
 
-            return data
-        except Exception as e:
-            raise Exception(f"Error al cargar los datos del ExchangeMonitor: {e}")
+        return data
