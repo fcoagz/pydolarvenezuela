@@ -1,3 +1,4 @@
+from typing import Any, Dict, List, Union
 from datetime import datetime
 from bs4 import BeautifulSoup
 
@@ -11,7 +12,7 @@ class Italcambio(Base):
     PAGE = ItalcambioPage
 
     @classmethod
-    def _load(cls, **kwargs):
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
         try:
             response = get(cls.PAGE.provider)
             soup = BeautifulSoup(response, 'html.parser')

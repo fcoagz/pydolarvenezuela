@@ -1,3 +1,4 @@
+from typing import Any, Dict, List, Union
 from bs4 import BeautifulSoup
 
 from .. import network
@@ -19,7 +20,7 @@ class ExchangeMonitor(Base):
     PAGE = ExchangeMonitorPage
 
     @classmethod
-    def _load(cls, **kwargs):
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
         try:
             url = f'{cls.PAGE.provider}dolar-venezuela' if not kwargs.get('currency') == 'usd' else f'{cls.PAGE.provider}dolar-venezuela/EUR'
             response = network.curl('GET', url)

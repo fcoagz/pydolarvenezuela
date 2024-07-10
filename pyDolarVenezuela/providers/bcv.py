@@ -19,7 +19,7 @@ class BCV(Base):
     PAGE = BCVPage
 
     @classmethod
-    def _load(cls, **kwargs) -> List[Dict[str, Any] | None]:
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
         try:
             response = get(f'{cls.PAGE.provider}tasas-informativas-sistema-bancario', verify=False)
             soup = BeautifulSoup(response, 'html.parser')

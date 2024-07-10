@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from .. import network
 from ..utils import time
@@ -71,7 +71,7 @@ class AlCambio(Base):
     PAGE = AlCambioPage
 
     @classmethod
-    def _load(cls, **kwargs) -> List[Union[Dict[str, Any], None]]:
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
         try:
             response = network.curl('POST', cls.PAGE.provider, headers, data)
             json_response = json.loads(response)

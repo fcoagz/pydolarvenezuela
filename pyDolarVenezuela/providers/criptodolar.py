@@ -1,3 +1,4 @@
+from typing import Any, Dict, List
 import json
 
 from .. import network
@@ -24,7 +25,7 @@ class CriptoDolar(Base):
     PAGE = CriptoDolarPage
 
     @classmethod
-    def _load(cls, **kwargs):
+    def _load(cls, **kwargs) -> List[Dict[str, Any]]:
         try:
             response = network.get(f'{cls.PAGE.provider}coins/latest', {'type': 'bolivar', 'base': kwargs.get('currency', 'usd')})
             json_response = json.loads(response)
