@@ -213,7 +213,27 @@ path_images = [
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093838/criptodolar/jukudiiabja65ijuu8yo.png",
         "provider": "criptodolar"
     },
-        {
+    {
+        "title": "dolartoday",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720738471/dolartoday/g1zgcculf79nzxe2njge.png",
+        "provider": "dolartoday"
+    },
+    {
+        "title": "bcv",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720738484/dolartoday/v6ueiwaboftzvo4cbigj.png",
+        "provider": "dolartoday"
+    },
+    {
+        "title": "petro",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720738643/dolartoday/xij8eoakaue9cneuqh6v.png",
+        "provider": "dolartoday"
+    },
+    {
+        "title": "bitcoin",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720739077/dolartoday/v2siv6ahfalwqqtjf5je.png",
+        "provider": "dolartoday"
+    },
+    {
         "title": "airtm",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093839/exchangemonitor/bekyy0llre7ypyk25rgo.webp",
         "provider": "exchangemonitor"
