@@ -23,7 +23,7 @@ def get(url: str, params: dict = None, verify: bool = True):
     
     return response.content
 
-def curl(method: Literal['GET', 'POST'], url: str, headers: dict = None, json: dict = None, impersonate: str = "chrome110"):
+def curl(method: Literal['GET', 'POST'], url: str, headers: dict = None, data: dict = None, json: dict = None, impersonate: str = "chrome110"):
     """
     Realiza una solicitud HTTP utilizando cffi y permite la opción de impersonar un navegador.
 
@@ -40,7 +40,7 @@ def curl(method: Literal['GET', 'POST'], url: str, headers: dict = None, json: d
     if headers is None:
         headers = _headers
         
-    response = cffi.request(method=method, url=url, impersonate=impersonate, headers=headers, json=json, timeout=10.0)
+    response = cffi.request(method=method, url=url, impersonate=impersonate, headers=headers, data=data, json=json, timeout=10.0)
     response.raise_for_status()
 
     return response.content
