@@ -1,13 +1,14 @@
 from typing import Union, Any, List, Dict
-from .providers import AlCambio, BCV, CriptoDolar, ExchangeMonitor, Italcambio
+from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, Italcambio
 from .data import SettingsDB, MonitorModel
 from .models import Page, Monitor, LocalDatabase, Database
-from .pages import AlCambio as A, BCV as B, CriptoDolar as C, ExchangeMonitor as E, Italcambio as I
+from .pages import AlCambio as A, BCV as B, CriptoDolar as C, DolarToday as D, ExchangeMonitor as E, Italcambio as I
 
 monitor_classes = {
     A.name: {'currency': A.currencies, 'provider': AlCambio},
     B.name: {'currency': B.currencies, 'provider': BCV},
     C.name: {'currency': C.currencies, 'provider': CriptoDolar},
+    D.name: {'currency': D.currencies, 'provider': DolarToday},
     E.name: {'currency': E.currencies, 'provider': ExchangeMonitor},
     I.name: {'currency': I.currencies, 'provider': Italcambio},
 }
@@ -55,31 +56,39 @@ class Provider:
         Extrae los datos y si la base de datos está declarada, actualizará cada monitor en la página que estás solicitando.
         """
         monitor_class = monitor_classes.get(self.page.name).get('provider')
-        values = monitor_class.get_values(currency=self.currency)
 
         if self.database is not None:
             self.page_id = self._connection.get_or_create_page(self.page)
             self.currency_id = self._connection.get_or_create_currency(self.currency)
-            self._connection.create_monitors(self.page_id, self.currency_id, [Monitor(**item) for item in values])
 
-            old_data = self._connection.get_monitors(self.page_id, self.currency_id)
-            new_data = [Monitor(**item) for item in values]
-            key_items = [item.key for item in old_data]
-            
-            for i in range(len(new_data)):
-                if new_data[i].key not in key_items:
-                    self._connection.create_monitor(self.page_id, self.currency_id, new_data[i])
-                else:
-                    index_old_data = key_items.index(new_data[i].key)
+            try:
+                values = monitor_class.get_values(currency=self.currency)
+                self._connection.create_monitors(self.page_id, self.currency_id, [Monitor(**item) for item in values])
+
+                old_data = self._connection.get_monitors(self.page_id, self.currency_id)
+                new_data = [Monitor(**item) for item in values]
+                key_items = [item.key for item in old_data]
                 
-                    if self.page.name not in [I.name, E.name]:
-                        if old_data[index_old_data].last_update != new_data[i].last_update:
-                            self._update_item(old_data[index_old_data], new_data[i])
+                for new_monitor in new_data:
+                    if new_monitor.key not in key_items:
+                        self._connection.create_monitor(self.page_id, self.currency_id, new_monitor)
                     else:
-                        if old_data[index_old_data].price != new_data[i].price:
-                            self._update_item(old_data[index_old_data], new_data[i])
-            
-            values = self._connection.get_monitors(self.page_id, self.currency_id)
+                        index_old_data = key_items.index(new_monitor.key)
+                    
+                        if self.page.name not in [I.name, E.name, D.name]:
+                            if old_data[index_old_data].last_update != new_monitor.last_update:
+                                self._update_item(old_data[index_old_data], new_monitor)
+                        else:
+                            if old_data[index_old_data].price != new_monitor.price:
+                                self._update_item(old_data[index_old_data], new_monitor)
+                
+                values = self._connection.get_monitors(self.page_id, self.currency_id)
+            except Exception:
+                values = self._connection.get_monitors(self.page_id, self.currency_id)
+                if not values:
+                    raise Exception(f'({self.page.name}) - Monitores no encontrados')
+        else:
+            values = monitor_class.get_values(currency=self.currency)
         return values
     
     def _update_item(self, old_monitor: MonitorModel, new_monitor: Monitor) -> None:
