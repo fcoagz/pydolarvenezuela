@@ -29,3 +29,9 @@ AlCambio = Page(
     provider="https://api.alcambio.app/graphql",
     currencies=['usd']
 )
+
+DolarToday = Page(
+    name="Dolar Today",
+    provider="https://dolartoday.com/",
+    currencies=['usd']
+)
