@@ -35,8 +35,8 @@ class DolarToday(Base):
 
         for key, value in json_response.items():
             title = _convert_dollar_name_to_monitor_name(key)
-            image = next((image.image for image in list_monitors_images if image.provider == 'dolartoday' and image.title == title), None)
             key = _convert_specific_format(title)
+            image = next((image.image for image in list_monitors_images if image.provider == 'dolartoday' and image.title == key), None)
             price = float(str(value).replace('Bs.', '').strip())   
             dt = datetime.now(standard_time_zone)
             last_update = dt.strftime('%d/%m/%Y, %I:%M %p')
