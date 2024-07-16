@@ -72,7 +72,7 @@ class AlCambio(Base):
 
     @classmethod
     def _load(cls, **kwargs) -> List[Dict[str, Any]]:
-        response = network.curl('POST', cls.PAGE.provider, headers, data)
+        response = network.curl('POST', cls.PAGE.provider, headers, json=data)
         json_response = json.loads(response)
 
         rates = []
