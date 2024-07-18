@@ -2,6 +2,7 @@ from typing import Union, Any, List, Dict
 from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from .data import SettingsDB, MonitorModel
 from .models import Page, Monitor, LocalDatabase, Database
+from .storage import Cache
 from .pages import (
     AlCambio as A,
     BCV as B,
@@ -50,6 +51,7 @@ class Provider:
         """
         
         self.currency = currency.lower()
+        self.key      = f'{page.name}:{currency}'
         
         if self.currency not in page.currencies:
             raise ValueError(f"The currency type must be 'usd', 'eur'..., not {currency}")
@@ -135,7 +137,7 @@ class Provider:
         
         self._connection.update_monitor(old_monitor.id, monitor)
     
-    def get_values_specifics(self, type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
+    def get_values_specifics(self, cache: Cache, type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
         Obtiene los valores específicos de un monitor o de todos los monitores.
 
@@ -144,7 +146,11 @@ class Provider:
         - property: La propiedad del monitor a obtener.
         - prettify: Si se debe formatear el precio del monitor `38.40` a `Bs. 38.40`.
         """
-        data = self._load_data()
+        if not cache.get(self.key):
+            data = self._load_data()
+            cache.set(self.key, data)
+            
+        data = cache.get(self.key)
         
         if self.database is not None:
             data = [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data]

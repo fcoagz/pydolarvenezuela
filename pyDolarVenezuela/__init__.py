@@ -38,7 +38,7 @@ class Monitor:
         from .storage import Cache
         
         self.cache = Cache(ttl=ttl)
-        self.key   = f'{provider.name}:{currency}'
+        
         self.provider = provider
         self.currency = currency.lower()
         self.db       = db
@@ -48,10 +48,8 @@ class Monitor:
         """
         El método `get_all_monitors` permite obtener todos los monitores disponibles.
         """
-        if not self.cache.get(self.key):
-            result = self.select_monitor.get_values_specifics()
-            self.cache.set(self.key, result)
-        return self.cache.get(self.key)
+        result = self.select_monitor.get_values_specifics(self.cache)
+        return result
 
     def get_value_monitors(self,
                            type_monitor: str = None,
@@ -65,7 +63,5 @@ class Monitor:
         - property: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
         - prettify: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
-        if not self.cache.get(self.key):
-            result = self.select_monitor.get_values_specifics(type_monitor, property, prettify)
-            self.cache.set(self.key, result)
-        return self.cache.get(self.key)
+        result = self.select_monitor.get_values_specifics(self.cache, type_monitor, property, prettify)
+        return result
