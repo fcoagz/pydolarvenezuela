@@ -48,7 +48,8 @@ class EnParaleloVzla(Base):
                             'image': url_image,
                             'percent': percent,
                             'change': change,
-                            'color': color
+                            'color': color,
+                            'symbol': symbol
                         }
                         last_occurrences.append(data)
         if last_occurrences:
