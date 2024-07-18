@@ -10,6 +10,7 @@ pyDolarVenezuela es una librería de Python diseñada para facilitar la obtenci�
 | Italcambio | https://www.italcambio.com/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | Al Cambio | https://alcambio.app/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | DolarToday | https://dolartoday.com/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
+| EnParaleloVzla | https://t.me/enparalelovzlatelegram | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 
 pyDolarVenezuela tiene como objetivo principal brindar una solución eficiente y confiable para acceder a información relevante sobre el valor del dólar en Venezuela, ofreciendo así una herramienta valiosa para desarrolladores interesados en trabajar en este ámbito.
 
@@ -69,7 +70,7 @@ pip install pyDolarVenezuela
 Debes importar el módulo `pages`, donde encontrarás una variedad de atributos que contienen información sobre una página específica de la que deseas obtener los datos. Adicionalmente deberás importar la clase `Monitor`, cuyos parámetros será la página que deseas utilizar y la moneda en la que se expresarán los precios (`USD`, `EUR`).
 
 ```python
-from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, Italcambio
+from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from pyDolarVenezuela import Monitor
 
 monitor = Monitor(ExchangeMonitor, 'USD')
@@ -79,7 +80,7 @@ Si deseas utilizar una base de datos (lo cual es útil para calcular el cambio, 
 
 
 ```python
-from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, Italcambio
+from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from pyDolarVenezuela import Monitor, LocalDatabase
 
 local = LocalDatabase(
@@ -106,7 +107,7 @@ El método `get_value_monitors` se utiliza después de crear una instancia del o
 - `prettify`: Muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
 
 ```python
-from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, Italcambio
+from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from pyDolarVenezuela import Monitor
 
 monitor = Monitor(ExchangeMonitor, 'USD')
@@ -123,7 +124,7 @@ print(valor_dolar)
 La función `currency_converter` convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
 
 ```python
-from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, Italcambio
+from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from pyDolarVenezuela import Monitor
 from pyDolarVenezuela import currency_converter
 
