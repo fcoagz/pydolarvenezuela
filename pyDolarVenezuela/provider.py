@@ -74,8 +74,8 @@ class Provider:
                         self._connection.create_monitor(self.page_id, self.currency_id, new_monitor)
                     else:
                         index_old_data = key_items.index(new_monitor.key)
-                    
-                        if self.page.name not in [I.name, E.name, D.name]:
+
+                        if self.page.name == B.name:
                             if old_data[index_old_data].last_update != new_monitor.last_update:
                                 self._update_item(old_data[index_old_data], new_monitor)
                         else:
