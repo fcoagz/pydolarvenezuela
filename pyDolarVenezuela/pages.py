@@ -35,3 +35,9 @@ DolarToday = Page(
     provider="https://dolartoday.com/",
     currencies=['usd']
 )
+
+EnParaleloVzla = Page(
+    name="EnParaleloVzla",
+    provider="https://t.me/s/EnParaleloVzlatelegram",
+    currencies=['usd']
+)
