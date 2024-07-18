@@ -33,8 +33,8 @@ class EnParaleloVzla(Base):
                         price = result.group(3).replace('Bs. ', '').replace(',', '.')
                         percent = result.group(5).replace(',', '.').replace('%', '')    
                         change = result.group(6).replace(',', '.')
-                        symbol = result.group(4)
-                        color  = "red" if symbol == '🔻' else "green" if symbol == '🔺' else "neutral"
+                        symbol = "▼" if result.group(4) == '🔻' else "▲" if result.group(4) == '🔺' else ""
+                        color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
                         # url_message = data_message.find('a', 'tgme_widget_message_photo_wrap').get('href')
                         date_message = data_message.find('div', 'tgme_widget_message_info short js-message_info').\
                             find('time').get('datetime')
