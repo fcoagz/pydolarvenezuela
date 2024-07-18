@@ -1,8 +1,16 @@
 from typing import Union, Any, List, Dict
-from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, Italcambio
+from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from .data import SettingsDB, MonitorModel
 from .models import Page, Monitor, LocalDatabase, Database
-from .pages import AlCambio as A, BCV as B, CriptoDolar as C, DolarToday as D, ExchangeMonitor as E, Italcambio as I
+from .pages import (
+    AlCambio as A,
+    BCV as B,
+    CriptoDolar as C,
+    DolarToday as D,
+    ExchangeMonitor as E,
+    EnParaleloVzla as EP,
+    Italcambio as I
+)
 
 monitor_classes = {
     A.name: {'currency': A.currencies, 'provider': AlCambio},
@@ -10,6 +18,7 @@ monitor_classes = {
     C.name: {'currency': C.currencies, 'provider': CriptoDolar},
     D.name: {'currency': D.currencies, 'provider': DolarToday},
     E.name: {'currency': E.currencies, 'provider': ExchangeMonitor},
+    EP.name: {'currency': EP.currencies, 'provider': EnParaleloVzla},
     I.name: {'currency': I.currencies, 'provider': Italcambio},
 }
 
@@ -75,7 +84,7 @@ class Provider:
                     else:
                         index_old_data = key_items.index(new_monitor.key)
 
-                        if self.page.name == B.name:
+                        if self.page.name in [B.name, EP.name]:
                             if old_data[index_old_data].last_update != new_monitor.last_update:
                                 self._update_item(old_data[index_old_data], new_monitor)
                         else:
@@ -83,10 +92,10 @@ class Provider:
                                 self._update_item(old_data[index_old_data], new_monitor)
                 
                 values = self._connection.get_monitors(self.page_id, self.currency_id)
-            except Exception:
+            except Exception as e:
                 values = self._connection.get_monitors(self.page_id, self.currency_id)
                 if not values:
-                    raise Exception(f'({self.page.name}) - Monitores no encontrados')
+                    raise Exception(e)
         else:
             values = monitor_class.get_values(currency=self.currency)
         return values
