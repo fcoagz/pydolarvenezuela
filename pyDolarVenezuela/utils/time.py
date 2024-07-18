@@ -10,8 +10,9 @@ def get_formatted_timestamp(date_timestamp_ms: int):
     """
     Formatear milisegundos a datetime string.
     """
-    timestamp_s = date_timestamp_ms / 1000.0
-    datetime_obj = datetime.fromtimestamp(timestamp_s)
+    datetime_obj = datetime.now(standard_time_zone)
+    timestamp_s  = date_timestamp_ms / 1000.0
+    datetime_obj = datetime_obj.fromtimestamp(timestamp_s)
     
     return datetime_obj.strftime('%d/%m/%Y, %I:%M %p')
 
