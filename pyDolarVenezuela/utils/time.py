@@ -10,11 +10,18 @@ def get_formatted_timestamp(date_timestamp_ms: int):
     """
     Formatear milisegundos a datetime string.
     """
-    datetime_obj = datetime.now(standard_time_zone)
     timestamp_s  = date_timestamp_ms / 1000.0
-    datetime_obj = datetime_obj.fromtimestamp(timestamp_s)
+    datetime_obj = datetime.fromtimestamp(timestamp_s)
     
-    return datetime_obj.strftime('%d/%m/%Y, %I:%M %p')
+    return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y, %I:%M %p')
+
+def get_formatted_date(date_string: str):
+    """
+    Formatear datetime a string.
+    """
+    datetime_obj = datetime.fromisoformat(date_string)
+    
+    return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y, %I:%M %p')
 
 def get_time(date_string: str):
     """
