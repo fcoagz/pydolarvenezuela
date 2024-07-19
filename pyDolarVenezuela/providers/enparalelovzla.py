@@ -30,7 +30,7 @@ class EnParaleloVzla(Base):
                 if text_message is not None:
                     result = re.search(pattern, text_message.text.strip())
                     if result:
-                        price = result.group(3).replace('Bs. ', '').replace(',', '.')
+                        price = float(result.group(3).replace('Bs. ', '').replace(',', '.'))
                         percent = result.group(5).replace(',', '.').replace('%', '')    
                         change = result.group(6).replace(',', '.')
                         symbol = "▼" if result.group(4) == '🔻' else "▲" if result.group(4) == '🔺' else ""
