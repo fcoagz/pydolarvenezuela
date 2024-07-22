@@ -4,7 +4,7 @@ from .models import Base
 from ..models import Database, LocalDatabase
 
 # https://github.com/orgs/supabase/discussions/27071 Using SQLAlchemy with Supabase
-def get_engine(connection: Union[Database, LocalDatabase]):
+def get_connection(connection: Union[Database, LocalDatabase]):
     """
     Obtiene un motor de base de datos (engine) de SQLAlchemy según el tipo de conexión proporcionada.
     """
@@ -12,12 +12,6 @@ def get_engine(connection: Union[Database, LocalDatabase]):
         return create_engine(f'{connection.motor}://{connection.user}:{connection.password}@{connection.host}:{connection.port}/{connection.database}')
     elif isinstance(connection, LocalDatabase):
         return create_engine(f'{connection.motor}:///{connection.url}')
-    else:
-        raise ValueError("The connection must be a Database or LocalDatabase object")
-
-def get_connection(connection: Union[Database, LocalDatabase]):
-    engine = get_engine(connection)
-    return engine
 
 def create_tables(engine):
     """
