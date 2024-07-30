@@ -64,7 +64,7 @@ class DatabaseSettings:
                 Monitor.key == type_monitor).first()
 
             if not monitor:
-                return None
+                raise ValueError('Monitor not found')
 
             changes = {}
             query = session.query(MonitorPriceHistory).\
