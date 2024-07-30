@@ -138,7 +138,7 @@ class Provider:
         )
         self._connection.add_price_history(old_monitor.id, new_price, last_update_obj)
     
-    def get_values_specifics(self, cache: Cache, type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
+    def get_values_specifics(self, cache: Union[Cache, None], type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
         Obtiene los valores específicos de un monitor o de todos los monitores.
 
@@ -147,11 +147,14 @@ class Provider:
         - property: La propiedad del monitor a obtener.
         - prettify: Si se debe formatear el precio del monitor `38.40` a `Bs. 38.40`.
         """
-        if not cache.get(self.key):
+        if cache is None:
             data = self._load_data()
-            cache.set(self.key, data)
-            
-        data = cache.get(self.key)
+        else:
+            if not cache.get(self.key):
+                data = self._load_data()
+                cache.set(self.key, data)
+                
+            data = cache.get(self.key)
         
         if self.database is not None:
             data = [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data] 
