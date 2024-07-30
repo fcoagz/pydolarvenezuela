@@ -53,8 +53,6 @@ from pyDolarVenezuela import Monitor
 monitor = Monitor(..., ttl=timedelta(minutes=5))
 ```
 
-Por defecto son 10 minutos para que la próxima vez que solicites recargue los datos
-
 ## Actividad
 
 ![Alt](https://repobeats.axiom.co/api/embed/4ee3c595fcdb3081e280a1e8f4f81af9767a37f7.svg "Repobeats analytics image")
@@ -67,77 +65,102 @@ pip install pyDolarVenezuela
 
 ## Uso
 
-Debes importar el módulo `pages`, donde encontrarás una variedad de atributos que contienen información sobre una página específica de la que deseas obtener los datos. Adicionalmente deberás importar la clase `Monitor`, cuyos parámetros será la página que deseas utilizar y la moneda en la que se expresarán los precios (`USD`, `EUR`).
+### Importación de las páginas
+
+El módulo `pages`, encontrarás una variedad de atributos que contienen información sobre una página específica de la que deseas obtener los datos. Adicionalmente deberás importar la clase `Monitor`, cuyos parámetros será la página que deseas utilizar, la moneda en la que se expresarán los precios (`USD`, `EUR`) y entre otras.
 
 ```python
 from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from pyDolarVenezuela import Monitor
 
-monitor = Monitor(ExchangeMonitor, 'USD')
+monitor = Monitor(AlCambio, 'USD')
 ```
 
-Si deseas utilizar una base de datos (lo cual es útil para calcular el cambio, el porcentaje, el color y el símbolo, y se devuelven los datos actualizados):
-
-
-```python
-from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
-from pyDolarVenezuela import Monitor, LocalDatabase
-
-local = LocalDatabase(
-    motor='sqlite',
-    url='database.db'
-)
-
-monitor = Monitor(CriptoDolar, 'USD', db=local)
-
-```
+Como se mencionó anteriormente, puede utilizar una base de datos (que es útil para calcular cambios, porcentajes, colores y símbolos).
 
 El parámetro `currency` de la clase `Monitor` por defecto tiene el valor: `USD`, verifique que la página de la que desea obtener los datos pueda expresar precios en `EUR`.
 
 ```python
-print(ExchangeMonitor.currencies)
+print(AlCambio.currencies)
 
->> ['usd', 'eur']
+>> ['usd']
 ```
 
-El método `get_value_monitors` se utiliza después de crear una instancia del objeto Monitor y permite el acceso a los datos almacenados en el diccionario. Los siguientes parámetros serían los siguientes:
+### Métodos disponibles
 
-- `type_monitor`: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+#### `get_all_monitors`
+
+Se utiliza para obtener todos los datos de los monitores que se encuentran en dicha página.
+
+#### `get_value_monitors`
+
+Se utiliza para obtener datos de un monitor específico y acceder a ellos fácilmente.
+
+Argumentos:
+
+- `type_monitor`: El código del monitor del cual se desea obtener información.
 - `property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
 - `prettify`: Muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
 
+#### `get_prices_history`
+
+Le permite obtener el historial de precios de cierre de un monitor específico.
+
+Argumentos:
+
+- `type_monitor`: El código del monitor del cual se desea obtener información.
+- `start_date`: Fecha de inicio del historial.
+- `end_date`: Fecha de fin del historial. Por defecto es la fecha actual.
+
+#### `get_daily_price_monitor`
+
+Le permite obtener todos los cambios realizados en un día para un monitor específico.
+
+Argumentos:
+
+- `type_monitor`: El código del monitor del cual se desea obtener información.
+- `date`: Fecha de la cual se desea obtener los precios.
+
+**Nota**: Para `get_prices_history` y `get_daily_price_monitor`. Debe establecer una base de datos y puede utilizarla siempre que mantenga el script activo y alimente la base de datos.
+
+#### `currency_converter`
+
+Convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
+
+Argumentos:
+
+- `type`: Tipo de conversión. (VES, USD, EUR)
+- `value`: Monto a convertir.
+- `monitor`: La data del monitor una vez obtenido sus datos.
+
+### Código de ejemplo
+
 ```python
 from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
-from pyDolarVenezuela import Monitor
+from pyDolarVenezuela import Monitor, Database
 
-monitor = Monitor(ExchangeMonitor, 'USD')
+db = Database(...)
+monitor = Monitor(AlCambio, 'USD', db=db)
 
 # Obtener los valores de todos los monitores
-valores_dolar = monitor.get_all_monitors()
+all_monitors = monitor.get_all_monitors()
 
 # Obtener el valor del dólar en EnParaleloVzla
-valor_dolar = monitor.get_value_monitors("enparalelovzla", "price", prettify=True)
+paralelo_value = monitor.get_value_monitors("enparalelovzla", "price", prettify=True)
 
-print(valor_dolar)
-```
+# Obtener el historial de precios de un monitor durante una semana.
+history = monitor.get_prices_history("enparalelovzla", "01-07-2024", "05-07-2024")
 
-La función `currency_converter` convierte una cantidad de dinero de una moneda a otra utilizando los datos de un monitor específico.
+# Obtener todos los cambios que se realizaron de un monitor.
+changes = monitor.get_daily_price_monitor("enparalelovzla", "30-07-2024")
 
-```python
-from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
-from pyDolarVenezuela import Monitor
-from pyDolarVenezuela import currency_converter
-
-monitor = Monitor(ExchangeMonitor, 'USD')
-
-information_dolar = monitor.get_value_monitors("enparalelovzla")
+# Conversion
+data_paralelo = monitor.get_value_monitors("enparalelovzla")
 price_in_dolares = currency_converter(
     type='VES', # VES | USD | EUR
     value=1000, # Bs. 1000
     monitor=information_dolar # Datos del dolar
 )
-
-print(price_in_dolares)  # Imprime algo como 28.22466836014677
 ```
 
 ## Contributores
