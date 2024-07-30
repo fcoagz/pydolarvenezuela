@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 from ..network import requests, get
 from ..utils.extras import currencies, list_monitors_images, bank_dict
+from ..utils.time import get_formatted_date_bcv
 from ._base import Base
 from ..pages import BCV as BCVPage
 
@@ -13,7 +14,7 @@ def _get_rate_by_id(tag_id: str, soup: BeautifulSoup):
 
 def _get_time(soup: BeautifulSoup):
     date = soup.find('span', 'date-display-single').get('content')
-    return date.split('T')[0].replace('-', '/')
+    return get_formatted_date_bcv(date)
 
 class BCV(Base):
     PAGE = BCVPage
