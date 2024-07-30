@@ -94,7 +94,7 @@ class DatabaseSettings:
             return session.query(MonitorPriceHistory).\
                 filter(
                     MonitorPriceHistory.monitor_id == monitor.id,
-                    func.strftime('%Y-%m-%d', MonitorPriceHistory.last_update) == last_update.strftime('%Y-%m-%d')).all()
+                    func.date(MonitorPriceHistory.last_update) == last_update).all()
 
     def create_monitor(self, page_id: int, currency_id: int, monitor: SchemaMonitor) -> None:
         """
