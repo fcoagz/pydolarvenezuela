@@ -6,15 +6,15 @@ from .extras import time_units
 
 standard_time_zone = timezone('America/Caracas')
 
-def get_date_and_time(date_string: str):
+def get_datestring_to_datetime(date_string: str):
     """
-    Obtener la fecha y la hora de una cadena de texto.
+    Formatear string a datetime.
     """
     date_time = date_string.split(' ')
     if len(date_time) > 1:
-        return [date_time[0], ' '.join(date_time[1:])]
+        return datetime.strptime(date_string, '%d/%m/%Y, %I:%M %p')
     else:
-        return [date_string, '00:00']
+        return datetime.strptime(date_string, '%d/%m/%Y')
     
 def get_formatted_timestamp(date_timestamp_ms: int):
     """
