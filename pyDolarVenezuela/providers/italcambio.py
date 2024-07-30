@@ -26,7 +26,7 @@ class Italcambio(Base):
                 price_old = float(str(monitors_amounts[i-1]).split()[-1])
                 price = round(price_old, 2)
                 dt = datetime.now(standard_time_zone)
-                dt_tostring = dt.strftime('%d/%m/%Y, %I:%M %p')
+                dt_tostring = dt.isoformat()
 
                 rates.append({
                     'key': key,
