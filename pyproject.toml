@@ -1,6 +1,6 @@
 [project]
 name = "pyDolarVenezuela"
-version = "1.8.1"
+version = "1.8.2"
 dependencies = [
   "requests",
   "curl_cffi",
