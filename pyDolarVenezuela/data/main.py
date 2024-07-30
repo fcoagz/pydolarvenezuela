@@ -62,7 +62,7 @@ class DatabaseSettings:
                 Monitor.page_id == page_id,
                 Monitor.currency_id == currency_id,
                 Monitor.key == type_monitor).first()
-            
+
             if not monitor:
                 return None
 
@@ -70,9 +70,9 @@ class DatabaseSettings:
             query = session.query(MonitorPriceHistory).\
                 filter(
                     MonitorPriceHistory.monitor_id == monitor.id,
-                    MonitorPriceHistory.last_update >= start_date, 
-                    MonitorPriceHistory.last_update <= end_date).order_by(MonitorPriceHistory.last_update.desc()).all()
-            
+                    func.date(MonitorPriceHistory.last_update) >= start_date, 
+                    func.date(MonitorPriceHistory.last_update) <= end_date).order_by(MonitorPriceHistory.last_update.desc()).all()
+
             for price_history in query:
                 changes[price_history.last_update] = price_history
             
