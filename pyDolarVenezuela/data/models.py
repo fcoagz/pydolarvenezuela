@@ -1,4 +1,4 @@
-from sqlalchemy import String, Column, Integer, Float, ForeignKey
+from sqlalchemy import String, Column, Integer, Float, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -32,3 +32,11 @@ class Monitor(Base):
     change      = Column(Float, nullable=True, default=0.0)
     color       = Column(String, nullable=True, default="neutral")
     symbol      = Column(String, nullable=True, default="")
+
+class MonitorPriceHistory(Base):
+    __tablename__ = 'monitor_price_history'
+
+    id          = Column(Integer, primary_key=True)
+    monitor_id  = Column(Integer, ForeignKey('monitors.id'), nullable=False)
+    price       = Column(Float, nullable=False)
+    last_update = Column(DateTime, nullable=False)

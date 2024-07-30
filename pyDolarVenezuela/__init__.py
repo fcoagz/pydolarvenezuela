@@ -1,5 +1,5 @@
 from typing import Any, List, Dict, Literal, Union
-from datetime import timedelta
+from datetime import datetime, timedelta
 from . import pages
 from .models import Page, LocalDatabase, Database
 from .provider import Provider
@@ -19,7 +19,11 @@ __all__ = (
 )
 
 class Monitor:
-    def __init__(self, provider: Page, currency: Literal['USD', 'EUR'] = 'USD', db: Union[LocalDatabase, Database] = None, ttl: timedelta = timedelta(minutes=10)) -> None:
+    def __init__(self,
+                provider: Page,
+                currency: Literal['USD', 'EUR'] = 'USD',
+                db: Union[LocalDatabase, Database] = None,
+                ttl: Union[timedelta, int, None] = None) -> None:
         """
         La clase `Monitor` proporciona funcionalidades para consultar los precios de diversos monitores en Venezuela.
 
@@ -27,18 +31,19 @@ class Monitor:
         - provider: La página de la que se accederán los datos.
         - currency: La moneda en la que se expresarán los precios. Puede ser `USD` o `EUR`. Por defecto es `USD`.
         - db: La base de datos en la que se almacenarán los datos. Por defecto es `None`.
-        - ttl: Tiempo de vida del cache. Por defecto es `360seg`
+        - ttl: Tiempo de vida del cache. Por defecto es `None`.
         """
 
-        if not isinstance(provider, Page):
-            raise TypeError("The parameter must be an object of type Monitor.")
         if CheckVersion.check:
             CheckVersion._check_dependence_version()
         
         from .storage import Cache
         
-        self.cache = Cache(ttl=ttl)
-        
+        if ttl is None:
+            self.cache = ttl
+        else:
+            self.cache = Cache(ttl=ttl)
+            
         self.provider = provider
         self.currency = currency.lower()
         self.db       = db
@@ -52,16 +57,43 @@ class Monitor:
         return result
 
     def get_value_monitors(self,
-                           type_monitor: str = None,
+                           type_monitor: str,
                            property: Literal['title', 'price', 'last_update'] = None,
                            prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
 
         Args:
-        - type_monitor: El código del monitor del cual se desea obtener información. Por defecto es `None`.
+        - type_monitor: El código del monitor del cual se desea obtener información. 
         - property: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
         - prettify: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
         result = self.select_monitor.get_values_specifics(self.cache, type_monitor, property, prettify)
+        return result
+    
+    def get_daily_price_monitor(self, type_monitor: str, date: str) -> List[Dict[str, Any]]:
+        """
+        El método `get_daily_price_monitor` permite obtener los precios de un monitor específico en una fecha determinada.\n\n
+
+        El formato debe ser `dd-mm-yyyy`.
+
+        Args:
+        - type_monitor: El código del monitor del cual se desea obtener información.
+        - date: Fecha de la cual se desea obtener los precios.
+        """
+        result = self.select_monitor.get_daily_price_monitor(type_monitor, date)
+        return result
+
+    def get_prices_history(self, type_monitor: str, start_date: str, end_date: Union[str, datetime] = datetime.now()) -> List[Dict[str, Any]]:
+        """
+        El método `get_prices_history` permite obtener el historial de precios de un monitor específico.\n\n
+
+        El formato debe ser `dd-mm-yyyy`.
+
+        Args:
+        - type_monitor: El código del monitor del cual se desea obtener información.
+        - start_date: Fecha de inicio del historial.
+        - end_date: Fecha de fin del historial. Por defecto es la fecha actual.
+        """
+        result = self.select_monitor.get_prices_history(type_monitor, start_date, end_date)
         return result

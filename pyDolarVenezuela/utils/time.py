@@ -6,6 +6,16 @@ from .extras import time_units
 
 standard_time_zone = timezone('America/Caracas')
 
+def get_datestring_to_datetime(date_string: str):
+    """
+    Formatear string a datetime.
+    """
+    date_time = date_string.split(' ')
+    if len(date_time) > 1:
+        return datetime.strptime(date_string, '%d/%m/%Y, %I:%M %p')
+    else:
+        return datetime.strptime(date_string, '%d/%m/%Y')
+    
 def get_formatted_timestamp(date_timestamp_ms: int):
     """
     Formatear milisegundos a datetime string.
@@ -14,6 +24,14 @@ def get_formatted_timestamp(date_timestamp_ms: int):
     datetime_obj = datetime.fromtimestamp(timestamp_s)
     
     return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y, %I:%M %p')
+
+def get_formatted_date_bcv(date_string: str):
+    """
+    Formatear datetime a string.
+    """
+    datetime_obj = datetime.fromisoformat(date_string)
+    
+    return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y')
 
 def get_formatted_date(date_string: str):
     """

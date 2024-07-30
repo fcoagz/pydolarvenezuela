@@ -1,6 +1,8 @@
 from typing import Union, Any, List, Dict
+from datetime import datetime
+from .utils.time import get_datestring_to_datetime
 from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
-from .data import SettingsDB, MonitorModel
+from .data import DatabaseSettings, MonitorModel
 from .models import Page, Monitor, LocalDatabase, Database
 from .storage import Cache
 from .pages import (
@@ -60,7 +62,7 @@ class Provider:
         self.database = database
 
         if self.database is not None:
-            self._connection = SettingsDB(self.database)
+            self._connection = DatabaseSettings(self.database)
     
     def _load_data(self) -> Union[List[Monitor], List[Dict[str, Any]]]:
         """
@@ -114,30 +116,29 @@ class Provider:
         old_price = old_monitor.price
         new_price = new_monitor.price
         price_old = new_monitor.price_old
-        change    = round(float(new_price - old_price), 2)
+        change    = round(float(new_price) - float(old_price), 2)
         percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
         symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
         color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
         last_update = new_monitor.last_update
+        last_update_obj = get_datestring_to_datetime(last_update)
         change = float(str(change).replace('-', ' '))
         image  = new_monitor.image
 
-        monitor = Monitor(
-            key=new_monitor.key,
-            title=new_monitor.title,
-            price=new_price,
-            price_old=price_old,
-            last_update=last_update,
-            image=image,
-            percent=percent,
-            change=change,
-            color=color,
-            symbol=symbol
+        self._connection.update_monitor(
+            old_monitor.id,
+            new_price,
+            price_old,
+            percent,
+            change,
+            color,
+            symbol,
+            last_update,
+            image
         )
-        
-        self._connection.update_monitor(old_monitor.id, monitor)
+        self._connection.add_price_history(old_monitor.id, new_price, last_update_obj)
     
-    def get_values_specifics(self, cache: Cache, type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
+    def get_values_specifics(self, cache: Union[Cache, None], type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
         Obtiene los valores específicos de un monitor o de todos los monitores.
 
@@ -146,14 +147,17 @@ class Provider:
         - property: La propiedad del monitor a obtener.
         - prettify: Si se debe formatear el precio del monitor `38.40` a `Bs. 38.40`.
         """
-        if not cache.get(self.key):
+        if cache is None:
             data = self._load_data()
-            cache.set(self.key, data)
-            
-        data = cache.get(self.key)
+        else:
+            if not cache.get(self.key):
+                data = self._load_data()
+                cache.set(self.key, data)
+                
+            data = cache.get(self.key)
         
         if self.database is not None:
-            data = [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data]
+            data = [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data] 
         if not type_monitor:
             return data
 
@@ -176,5 +180,57 @@ class Provider:
             return monitor_data
         except KeyError as e:
             raise KeyError(f'{e} https://github.com/fcoagz/pyDolarVenezuela')
+        except Exception as e:
+            raise e
+    
+    def get_prices_history(self, type_monitor: str, start_date: str, end_date: Union[str, datetime] = datetime.now()) -> List[Dict[str, Any]]:
+        """
+        Obtiene el historial de precios de un monitor específico.
+
+        Args:
+        - type_monitor: El tipo de monitor a obtener.
+        - start_date: Fecha de inicio del historial.
+        - end_date: Fecha de fin del historial.
+        """
+        try:
+            if not self.database:
+                raise Exception('The database is not declared.')
+            
+            start_date  = datetime.strptime(start_date, "%d-%m-%Y").date()
+            end_date    = datetime.strptime(end_date, "%d-%m-%Y").date() if isinstance(end_date, str) else end_date.date()
+            page_id     = self._connection.get_or_create_page(self.page)
+            currency_id = self._connection.get_or_create_currency(self.currency)
+            
+            data = self._connection.get_date_range_history(page_id, currency_id, type_monitor, start_date, end_date)
+            data = [model_to_dict(monitor, exclude=['id', 'monitor_id']) for monitor in data]
+            
+            return data
+        except ValueError as e:
+            raise ValueError('La fecha proporcionada no es válida. DD-MM-YYYY')
+        except Exception as e:
+            raise e
+    
+    def get_daily_price_monitor(self, type_monitor: str, date: str) -> List[Dict[str, Any]]:
+        """
+        Obtiene los precios de un monitor específico en una fecha especifica.
+
+        Args:
+        - type_monitor: El tipo de monitor a obtener.
+        - date: Fecha de la que se desea obtener los precios.
+        """
+        try:
+            if not self.database:
+                raise Exception('The database is not declared.')
+            
+            date        = datetime.strptime(date, "%d-%m-%Y").date()
+            page_id     = self._connection.get_or_create_page(self.page)
+            currency_id = self._connection.get_or_create_currency(self.currency)
+            
+            data = self._connection.get_prices_monitor_one_day(page_id, currency_id, type_monitor, date)
+            data = [model_to_dict(monitor, exclude=['id', 'monitor_id']) for monitor in data]
+            
+            return data
+        except ValueError as e:
+            raise ValueError('La fecha proporcionada no es válida. DD-MM-YYYY')
         except Exception as e:
             raise e
