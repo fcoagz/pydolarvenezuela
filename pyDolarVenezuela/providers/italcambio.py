@@ -25,15 +25,14 @@ class Italcambio(Base):
                 key = monitors_amounts[i].lower()
                 price_old = float(str(monitors_amounts[i-1]).split()[-1])
                 price = round(price_old, 2)
-                dt = datetime.now(standard_time_zone)
-                dt_tostring = dt
+                last_update = datetime.now(standard_time_zone)
 
                 rates.append({
                     'key': key,
                     'title': title,
                     'price': price,
                     'price_old': price_old,
-                    'last_update': dt_tostring
+                    'last_update': last_update
                 })
 
         return rates
