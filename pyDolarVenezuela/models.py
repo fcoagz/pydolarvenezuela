@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime
 from dataclasses import dataclass
 
 @dataclass 
@@ -48,7 +49,7 @@ class Monitor:
     title: str  
     price: float  
     price_old: Optional[float] = None 
-    last_update: Optional[str] = None  
+    last_update: Optional[datetime] = None  
     image: Optional[str] = None  
     percent: Optional[float] = 0.0
     change: Optional[float] = 0.0  

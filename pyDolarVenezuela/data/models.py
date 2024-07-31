@@ -1,4 +1,4 @@
-from sqlalchemy import String, Column, Integer, Float, DateTime, ForeignKey
+from sqlalchemy import String, Column, Integer, Float, DateTime, ForeignKey, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -26,7 +26,7 @@ class Monitor(Base):
     title       = Column(String, nullable=False)
     price       = Column(Float, nullable=False)
     price_old   = Column(Float, nullable=True)
-    last_update = Column(String, nullable=False)
+    last_update = Column(DateTime, nullable=False)
     image       = Column(String, nullable=True)
     percent     = Column(Float, nullable=True, default=0.0)
     change      = Column(Float, nullable=True, default=0.0)
