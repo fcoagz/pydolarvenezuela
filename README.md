@@ -163,6 +163,24 @@ price_in_dolares = currency_converter(
 )
 ```
 
+### Configuración de fecha
+
+Respetando el tipado de las fechas. Te muestro cómo puedes formatearlo.
+
+```python
+from datetime import datetime
+from pyDolarVenezuela.pages import AlCambio
+from pyDolarVenezuela import Monitor
+
+monitor = Monitor(AlCambio, 'USD')
+
+paralelo    = monitor.get_value_monitors("enparalelovzla")
+last_update = datetime.strftime(paralelo['last_update'], '%d-%m-%Y %H:%M:%S')
+
+print(last_update)
+```
+Para que puedas mostrar la fecha como desees.
+
 ## Contributores
 
 <a href="https://github.com/fcoagz/pydolarvenezuela/graphs/contributors">
