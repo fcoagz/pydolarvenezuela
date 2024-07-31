@@ -39,7 +39,7 @@ class DolarToday(Base):
             image = next((image.image for image in list_monitors_images if image.provider == 'dolartoday' and image.title == key), None)
             price = float(str(value).replace('Bs.', '').strip())   
             dt = datetime.now(standard_time_zone)
-            last_update = dt.strftime('%d/%m/%Y, %I:%M %p')
+            last_update = dt
 
             data.append({
                 'key': key,
