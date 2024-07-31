@@ -89,7 +89,7 @@ class Provider:
                         index_old_data = key_items.index(new_monitor.key)
 
                         if self.page.name in [B.name, EP.name]:
-                            if old_data[index_old_data].last_update != new_monitor.last_update:
+                            if old_data[index_old_data].last_update != new_monitor.last_update.replace(tzinfo=None):
                                 self._update_item(old_data[index_old_data], new_monitor)
                         else:
                             if old_data[index_old_data].price != new_monitor.price:
