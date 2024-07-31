@@ -121,7 +121,6 @@ class Provider:
         symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
         color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
         last_update = new_monitor.last_update
-        last_update_obj = get_datestring_to_datetime(last_update)
         change = float(str(change).replace('-', ' '))
         image  = new_monitor.image
 
@@ -136,7 +135,7 @@ class Provider:
             last_update,
             image
         )
-        self._connection.add_price_history(old_monitor.id, new_price, last_update_obj)
+        self._connection.add_price_history(old_monitor.id, new_price, last_update)
     
     def get_values_specifics(self, cache: Union[Cache, None], type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
         """
