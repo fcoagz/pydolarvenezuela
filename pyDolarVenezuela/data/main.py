@@ -135,7 +135,7 @@ class DatabaseSettings:
                     change: float,
                     color: str,
                     symbol: str,
-                    last_update: str, 
+                    last_update: datetime, 
                     image: str) -> None:
         """
         Actualiza un monitor en la base de datos según el ID proporcionado.
