@@ -18,40 +18,40 @@ def get_datestring_to_datetime(date_string: str):
     
 def get_formatted_timestamp(date_timestamp_ms: int):
     """
-    Formatear milisegundos a datetime string.
+    Formatear milisegundos a datetime.
     """
     timestamp_s  = date_timestamp_ms / 1000.0
     datetime_obj = datetime.fromtimestamp(timestamp_s)
     
-    return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y, %I:%M %p')
+    return datetime_obj
 
 def get_formatted_date_bcv(date_string: str):
     """
-    Formatear datetime a string.
+    Formatear datetime.
     """
     datetime_obj = datetime.fromisoformat(date_string)
     
-    return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y')
+    return datetime_obj
 
 def get_formatted_date(date_string: str):
     """
-    Formatear datetime a string.
+    Formatear datetime.
     """
     datetime_obj = datetime.fromisoformat(date_string)
     
-    return datetime_obj.astimezone(standard_time_zone).strftime('%d/%m/%Y, %I:%M %p')
+    return datetime_obj.astimezone(standard_time_zone)
 
 def get_time(date_string: str):
     """
-    Formatear datetime a string.
+    Formatear datetime.
     """
     datetime_obj = datetime.strptime(date_string, '%Y-%m-%d %H:%M')
     
-    return datetime_obj.strftime('%d/%m/%Y, %I:%M %p')
+    return datetime_obj
 
 def get_formatted_time(date_string: str):
     """
-    Formatear string a strdatetime. Solo que esta formateada primeramente como (Hace una Hora).
+    Formatear string a datetime. Solo que esta formateada primeramente como (Hace una Hora).
     """
     datetime_obj = datetime.now(standard_time_zone)
     listdate = date_string.split(' ')
@@ -68,29 +68,29 @@ def get_formatted_time(date_string: str):
         exact_time = datetime_obj - duration
 
         if time == "día" or time == "días":
-            return exact_time.strftime("%d/%m/%Y") 
+            return exact_time
             
-        return exact_time.strftime("%d/%m/%Y, %I:%M %p")
+        return exact_time
         
     elif len(listdate) == 5:
         duration = timedelta(days=30)
 
         exact_time = datetime_obj - duration
-        return exact_time.strftime("%d/%m/%Y")
+        return exact_time
         
     else:
         return None 
 
 def get_time_standard(date_string: str):
     """
-    Formatear datetime a string. Restando las horas que tuvo la ultima actualizacion del monitor \
+    Formatear datetime. Restando las horas que tuvo la ultima actualizacion del monitor \
     por la zona horaria universal.
     """
     rested_hours = timedelta(hours=4)
     time_zone_utc = datetime.fromisoformat(date_string[:-1])
     datetime_obj = time_zone_utc - rested_hours
 
-    return datetime_obj.strftime('%d/%m/%Y, %I:%M %p')
+    return datetime_obj
 
 def get_time_zone():
     """
