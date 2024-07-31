@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from ..network import requests, get
 from ..utils.extras import currencies, list_monitors_images, bank_dict
-from ..utils.time import get_formatted_date_bcv
+from ..utils.time import get_formatted_date_bcv, get_datestring_to_datetime
 from ._base import Base
 from ..pages import BCV as BCVPage
 
@@ -35,7 +35,7 @@ class BCV(Base):
             if title not in [bank['title'] for bank in rates]:
                 price = float(str(bank.find('td', 'views-field views-field-field-tasa-venta').text).replace(',', '.'))
                 price_round = round(price, 2)
-                last_update = str(bank.find('td', 'views-field views-field-field-fecha-del-indicador').text).strip().replace('-', '/')
+                last_update = get_datestring_to_datetime(str(bank.find('td', 'views-field views-field-field-fecha-del-indicador').text).strip().replace('-', '/'))
 
                 rates.append({
                     'key': key,
