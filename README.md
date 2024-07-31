@@ -137,7 +137,7 @@ Argumentos:
 
 ```python
 from pyDolarVenezuela.pages import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
-from pyDolarVenezuela import Monitor, Database
+from pyDolarVenezuela import Monitor, Database, currency_converter
 
 db = Database(...)
 monitor = Monitor(AlCambio, 'USD', db=db)
