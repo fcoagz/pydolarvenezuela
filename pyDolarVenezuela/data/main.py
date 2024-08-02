@@ -74,7 +74,8 @@ class DatabaseSettings:
                     func.date(MonitorPriceHistory.last_update) <= end_date).order_by(MonitorPriceHistory.last_update.desc()).all()
 
             for price_history in query:
-                changes[price_history.last_update] = price_history
+                if func.date(price_history.last_update) not in changes:
+                    changes[price_history.last_update] = price_history
             
             return changes.values()
     
