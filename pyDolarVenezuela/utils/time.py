@@ -11,17 +11,18 @@ def get_datestring_to_datetime(date_string: str):
     Formatear string a datetime.
     """
     date_time = date_string.split(' ')
+    datetime_obj = datetime.now(standard_time_zone)
     if len(date_time) > 1:
-        return datetime.strptime(date_string, '%d/%m/%Y, %I:%M %p')
+        return datetime_obj.strptime(date_string, '%d/%m/%Y, %I:%M %p')
     else:
-        return datetime.strptime(date_string, '%d/%m/%Y')
+        return datetime_obj.strptime(date_string, '%d/%m/%Y')
     
 def get_formatted_timestamp(date_timestamp_ms: int):
     """
     Formatear milisegundos a datetime.
     """
     timestamp_s  = date_timestamp_ms / 1000.0
-    datetime_obj = datetime.fromtimestamp(timestamp_s)
+    datetime_obj = datetime.fromtimestamp(timestamp_s, standard_time_zone)
     
     return datetime_obj
 
@@ -29,7 +30,7 @@ def get_formatted_date_bcv(date_string: str):
     """
     Formatear datetime.
     """
-    datetime_obj = datetime.fromisoformat(date_string)
+    datetime_obj = datetime.now(standard_time_zone).fromisoformat(date_string)
     
     return datetime_obj
 
@@ -37,9 +38,9 @@ def get_formatted_date(date_string: str):
     """
     Formatear datetime.
     """
-    datetime_obj = datetime.fromisoformat(date_string)
+    datetime_obj = datetime.fromisoformat(date_string).astimezone(standard_time_zone)
     
-    return datetime_obj.astimezone(standard_time_zone)
+    return datetime_obj
 
 def get_time(date_string: str):
     """
@@ -80,17 +81,6 @@ def get_formatted_time(date_string: str):
         
     else:
         return None 
-
-def get_time_standard(date_string: str):
-    """
-    Formatear datetime. Restando las horas que tuvo la ultima actualizacion del monitor \
-    por la zona horaria universal.
-    """
-    rested_hours = timedelta(hours=4)
-    time_zone_utc = datetime.fromisoformat(date_string[:-1])
-    datetime_obj = time_zone_utc - rested_hours
-
-    return datetime_obj
 
 def get_time_zone():
     """
