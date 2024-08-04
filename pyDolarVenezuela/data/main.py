@@ -65,7 +65,7 @@ class DatabaseSettings:
                 Monitor.key == type_monitor).first()
 
             if not monitor:
-                raise MonitorNotFound(f'El monitor cuando intentaste acceder a su historial. No se encuentra: {type_monitor}')
+                raise MonitorNotFound(f'No se puede encontrar un monitor llamado: {type_monitor}')
 
             changes = {}
             query = session.query(MonitorPriceHistory).\
@@ -93,7 +93,7 @@ class DatabaseSettings:
                 Monitor.key == type_monitor).first()
             
             if not monitor:
-                raise MonitorNotFound(f'El monitor cuando intentaste acceder a su historial. No se encuentra: {type_monitor}')
+                raise MonitorNotFound(f'No se puede encontrar un monitor llamado: {type_monitor}')
 
             return session.query(MonitorPriceHistory).\
                 filter(
