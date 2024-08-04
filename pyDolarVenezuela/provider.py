@@ -1,6 +1,6 @@
 from typing import Union, Any, List, Dict
 from datetime import datetime
-from .utils.time import get_datestring_to_datetime
+from .exceptions import MonitorNotFound, CurrencyNotFound, PropertyNotFound, DatabaseNotDefined
 from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from .data import DatabaseSettings, MonitorModel
 from .models import Page, Monitor, LocalDatabase, Database
@@ -56,7 +56,7 @@ class Provider:
         self.key      = f'{page.name}:{currency}'
         
         if self.currency not in page.currencies:
-            raise ValueError(f"The currency type must be 'usd', 'eur'..., not {currency}")
+            raise CurrencyNotFound(f"Tipo de moneda no encontrado. Debe ser USD o EUR. No '{currency}'")
         
         self.page = page
         self.database = database
@@ -165,20 +165,18 @@ class Provider:
             monitor_data = next((monitor for monitor in data if monitor.get('key') == type_monitor_lower), None)
 
             if not monitor_data:
-                raise KeyError(f'Type monitor "{type_monitor}" not found.')
+                raise MonitorNotFound('El monitor que intentó obtener. No se encuentra, comprueba cómo se encuentra el key.')
 
             if property:
                 property_value = monitor_data.get(property)
                 if property_value is None:
-                    raise KeyError(f'Property "{property}" not found in type monitor "{type_monitor}".')
+                    raise PropertyNotFound(f'La propiedad "{property}" no se encuentra en el monitor "{type_monitor}".')
                 
                 if prettify and property == 'price':
                     return f'Bs. {property_value}'
                 return property_value
 
             return monitor_data
-        except KeyError as e:
-            raise KeyError(f'{e} https://github.com/fcoagz/pyDolarVenezuela')
         except Exception as e:
             raise e
     
@@ -193,7 +191,7 @@ class Provider:
         """
         try:
             if not self.database:
-                raise Exception('The database is not declared.')
+                raise DatabaseNotDefined('La base de datos no está declarada.')
             
             start_date  = datetime.strptime(start_date, "%d-%m-%Y").date()
             end_date    = datetime.strptime(end_date, "%d-%m-%Y").date() if isinstance(end_date, str) else end_date.date()
@@ -219,7 +217,7 @@ class Provider:
         """
         try:
             if not self.database:
-                raise Exception('The database is not declared.')
+                raise DatabaseNotDefined('La base de datos no está declarada.')
             
             date        = datetime.strptime(date, "%d-%m-%Y").date()
             page_id     = self._connection.get_or_create_page(self.page)
