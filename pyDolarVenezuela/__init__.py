@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from . import pages
 from .models import Page, LocalDatabase, Database
 from .provider import Provider
-from .utils import currency_converter
-from .utils import get_time_zone as getdate
+from .utils.calculator import currency_converter
+from .utils.time import get_time_zone as getdate
 from .version import CheckVersion, __version__
 
 __all__ = (
