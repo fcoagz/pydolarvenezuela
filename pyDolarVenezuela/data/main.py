@@ -7,6 +7,7 @@ from .models import Page, Monitor, Currency, MonitorPriceHistory
 from .engine import get_connection, create_tables
 from ..models import Page as SchemaPage
 from ..models import Monitor as SchemaMonitor
+from ..exceptions import MonitorNotFound
 
 class DatabaseSettings:
     def __init__(self, connection) -> None:
@@ -64,7 +65,7 @@ class DatabaseSettings:
                 Monitor.key == type_monitor).first()
 
             if not monitor:
-                raise ValueError('Monitor not found')
+                raise MonitorNotFound(f'El monitor cuando intentaste acceder a su historial. No se encuentra: {type_monitor}')
 
             changes = {}
             query = session.query(MonitorPriceHistory).\
@@ -92,7 +93,7 @@ class DatabaseSettings:
                 Monitor.key == type_monitor).first()
             
             if not monitor:
-                return None
+                raise MonitorNotFound(f'El monitor cuando intentaste acceder a su historial. No se encuentra: {type_monitor}')
 
             return session.query(MonitorPriceHistory).\
                 filter(
