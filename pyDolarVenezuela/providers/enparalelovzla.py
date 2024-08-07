@@ -2,8 +2,7 @@ import re
 from bs4 import BeautifulSoup
 
 from ..network import get
-from ..utils import time
-from ..utils.extras import list_monitors_images
+from ..utils.time import get_formatted_date
 from ..pages import EnParaleloVzla as EnParaleloVzlaPage
 from ._base import Base
 
@@ -38,7 +37,7 @@ class EnParaleloVzla(Base):
                         # url_message = data_message.find('a', 'tgme_widget_message_photo_wrap').get('href')
                         date_message = data_message.find('div', 'tgme_widget_message_info short js-message_info').\
                             find('time').get('datetime')
-                        last_update = time.get_formatted_date(date_message)
+                        last_update = get_formatted_date(date_message)
 
                         data = {
                             'key': 'enparalelovzla',

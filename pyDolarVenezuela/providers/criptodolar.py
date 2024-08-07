@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 import json
 
 from .. import network
-from ..utils import time
+from ..utils.time import get_formatted_date
 from ..utils.extras import list_monitors_images
 from ._base import Base
 from ..pages import CriptoDolar as CriptoDolarPage
@@ -38,7 +38,7 @@ class CriptoDolar(Base):
                 title = _convert_dollar_name_to_monitor_name(monitor['name'])
                 price = round(monitor['price'], 2)
                 price_old   = monitor['priceOld']
-                last_update = time.get_formatted_date(monitor['updatedAt'])
+                last_update = get_formatted_date(monitor['updatedAt'])
 
                 data.append({
                     'key': key,
