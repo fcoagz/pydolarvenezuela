@@ -14,7 +14,7 @@ def get_datestring_to_datetime(date_string: str):
     try:
         return datetime_obj.strptime(date_string, '%d/%m/%Y, %I:%M %p')
     except ValueError:
-        return datetime_obj.strptime(date_string, '%d/%m/%Y')
+        return datetime_obj.strptime(date_string, '%d/%m/%Y').astimezone(standard_time_zone)
 
 def get_formatted_timestamp(date_timestamp_ms: int):
     """
@@ -27,7 +27,7 @@ def get_formatted_date_bcv(date_string: str):
     """
     Formatear datetime.
     """
-    return datetime.fromisoformat(date_string).replace(tzinfo=standard_time_zone)
+    return datetime.fromisoformat(date_string).astimezone(standard_time_zone)
 
 def get_formatted_date(date_string: str):
     """
