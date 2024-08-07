@@ -10,7 +10,7 @@ def get_connection(connection: Union[Database, LocalDatabase]):
     """
     if isinstance(connection, Database):
         return create_engine(f'{connection.motor}://{connection.user}:{connection.password}@{connection.host}:{connection.port}/{connection.database}',
-                            connect_args={'options': '-c timezone=America/Caracas'})
+                            connect_args={'options': '-c timezone=utc'})
     elif isinstance(connection, LocalDatabase):
         return create_engine(f'{connection.motor}:///{connection.url}')
 
