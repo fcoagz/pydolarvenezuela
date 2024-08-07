@@ -1,7 +1,7 @@
-from typing import Any, List, Dict, Literal, Union
+from typing import List, Literal, Union
 from datetime import datetime, timedelta
 from . import pages
-from .models import Page, LocalDatabase, Database
+from .models import Page, LocalDatabase, Database, Monitor as MonitorModel, HistoryPrice
 from .provider import Provider
 from .utils.calculator import currency_converter
 from .utils.time import get_time_zone as getdate
@@ -49,29 +49,24 @@ class Monitor:
         self.db       = db
         self.select_monitor = Provider(provider, currency, db)
     
-    def get_all_monitors(self) -> List[Dict[str, Any]]:
+    def get_all_monitors(self) -> List[MonitorModel]:
         """
         El método `get_all_monitors` permite obtener todos los monitores disponibles.
         """
         result = self.select_monitor.get_values_specifics(self.cache)
         return result
 
-    def get_value_monitors(self,
-                           type_monitor: str,
-                           property: Literal['title', 'price', 'last_update'] = None,
-                           prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
+    def get_value_monitors(self, type_monitor: str) -> MonitorModel:
         """
         El método `get_value_monitors` permite acceder a los datos extraídos de los monitores.
 
         Args:
         - type_monitor: El código del monitor del cual se desea obtener información. 
-        - property: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
-        - prettify: Si es True, muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
         """ 
-        result = self.select_monitor.get_values_specifics(self.cache, type_monitor, property, prettify)
+        result = self.select_monitor.get_values_specifics(self.cache, type_monitor)
         return result
     
-    def get_daily_price_monitor(self, type_monitor: str, date: str) -> List[Dict[str, Any]]:
+    def get_daily_price_monitor(self, type_monitor: str, date: str) -> List[HistoryPrice]:
         """
         El método `get_daily_price_monitor` permite obtener los precios de un monitor específico en una fecha determinada.\n\n
 
@@ -84,7 +79,7 @@ class Monitor:
         result = self.select_monitor.get_daily_price_monitor(type_monitor, date)
         return result
 
-    def get_prices_history(self, type_monitor: str, start_date: str, end_date: Union[str, datetime] = datetime.now()) -> List[Dict[str, Any]]:
+    def get_prices_history(self, type_monitor: str, start_date: str, end_date: Union[str, datetime] = datetime.now()) -> List[HistoryPrice]:
         """
         El método `get_prices_history` permite obtener el historial de precios de un monitor específico.\n\n
 
