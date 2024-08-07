@@ -60,6 +60,17 @@ class Monitor:
         return f"{self.__class__.__name__}(title={self.title!r}, price={self.price!r}, price_old={self.price_old!r}, last_update={self.last_update!r}, percent={self.percent!r}, change={self.change!r}, color={self.color!r}, symbol={self.symbol!r}, image={self.image!r})"
     
 @dataclass
+class HistoryPrice:
+    """
+    History price instance
+    """
+    price: float
+    last_update: datetime
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}(price={self.price!r}, last_update={self.last_update!r})'
+
+@dataclass
 class Image:
     """
     Image instance
