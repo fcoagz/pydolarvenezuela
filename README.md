@@ -99,8 +99,6 @@ Se utiliza para obtener datos de un monitor específico y acceder a ellos fácil
 Argumentos:
 
 - `type_monitor`: El código del monitor del cual se desea obtener información.
-- `property`: El nombre de la propiedad específica del diccionario de la información del monitor extraído que se desea obtener. Por defecto es `None`.
-- `prettify`: Muestra los precios en formato de moneda con el símbolo de Bolívares. Por defecto es `False`.
 
 #### `get_prices_history`
 
@@ -146,13 +144,16 @@ monitor = Monitor(AlCambio, 'USD', db=db)
 all_monitors = monitor.get_all_monitors()
 
 # Obtener el valor del dólar en EnParaleloVzla
-paralelo_value = monitor.get_value_monitors("enparalelovzla", "price", prettify=True)
+paralelo = monitor.get_value_monitors("enparalelovzla")
+last_update = paralelo.price
 
 # Obtener el historial de precios de un monitor durante una semana.
 history = monitor.get_prices_history("enparalelovzla", "01-07-2024", "05-07-2024")
 
 # Obtener todos los cambios que se realizaron de un monitor.
 changes = monitor.get_daily_price_monitor("enparalelovzla", "30-07-2024")
+
+# "history", "changes". Obtendrá una lista de objetos.
 
 # Conversion
 data_paralelo = monitor.get_value_monitors("enparalelovzla")
@@ -179,11 +180,10 @@ zone = timezone('America/Caracas')
 monitor = Monitor(AlCambio, 'USD')
 
 paralelo       = monitor.get_value_monitors("enparalelovzla")
-last_update_dt = paralelo['last_update']
-last_update_ve = last_update_dt.astimezone(timezone('America/Caracas'))
+last_update_dt = paralelo.last_update
+last_update_ve = last_update_dt.astimezone(zone)
 
 formatted_last_update = last_update_ve.strftime('%d/%m/%Y, %I:%M %p')
-
 
 print(formatted_last_update)
 ```
