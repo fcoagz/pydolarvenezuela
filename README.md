@@ -4,7 +4,7 @@ pyDolarVenezuela es una librería de Python diseñada para facilitar la obtenci�
 
 | Página Web | URL | Estado
 |------------|-------------|-------------|
-| Exchange Monitor | https://exchangemonitor.net/dolar-venezuela | ![Pending](https://img.shields.io/badge/Pendiente-orange) |
+| Exchange Monitor | https://exchangemonitor.net/dolar-venezuela | ![Error](https://img.shields.io/badge/Error-red) |
 | CriptoDolar | https://criptodolar.net/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | BCV (Banco Central de Venezuela) | http://www.bcv.org.ve/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | Italcambio | https://www.italcambio.com/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
@@ -167,19 +167,27 @@ price_in_dolares = currency_converter(
 
 Respetando el tipado de las fechas. Te muestro cómo puedes formatearlo.
 
+**Nota**: La fecha y la hora se almacenan internamente en UTC, por lo que puede especificar la zona horaria que desea mostrar cuando se actualizó el monitor por última vez.
+
 ```python
 from datetime import datetime
+from pytz import timezone
 from pyDolarVenezuela.pages import AlCambio
 from pyDolarVenezuela import Monitor
 
+zone = timezone('America/Caracas')
 monitor = Monitor(AlCambio, 'USD')
 
-paralelo    = monitor.get_value_monitors("enparalelovzla")
-last_update = datetime.strftime(paralelo['last_update'], '%d-%m-%Y %H:%M:%S')
+paralelo       = monitor.get_value_monitors("enparalelovzla")
+last_update_dt = datetime.fromisoformat(paralelo['last_update'])
+last_update_ve = last_update_dt.astimezone(zone)
 
-print(last_update)
+formatted_last_update = last_update_ve.strftime('%d/%m/%Y, %I:%M %p')
+
+
+print(formatted_last_update)
 ```
-Para que puedas mostrar la fecha como desees.
+`formatted_last_update` Especifica cómo se debe formatear la fecha como una cadena.
 
 ## Contributores
 
