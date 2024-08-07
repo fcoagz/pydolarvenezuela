@@ -10,45 +10,36 @@ def get_datestring_to_datetime(date_string: str):
     """
     Formatear string a datetime.
     """
-    date_time = date_string.split(' ')
     datetime_obj = datetime.now(standard_time_zone)
-    if len(date_time) > 1:
+    try:
         return datetime_obj.strptime(date_string, '%d/%m/%Y, %I:%M %p')
-    else:
+    except ValueError:
         return datetime_obj.strptime(date_string, '%d/%m/%Y')
-    
+
 def get_formatted_timestamp(date_timestamp_ms: int):
     """
     Formatear milisegundos a datetime.
     """
     timestamp_s  = date_timestamp_ms / 1000.0
-    datetime_obj = datetime.fromtimestamp(timestamp_s, standard_time_zone)
-    
-    return datetime_obj
+    return datetime.fromtimestamp(timestamp_s, standard_time_zone)
 
 def get_formatted_date_bcv(date_string: str):
     """
     Formatear datetime.
     """
-    datetime_obj = datetime.now(standard_time_zone).fromisoformat(date_string)
-    
-    return datetime_obj
+    return datetime.fromisoformat(date_string).replace(tzinfo=standard_time_zone)
 
 def get_formatted_date(date_string: str):
     """
     Formatear datetime.
     """
-    datetime_obj = datetime.fromisoformat(date_string).astimezone(standard_time_zone)
-    
-    return datetime_obj
+    return datetime.fromisoformat(date_string).astimezone(standard_time_zone)
 
 def get_time(date_string: str):
     """
     Formatear datetime.
     """
-    datetime_obj = datetime.strptime(date_string, '%Y-%m-%d %H:%M')
-    
-    return datetime_obj
+    return datetime.strptime(date_string, '%Y-%m-%d %H:%M')
 
 def get_formatted_time(date_string: str):
     """
