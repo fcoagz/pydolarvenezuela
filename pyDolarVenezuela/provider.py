@@ -1,9 +1,9 @@
 from typing import Union, Any, List, Dict
 from datetime import datetime
-from .exceptions import MonitorNotFound, CurrencyNotFound, PropertyNotFound, DatabaseNotDefined
+from .exceptions import MonitorNotFound, CurrencyNotFound, DatabaseNotDefined
 from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
 from .data import DatabaseSettings, MonitorModel
-from .models import Page, Monitor, LocalDatabase, Database
+from .models import Page, Monitor, HistoryPrice, LocalDatabase, Database
 from .storage import Cache
 from .pages import (
     AlCambio as A,
@@ -14,6 +14,7 @@ from .pages import (
     EnParaleloVzla as EP,
     Italcambio as I
 )
+from .utils.time import standard_time_zone
 
 monitor_classes = {
     A.name: {'currency': A.currencies, 'provider': AlCambio},
@@ -87,19 +88,27 @@ class Provider:
                         self._connection.create_monitor(self.page_id, self.currency_id, new_monitor)
                     else:
                         index_old_data = key_items.index(new_monitor.key)
+                        old_monitor = old_data[index_old_data]
 
-                        if self.page.name in [B.name, EP.name]:
-                            if old_data[index_old_data].last_update != new_monitor.last_update.replace(tzinfo=None):
-                                self._update_item(old_data[index_old_data], new_monitor)
+                        old_last_update = old_monitor.last_update
+                        new_last_update = new_monitor.last_update
+
+                        if self.page.name == B.name:
+                            if old_last_update.date() != new_last_update.date():
+                                self._update_item(old_monitor, new_monitor)
+                        elif self.page.name == EP.name:
+                            if old_last_update.astimezone(standard_time_zone) != new_last_update:
+                                self._update_item(old_monitor, new_monitor)
                         else:
-                            if old_data[index_old_data].price != new_monitor.price:
-                                self._update_item(old_data[index_old_data], new_monitor)
+                            if old_monitor.price != new_monitor.price:
+                                self._update_item(old_monitor, new_monitor)
                 
                 values = self._connection.get_monitors(self.page_id, self.currency_id)
-            except Exception as e:
-                values = self._connection.get_monitors(self.page_id, self.currency_id)
+                
                 if not values:
-                    raise Exception(e)
+                    raise MonitorNotFound('No se pudo obtener los datos de la base de datos.')
+            except Exception as e:
+                raise e
         else:
             values = monitor_class.get_values(currency=self.currency)
         return values
@@ -137,50 +146,39 @@ class Provider:
         )
         self._connection.add_price_history(old_monitor.id, new_price, last_update)
     
-    def get_values_specifics(self, cache: Union[Cache, None], type_monitor: str = None, property: str = None, prettify: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any], Any]:
+    def get_values_specifics(self, cache: Union[Cache, None], type_monitor: str = None) -> Union[List[Monitor], Monitor]:
         """
         Obtiene los valores específicos de un monitor o de todos los monitores.
 
         Args:
         - type_monitor: El tipo de monitor a obtener.
-        - property: La propiedad del monitor a obtener.
-        - prettify: Si se debe formatear el precio del monitor `38.40` a `Bs. 38.40`.
         """
-        if cache is None:
-            data = self._load_data()
-        else:
-            if not cache.get(self.key):
-                data = self._load_data()
-                cache.set(self.key, data)
-                
-            data = cache.get(self.key)
-        
-        if self.database is not None:
-            data = [model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id']) for monitor in data] 
-        if not type_monitor:
-            return data
-
-        type_monitor_lower = type_monitor.lower()
         try:
-            monitor_data = next((monitor for monitor in data if monitor.get('key') == type_monitor_lower), None)
+            if cache is None or not cache.get(self.key):
+                data = self._load_data()
+                if cache is not None:
+                    cache.set(self.key, data)
+            else:
+                data = cache.get(self.key)
+            
+            if self.database is not None:
+                data = [Monitor(**model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id'])) for monitor in data]
+            else:
+                data = [Monitor(**item) for item in data]
+            
+            if not type_monitor:
+                return data
 
+            type_monitor_lower = type_monitor.lower()
+            monitor_data = next((monitor for monitor in data if monitor.key == type_monitor_lower), None)
             if not monitor_data:
                 raise MonitorNotFound('El monitor que intentó obtener. No se encuentra, comprueba cómo se encuentra el key.')
-
-            if property:
-                property_value = monitor_data.get(property)
-                if property_value is None:
-                    raise PropertyNotFound(f'La propiedad "{property}" no se encuentra en el monitor "{type_monitor}".')
-                
-                if prettify and property == 'price':
-                    return f'Bs. {property_value}'
-                return property_value
-
+            
             return monitor_data
         except Exception as e:
             raise e
     
-    def get_prices_history(self, type_monitor: str, start_date: str, end_date: Union[str, datetime] = datetime.now()) -> List[Dict[str, Any]]:
+    def get_prices_history(self, type_monitor: str, start_date: str, end_date: Union[str, datetime] = datetime.now()) -> List[HistoryPrice]:
         """
         Obtiene el historial de precios de un monitor específico.
 
@@ -199,7 +197,7 @@ class Provider:
             currency_id = self._connection.get_or_create_currency(self.currency)
             
             data = self._connection.get_date_range_history(page_id, currency_id, type_monitor, start_date, end_date)
-            data = [model_to_dict(monitor, exclude=['id', 'monitor_id']) for monitor in data]
+            data = [HistoryPrice(**model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
             
             return data
         except ValueError as e:
@@ -207,7 +205,7 @@ class Provider:
         except Exception as e:
             raise e
     
-    def get_daily_price_monitor(self, type_monitor: str, date: str) -> List[Dict[str, Any]]:
+    def get_daily_price_monitor(self, type_monitor: str, date: str) -> List[HistoryPrice]:
         """
         Obtiene los precios de un monitor específico en una fecha especifica.
 
@@ -224,7 +222,7 @@ class Provider:
             currency_id = self._connection.get_or_create_currency(self.currency)
             
             data = self._connection.get_prices_monitor_one_day(page_id, currency_id, type_monitor, date)
-            data = [model_to_dict(monitor, exclude=['id', 'monitor_id']) for monitor in data]
+            data = [HistoryPrice(**model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
             
             return data
         except ValueError as e:
