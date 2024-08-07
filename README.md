@@ -179,8 +179,8 @@ zone = timezone('America/Caracas')
 monitor = Monitor(AlCambio, 'USD')
 
 paralelo       = monitor.get_value_monitors("enparalelovzla")
-last_update_dt = datetime.fromisoformat(paralelo['last_update'])
-last_update_ve = last_update_dt.astimezone(zone)
+last_update_dt = paralelo['last_update']
+last_update_ve = last_update_dt.astimezone(timezone('America/Caracas'))
 
 formatted_last_update = last_update_ve.strftime('%d/%m/%Y, %I:%M %p')
 
