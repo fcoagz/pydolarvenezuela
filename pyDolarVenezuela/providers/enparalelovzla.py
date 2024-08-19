@@ -6,7 +6,7 @@ from ..utils.time import get_formatted_date
 from ..pages import EnParaleloVzla as EnParaleloVzlaPage
 from ._base import Base
 
-pattern = r"🗓 (\d{2}/\d{2}/\d{4})🕒 (\d{1,2}:\d{2} [AP]M)💵 (Bs\. \d{2},\d{2})(🔺|🔻|🟰) (\d{1,2},\d{2}%) Bs (\d{1,2},\d{2})"
+pattern = r"🗓 (\d{2}/\d{2}/\d{4})🕒 (\d{1,2}:\d{2} [AP]M)💵 (Bs\. \d{2},\d{2})(🔺|🔻|🟰) (\d{1,2},\d{2}%|\d{3}%) Bs (\d{1,2},\d{2}|\d{3})"
 url_image = 'https://res.cloudinary.com/dcpyfqx87/image/upload/v1721329079/enparalelovzla/jmdvqvnopoobzmdszno3.png'
 
 class EnParaleloVzla(Base):
