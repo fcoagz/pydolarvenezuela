@@ -30,8 +30,13 @@ class EnParaleloVzla(Base):
                     result = re.search(pattern, text_message.text.strip())
                     if result:
                         price = float(result.group(3).replace('Bs. ', '').replace(',', '.'))
-                        percent = result.group(5).replace(',', '.').replace('%', '')    
-                        change = result.group(6).replace(',', '.')
+                        
+                        percent = result.group(5).replace(',', '.').replace('%', '')  
+                        change = result.group(6).replace(',', '.') 
+                        if not '.' in percent:
+                            percent = float(percent) / 100 
+                        if not '.' in change:
+                            change = float(change) / 100
                         symbol = "▼" if result.group(4) == '🔻' else "▲" if result.group(4) == '🔺' else ""
                         color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
                         # url_message = data_message.find('a', 'tgme_widget_message_photo_wrap').get('href')
