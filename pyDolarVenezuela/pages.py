@@ -14,7 +14,7 @@ CriptoDolar = Page(
 
 ExchangeMonitor = Page(
     name="Exchange Monitor",
-    provider="https://exchangemonitor.net/",
+    provider="https://exchangemonitor.net",
     currencies=['usd', 'eur']
 )
 

@@ -1,62 +1,62 @@
 from typing import Any, Dict, List
-from bs4 import BeautifulSoup
+from datetime import datetime
+import requests
+import pytz
 
-from .. import network
-from ..utils import time
-from ..utils.extras import list_monitors_images
+from ..network import _headers
+from ..utils.common import _convert_specific_format, _parse_price, _parse_percent
+from ..utils.time import get_formatted_date
+
 from ._base import Base
 from ..pages import ExchangeMonitor as ExchangeMonitorPage
 
-def _convert_specific_format(text: str, character: str = '_') -> str:
-    acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
-    for acento, sin_acento in acentos.items():
-        text = text.lower().replace(acento, sin_acento).replace(' ', character)
-    return text
-
-def _get_values_monitors(soup: BeautifulSoup):
-    return [value for value in soup]
 
 class ExchangeMonitor(Base):
     PAGE = ExchangeMonitorPage
 
     @classmethod
     def _load(cls, **kwargs) -> List[Dict[str, Any]]:
-        url = f'{cls.PAGE.provider}dolar-venezuela' if not kwargs.get('currency') == 'usd' else f'{cls.PAGE.provider}dolar-venezuela/EUR'
-        response = network.curl('GET', url)
-        soup = BeautifulSoup(response, 'html.parser')
-            
-        section_dolar_venezuela = soup.find_all("div", "col-xs-12 col-sm-6 col-md-4 col-tabla")
-        _scraping_monitors = _get_values_monitors(section_dolar_venezuela)
-        data = []
+        tz = pytz.timezone('America/Caracas')
 
-        for scraping_monitor in _scraping_monitors:
-            result = scraping_monitor.find("div", "module-table module-table-fecha")
+        url = f'{cls.PAGE.provider}/data/data-rates/ve'
 
-            name  = result.find("h6", "nombre").text
-            key = _convert_specific_format(name)
-            price = str(result.find('p', "precio").text).replace(',', '.')
+        # Realizar la solicitud GET a la API
+        response = requests.get(url, headers=_headers)
 
-            if price.count('.') == 2:
-                price = price.replace('.', '', 1)
+        # Verificar que la solicitud fue exitosa
+        if response.status_code == 200:
+            data_json = response.json()
 
-            price = float(price)
-            last_update = time.get_formatted_time(' '.join(str(result.find('p', "fecha").text).split(' ')[1:]).capitalize())
-            symbol = str(result.find('p', "cambio-por").text)[0] if not str(result.find('p', "cambio-por").text)[0] == ' ' else ''
-            color  = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-            percent = float(str(result.find('p', "cambio-por").text)[1:].strip().replace(',', '.').replace('%', ''))
-            change = float(str(result.find('p', "cambio-num").text).replace(',', '.'))
-            image = next((image.image for image in list_monitors_images if image.provider == 'exchangemonitor' and image.title == _convert_specific_format(name)), None)
+            # Extraer los datos requeridos
+            result = []
+            for item in data_json["data"]:
+                # Parsear la fecha y hora (sin zona horaria)
+                date_naive = datetime.strptime(item.get("date"), "%d-%m-%Y %I:%M %p")
 
-            data.append({
-                'key': key,
-                'title': name,
-                'price': price,
-                'last_update': last_update,
-                'percent': percent,
-                'change': change,
-                'color': color,
-                'symbol': symbol,
-                'image': image
-            })
+                # Asignar y formatear valores
+                date_aware = str(tz.localize(date_naive))
+                logo = item.get("logo")
+                net_change = _parse_percent(item.get("change_rate"))
+                net_chg = str(item.get("change_rate"))
+                color = "red" if "-" in net_chg else "green" if "+" in net_chg else ""
+                symbol = "▼" if "-" in net_chg else "▲" if "+" in net_chg else "neutral"
 
-        return data
+                extracted_data = {
+                    "key": _convert_specific_format(item.get("id")),
+                    "title": _convert_specific_format(item.get("name")),
+                    "price": _parse_price(item.get("rate")),
+                    "price_old": _parse_price(item.get("last_rate")),
+                    "last_update":get_formatted_date(date_aware),
+                    "percent": _parse_percent(item.get("change_perc")),
+                    "change": net_change,
+                    "color": color,
+                    "symbol": symbol,
+                    "image": f'{cls.PAGE.provider}{logo}'
+                }
+                result.append(extracted_data)
+
+            return result
+
+        else:
+            print(f"Error retrieving data from API: {response.status_code}")
+            return []
