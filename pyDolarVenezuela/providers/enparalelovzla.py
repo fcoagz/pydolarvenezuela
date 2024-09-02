@@ -8,7 +8,7 @@ from ._base import Base
 
 # pattern = r"🗓 (\d{2}/\d{2}/\d{4})🕒 (\d{1,2}::?\d{2} [AP]M)💵 (Bs\. \d{2},\d{2})(🔺|🔻|🟰) (\d{1,3},\d{2}%?) Bs (\d{1,3},?\d{2}?)"
 # TODO: Fix the pattern
-pattern = r"(🗓|🕒|💵|🔺)|Bs\. (\d{2},\d{2})"
+pattern = r"(🗓|🕒|💵|🔺|🔻|🟰)|Bs\. (\d{2},\d{2})"
 url_image = 'https://res.cloudinary.com/dcpyfqx87/image/upload/v1721329079/enparalelovzla/jmdvqvnopoobzmdszno3.png'
 
 class EnParaleloVzla(Base):
@@ -30,7 +30,7 @@ class EnParaleloVzla(Base):
                 
                 if text_message is not None:
                     result = re.findall(pattern, text_message.text.strip())
-                    if result:
+                    if result and len([emoji[0] for emoji in result if emoji[0]]) == 4:
                         # url_message = data_message.find('a', 'tgme_widget_message_photo_wrap').get('href')
                         value = ''.join([r[-1] for r in result if r[-1]]).replace(',', '.')
                         price = float(value)
