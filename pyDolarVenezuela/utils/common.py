@@ -21,3 +21,16 @@ def _parse_percent(percent: str) -> float:
     Convierte el formato del cambio porcentual de "," al uso del "." y agrega el simbolo "%".
     """
     return float(percent.strip().replace(',', '.').replace('%', ''))
+
+def _convert_dollar_name_to_monitor_name(monitor_name: str):
+    """
+    Cambiar el nombre de los monitores existentes a su nombre original. (Dolar Today, EnParaleloVzla)
+    """
+    if monitor_name.split(' ')[0] in ['Dólar', 'Euro'] and monitor_name not in ['Dólar Today', 'Euro Today']:
+        if monitor_name == 'Dólar Paralelo':
+            return 'DolarToday'
+        if monitor_name in ['Dólar Monitor', 'Euro Monitor']:
+            return 'EnParaleloVzla'
+        else:
+            return monitor_name.split(' ')[1]
+    return monitor_name
