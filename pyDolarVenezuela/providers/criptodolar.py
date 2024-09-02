@@ -3,23 +3,10 @@ import json
 
 from .. import network
 from ..utils.time import get_formatted_date
+from ..utils.common import _convert_specific_format, _convert_dollar_name_to_monitor_name
 from ..utils.extras import list_monitors_images
 from ._base import Base
 from ..pages import CriptoDolar as CriptoDolarPage
-
-def _convert_specific_format(text: str, character: str = '_') -> str:
-    acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
-    for acento, sin_acento in acentos.items():
-        text = text.lower().replace(acento, sin_acento).replace(' ', character)
-    return text
-
-def _convert_dollar_name_to_monitor_name(monitor_name: str):
-    if monitor_name.split(' ')[0] in ['Dólar', 'Euro'] and monitor_name not in ['Dólar Today', 'Euro Today']:
-        if monitor_name in ['Dólar Monitor', 'Euro Monitor']:
-            return 'EnParaleloVzla'
-        else:
-            return monitor_name.split(' ')[1]
-    return monitor_name
 
 class CriptoDolar(Base):
     PAGE = CriptoDolarPage
