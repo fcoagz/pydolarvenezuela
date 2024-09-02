@@ -4,23 +4,11 @@ import json
 
 from .. import network
 from ..utils.extras import list_monitors_images
+from ..utils.common import _convert_specific_format, _convert_dollar_name_to_monitor_name
 from ..utils.time import standard_time_zone
 from ._base import Base
 from ..pages import DolarToday as DolarTodayPage
 
-def _convert_specific_format(text: str, character: str = '_') -> str:
-    acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'}
-    for acento, sin_acento in acentos.items():
-        text = text.lower().replace(acento, sin_acento).replace(' ', character)
-    return text
-
-def _convert_dollar_name_to_monitor_name(monitor_name: str):
-    if monitor_name.split(' ')[0] in ['Dólar', 'Euro']:
-        if monitor_name == 'Dólar Paralelo':
-            return 'DolarToday'
-        else:
-            return monitor_name.split(' ')[1]
-    return monitor_name
 
 class DolarToday(Base):
     PAGE = DolarTodayPage
