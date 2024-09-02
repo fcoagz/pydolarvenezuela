@@ -38,8 +38,8 @@ class ExchangeMonitor(Base):
                 logo = item.get("logo")
                 net_change = _parse_percent(item.get("change_rate"))
                 net_chg = str(item.get("change_rate"))
-                color = "red" if "-" in net_chg else "green" if "+" in net_chg else ""
-                symbol = "▼" if "-" in net_chg else "▲" if "+" in net_chg else "neutral"
+                color = "red" if "-" in net_chg else "green" if "+" in net_chg else "neutral"
+                symbol = "▼" if "-" in net_chg else "▲" if "+" in net_chg else ""
 
                 extracted_data = {
                     "key": _convert_specific_format(item.get("id")),
