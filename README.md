@@ -4,7 +4,7 @@ pyDolarVenezuela es una librería de Python diseñada para facilitar la obtenci�
 
 | Página Web | URL | Estado
 |------------|-------------|-------------|
-| Exchange Monitor | https://exchangemonitor.net/dolar-venezuela | ![Error](https://img.shields.io/badge/Error-red) |
+| Exchange Monitor | https://exchangemonitor.net/dolar-venezuela | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | CriptoDolar | https://criptodolar.net/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | BCV (Banco Central de Venezuela) | http://www.bcv.org.ve/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
 | Italcambio | https://www.italcambio.com/ | ![Active](https://img.shields.io/badge/Activo-brightgreen) |
