@@ -42,7 +42,7 @@ class ExchangeMonitor(Base):
                 symbol = "▼" if "-" in net_chg else "▲" if "+" in net_chg else ""
 
                 extracted_data = {
-                    "key": _convert_specific_format(item.get("id")),
+                    "key": _convert_specific_format(item.get("name")),
                     "title": _convert_specific_format(item.get("name")),
                     "price": _parse_price(item.get("rate")),
                     "price_old": _parse_price(item.get("last_rate")),
