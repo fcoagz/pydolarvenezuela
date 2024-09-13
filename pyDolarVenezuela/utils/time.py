@@ -1,6 +1,6 @@
 from babel.dates import format_date, format_time
 from datetime import datetime, timedelta
-from pytz import timezone
+from pytz import timezone,utc
 
 from .extras import time_units
 
@@ -34,6 +34,19 @@ def get_formatted_date(date_string: str):
     Formatear datetime.
     """
     return datetime.fromisoformat(date_string).astimezone(standard_time_zone)
+
+
+def get_formatted_date_tz(date_string: str):
+    """
+    Formatear datetime desde TZ.
+    """
+    # Parsear la fecha y hora usando strptime
+    dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    # Asignar la zona horaria UTC utilizando pytz
+    dt = dt.replace(tzinfo=utc)
+
+    return dt.astimezone(standard_time_zone)
+
 
 def get_time(date_string: str):
     """
