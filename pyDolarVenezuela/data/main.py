@@ -124,6 +124,16 @@ class DatabaseSettings:
                                 for monitor in monitors]
             session.add_all(monitors)
             session.commit()
+    
+    def delete_page(self, page: str) -> None:
+        """
+        Elimina una página de la base de datos según el nombre proporcionado.
+        """
+        with Session(self.engine) as session:
+            page = session.query(Page).filter(Page.name == page).first()
+            session.query(Monitor).filter(Monitor.page_id == page.id).delete()
+            session.delete(page)
+            session.commit()
 
     def update_monitor(self, id: int, data: dict) -> None:
         """
