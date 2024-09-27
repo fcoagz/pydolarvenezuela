@@ -124,6 +124,13 @@ class DatabaseSettings:
         """
         with Session(self.engine) as session:
             page = session.query(Page).filter(Page.name == page).first()
+            if not page:
+                raise ValueError('La página que intenta eliminar no existe.')
+            
+            monitors = session.query(Monitor).filter(Monitor.page_id == page.id).all()
+            for monitor in monitors:
+                session.query(MonitorPriceHistory).filter(MonitorPriceHistory.monitor_id == monitor.id).delete()
+            
             session.query(Monitor).filter(Monitor.page_id == page.id).delete()
             session.delete(page)
             session.commit()
