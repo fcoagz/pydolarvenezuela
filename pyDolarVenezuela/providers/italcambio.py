@@ -16,23 +16,26 @@ class Italcambio(Base):
         response = get(cls.PAGE.provider)
         soup = BeautifulSoup(response, 'html.parser')
         section_currencies_italcambio = soup.find('div', 'container-fluid compra')
-        monitors_amounts = [x.text for x in section_currencies_italcambio.find_all('p', 'small')]
+        monitors_amounts = [
+            x.text for x in section_currencies_italcambio.find_all('p', 'small')
+            ]
 
         rates = []
         for i in range(len(monitors_amounts)):
             if i%2 == 0:
-                title = code_currencies[monitors_amounts[i]]
-                key = monitors_amounts[i].lower()
-                price_old = float(str(monitors_amounts[i-1]).split()[-1])
-                price = round(price_old, 2)
-                last_update = datetime.now(standard_time_zone)
+                if monitors_amounts[i] in code_currencies:
+                    title = code_currencies[monitors_amounts[i]]
+                    key = monitors_amounts[i].lower()
+                    price_old = float(str(monitors_amounts[i+1]).split()[-1])
+                    price = round(price_old, 2)
+                    last_update = datetime.now(standard_time_zone)
 
-                rates.append({
-                    'key': key,
-                    'title': title,
-                    'price': price,
-                    'price_old': price_old,
-                    'last_update': last_update
-                })
+                    rates.append({
+                        'key': key,
+                        'title': title,
+                        'price': price,
+                        'price_old': price_old,
+                        'last_update': last_update
+                    })
 
         return rates
