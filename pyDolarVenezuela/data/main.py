@@ -104,16 +104,9 @@ class DatabaseSettings:
         Generar un monitor en la base de datos especificando el id de la página y la moneda.
         """
         with Session(self.engine) as session:
-            existing_monitor = session.query(Monitor).filter(
-                Monitor.page_id == page_id,
-                Monitor.currency_id == currency_id,
-                Monitor.title == monitor.title
-            ).first()
-            
-            if not existing_monitor:
-                new_monitor = Monitor(page_id=page_id, currency_id=currency_id, **monitor.__dict__)
-                session.add(new_monitor)
-                session.commit()
+            monitor = Monitor(page_id=page_id, currency_id=currency_id, **monitor.__dict__)
+            session.add(monitor)
+            session.commit()
 
     def create_monitors(self, page_id: int, currency_id: int, monitors: List[SchemaMonitor]) -> None:
         """
