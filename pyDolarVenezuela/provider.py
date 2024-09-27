@@ -78,7 +78,6 @@ class Provider:
 
             try:
                 if not self._connection.is_monitor_exists(self.page_id, self.currency_id):
-                    print('Creando monitores...')
                     self._connection.create_monitors(self.page_id, self.currency_id, data)
 
                 for new_monitor in data:
