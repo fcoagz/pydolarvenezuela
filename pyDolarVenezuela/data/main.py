@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, func
 from sqlalchemy.orm import Session
 
 from .models import Page, Monitor, Currency, MonitorPriceHistory
-from .engine import get_connection, create_tables
+from .engine import get_connection
 from ..models import Page as SchemaPage
 from ..models import Monitor as SchemaMonitor
 from ..exceptions import MonitorNotFound
@@ -15,7 +15,6 @@ class DatabaseSettings:
         Configuracion de la base de datos.
         """
         self.engine = get_connection(connection)
-        create_tables(self.engine)
 
     def get_or_create_page(self, page: SchemaPage) -> Union[Any, Column[Integer]]:
         """
@@ -121,40 +120,17 @@ class DatabaseSettings:
         Generar varios monitores en la base de datos especificando el id de la página y la moneda.
         """
         with Session(self.engine) as session:
-            existing_monitor = session.query(Monitor).filter(
-                    Monitor.page_id == page_id,
-                    Monitor.currency_id == currency_id
-                ).first()
-
-            if not existing_monitor:
-                new_monitors = [Monitor(page_id=page_id, currency_id=currency_id, **monitor.__dict__)
+            monitors = [Monitor(page_id=page_id, currency_id=currency_id, **monitor.__dict__)
                                 for monitor in monitors]
-                session.add_all(new_monitors)
-                session.commit()
+            session.add_all(monitors)
+            session.commit()
 
-    def update_monitor(self, id: int,
-                    price: float,
-                    price_old: Optional[float],
-                    percent: float,
-                    change: float,
-                    color: str,
-                    symbol: str,
-                    last_update: datetime, 
-                    image: str) -> None:
+    def update_monitor(self, id: int, data: dict) -> None:
         """
         Actualiza un monitor en la base de datos según el ID proporcionado.
         """
         with Session(self.engine) as session:
-            session.query(Monitor).filter(Monitor.id == id).update({
-                'price': price,
-                'price_old': price_old,
-                'percent': percent,
-                'change': change,
-                'color': color,
-                'symbol': symbol,
-                'last_update': last_update,
-                'image': image
-            })
+            session.query(Monitor).filter(Monitor.id == id).update(data)
             session.commit()
 
     def get_monitors(self, page_id: int, currency_id: int) -> List[Monitor]:
@@ -163,3 +139,31 @@ class DatabaseSettings:
         """
         with Session(self.engine) as session:
             return session.query(Monitor).filter(Monitor.page_id == page_id, Monitor.currency_id == currency_id).all()
+
+    def get_monitor_by_key(self, page_id: int, currency_id: int, key: str) -> Monitor:
+        """
+        Obtiene un monitor en la base de datos según el ID de la página, la moneda y el key.
+        """
+        with Session(self.engine) as session:
+            monitor = session.query(Monitor).filter(
+                Monitor.page_id == page_id, Monitor.currency_id == currency_id, Monitor.key == key
+                ).first()
+            return monitor
+
+    def is_monitor_exists_by_key(self, page_id: int, currency_id: int, key: str) -> bool:
+        """
+        Verifica si un monitor existe en la base de datos según el ID de la página, la moneda y el key.
+        """
+        with Session(self.engine) as session:
+            return session.query(Monitor).filter(
+                Monitor.page_id == page_id, Monitor.currency_id == currency_id, Monitor.key == key
+                ).count() > 0
+
+    def is_monitor_exists(self, page_id: int, currency_id: int) -> bool:
+        """
+        Verifica si un monitor existe en la base de datos según el ID de la página y la moneda.
+        """
+        with Session(self.engine) as session:
+            return session.query(Monitor).filter(
+                Monitor.page_id == page_id, Monitor.currency_id == currency_id
+                ).count() > 0
