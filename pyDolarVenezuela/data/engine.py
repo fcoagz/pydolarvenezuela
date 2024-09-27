@@ -8,17 +8,7 @@ def get_connection(connection: Union[Database, LocalDatabase]):
     """
     Obtiene un motor de base de datos (engine) de SQLAlchemy según el tipo de conexión proporcionada.
     """
-    if isinstance(connection, Database):
-        return create_engine(f'{connection.motor}://{connection.user}:{connection.password}@{connection.host}:{connection.port}/{connection.database}',
-                            connect_args={'options': '-c timezone=utc'})
-    elif isinstance(connection, LocalDatabase):
-        return create_engine(f'{connection.motor}:///{connection.url}')
-
-def create_tables(engine):
-    """
-    Crea todas las tablas definidas en los modelos utilizando el motor de base de datos proporcionado.
-    """
-    try:
-        Base.metadata.create_all(engine)
-    except Exception as e:
-        raise e
+    engine = create_engine(connection.__str__(), connect_args={'options': '-c timezone=utc'}) if isinstance(connection, Database) else create_engine(connection.__str__())
+    Base.metadata.create_all(engine)
+    
+    return engine
