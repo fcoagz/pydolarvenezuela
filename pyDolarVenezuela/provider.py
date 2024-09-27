@@ -70,48 +70,42 @@ class Provider:
         Extrae los datos y si la base de datos está declarada, actualizará cada monitor en la página que estás solicitando.
         """
         monitor_class = monitor_classes.get(self.page.name).get('provider')
+        data = [Monitor(**item) for item in monitor_class.get_values(currency=self.currency)]
 
         if self.database is not None:
             self.page_id = self._connection.get_or_create_page(self.page)
             self.currency_id = self._connection.get_or_create_currency(self.currency)
 
             try:
-                values = monitor_class.get_values(currency=self.currency)
-                self._connection.create_monitors(self.page_id, self.currency_id, [Monitor(**item) for item in values])
+                if not self._connection.is_monitor_exists(self.page_id, self.currency_id):
+                    print('Creando monitores...')
+                    self._connection.create_monitors(self.page_id, self.currency_id, data)
 
-                old_data = self._connection.get_monitors(self.page_id, self.currency_id)
-                new_data = [Monitor(**item) for item in values]
-                key_items = [item.key for item in old_data]
-                
-                for new_monitor in new_data:
-                    if new_monitor.key not in key_items:
+                for new_monitor in data:
+                    if not self._connection.is_monitor_exists_by_key(self.page_id, self.currency_id, new_monitor.key):
                         self._connection.create_monitor(self.page_id, self.currency_id, new_monitor)
                     else:
-                        index_old_data = key_items.index(new_monitor.key)
-                        old_monitor = old_data[index_old_data]
-
+                        old_monitor = self._connection.get_monitor_by_key(self.page_id, self.currency_id, new_monitor.key)
                         old_last_update = old_monitor.last_update
                         new_last_update = new_monitor.last_update
 
-                        if self.page.name == B.name:
-                            if old_last_update.date() != new_last_update.date():
-                                self._update_item(old_monitor, new_monitor)
-                        elif self.page.name == EP.name:
-                            if old_last_update.astimezone(standard_time_zone) != new_last_update:
-                                self._update_item(old_monitor, new_monitor)
+                        if self.page.name in [B.name, EP.name, A.name]:
+                            if self.page.name == B.name:
+                                if old_last_update.date() != new_last_update.date():
+                                    self._update_item(old_monitor, new_monitor)
+                            else:
+                                if old_last_update.astimezone(standard_time_zone) != new_last_update:
+                                    self._update_item(old_monitor, new_monitor)
                         else:
                             if old_monitor.price != new_monitor.price:
                                 self._update_item(old_monitor, new_monitor)
                 
-                values = self._connection.get_monitors(self.page_id, self.currency_id)
-                
-                if not values:
+                data = self._connection.get_monitors(self.page_id, self.currency_id)
+                if not data:
                     raise MonitorNotFound('No se pudo obtener los datos de la base de datos.')
             except Exception as e:
                 raise e
-        else:
-            values = monitor_class.get_values(currency=self.currency)
-        return values
+        return data
     
     def _update_item(self, old_monitor: MonitorModel, new_monitor: Monitor) -> None:
         """
@@ -124,27 +118,22 @@ class Provider:
 
         old_price = old_monitor.price
         new_price = new_monitor.price
-        price_old = new_monitor.price_old
-        change    = round(float(new_price) - float(old_price), 2)
-        percent   = float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' '))
-        symbol    = "" if change == 0 else "▲" if change >= 0 else "▼"
-        color     = "red" if symbol == '▼' else "green" if symbol == '▲' else "neutral"
-        last_update = new_monitor.last_update
-        change = float(str(change).replace('-', ' '))
-        image  = new_monitor.image
+        change = round(float(new_price) - float(old_price), 2)
 
-        self._connection.update_monitor(
-            old_monitor.id,
-            new_price,
-            price_old,
-            percent,
-            change,
-            color,
-            symbol,
-            last_update,
-            image
-        )
-        self._connection.add_price_history(old_monitor.id, new_price, last_update)
+        data = {
+            'price': new_price,
+            'price_old': old_price,
+            'last_update': new_monitor.last_update,
+            'image': new_monitor.image,
+            'change': change,
+            'percent': float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' ')),
+            'color': "red" if new_price < old_price else "green" if new_price > old_price else "neutral",
+            'symbol': "▲" if new_price > old_price else "▼" if new_price < old_price else ""
+        }
+        data.update({'change': float(str(data.get('change')).replace('-', ' '))})
+
+        self._connection.update_monitor(old_monitor.id, data)
+        self._connection.add_price_history(old_monitor.id, data['price'], data['last_update'])
     
     def get_values_specifics(self, cache: Union[Cache, None], type_monitor: str = None) -> Union[List[Monitor], Monitor]:
         """
@@ -163,8 +152,6 @@ class Provider:
             
             if self.database is not None:
                 data = [Monitor(**model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id'])) for monitor in data]
-            else:
-                data = [Monitor(**item) for item in data]
             
             if not type_monitor:
                 return data
