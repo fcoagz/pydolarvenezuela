@@ -17,6 +17,9 @@ class Database:
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}(host={self.host!r}, database={self.database!r}, port={self.port!r}, user={self.user!r}, password={self.password!r})'
     
+    def __str__(self) -> str:
+        return f'{self.motor}://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}'
+    
 @dataclass
 class LocalDatabase:
     """
@@ -27,6 +30,9 @@ class LocalDatabase:
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}(motor={self.motor!r}, url={self.url!r})'
+    
+    def __str__(self) -> str:
+        return f'{self.motor}:///{self.url}'
 
 @dataclass
 class Page:
