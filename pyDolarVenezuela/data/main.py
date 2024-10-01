@@ -2,6 +2,7 @@ from typing import Any, List, Union, Optional
 from datetime import datetime
 from sqlalchemy import Column, Integer, func
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import insert
 
 from .models import Page, Monitor, Currency, MonitorPriceHistory
 from .engine import get_connection
@@ -177,3 +178,13 @@ class DatabaseSettings:
             return session.query(Monitor).filter(
                 Monitor.page_id == page_id, Monitor.currency_id == currency_id
                 ).count() > 0
+
+    def bulk_update_monitors(self, monitors: List[Dict[str, Any]]):
+        with Session(self.engine) as session:
+            stmt = insert(Monitor).values(monitors)
+            stmt = stmt.on_conflict_do_update(
+                index_elements=['id'],
+                set_={c.key: c for c in stmt.excluded if c.key != 'id'}
+            )
+            session.execute(stmt)
+            session.commit()

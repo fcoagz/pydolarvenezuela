@@ -1,22 +1,21 @@
 from typing import Literal
 import requests
 from curl_cffi import requests as cffi
+import time
+from ratelimit import limits, sleep_and_retry
+
+CALLS = 5
+RATE_LIMIT = 60
 
 _headers = {
     'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36'
 }
 
+@sleep_and_retry
+@limits(calls=CALLS, period=RATE_LIMIT)
 def get(url: str, params: dict = None, verify: bool = True):
     """
-    Realiza una solicitud HTTP GET utilizando la biblioteca requests.
-
-    Args:
-        - url (str): La URL a la que se enviará la solicitud GET.
-        - params (dict, opcional): Parámetros que se incluirán en la solicitud. Por defecto es None.
-        - verify (bool, opcional): Si se debe verificar el certificado SSL. Por defecto es True.
-
-    Returns:
-        bytes: El contenido de la respuesta en formato de bytes.
+    Realiza una solicitud HTTP GET utilizando la biblioteca requests con límite de tasa.
     """
     response = requests.get(url, params=params, verify=verify, timeout=10.0, headers=_headers)
     response.raise_for_status()
