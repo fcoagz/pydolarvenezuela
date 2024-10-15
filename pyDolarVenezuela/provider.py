@@ -117,6 +117,10 @@ class Provider:
 
         old_price = old_monitor.price
         new_price = new_monitor.price
+        
+        if not new_price > 0:
+            new_price = old_price
+
         change = round(float(new_price) - float(old_price), 2)
 
         data = {
