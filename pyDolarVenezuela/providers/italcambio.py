@@ -34,7 +34,6 @@ class Italcambio(Base):
                         'key': key,
                         'title': title,
                         'price': price,
-                        'price_old': price_old,
                         'last_update': last_update
                     })
 

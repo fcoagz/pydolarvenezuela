@@ -24,14 +24,12 @@ class CriptoDolar(Base):
                 key = _convert_specific_format(_convert_dollar_name_to_monitor_name(monitor['name']))
                 title = _convert_dollar_name_to_monitor_name(monitor['name'])
                 price = round(monitor['price'], 2)
-                price_old   = monitor['priceOld']
                 last_update = get_formatted_date_tz(monitor['updatedAt'])
 
                 data.append({
                     'key': key,
                     'title': title,
                     'price': price,
-                    'price_old': price_old,
                     'last_update': last_update,
                     'image': image
                 })

@@ -40,7 +40,6 @@ class BCV(Base):
                 rates.append({
                     'key': key,
                     'title': title,
-                    'price_old': price,
                     'price': price_round,
                     'last_update': last_update
                 })
@@ -51,7 +50,6 @@ class BCV(Base):
                 'key': code,
                 'title': values['name'],
                 'price': round(_get_rate_by_id(values['id'], section_tipo_de_cambio_oficial), 2),
-                'price_old': _get_rate_by_id(values['id'], section_tipo_de_cambio_oficial),
                 'image': image,
                 'last_update': _get_time(section_tipo_de_cambio_oficial)
             })
