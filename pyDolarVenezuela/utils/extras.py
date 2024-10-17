@@ -94,7 +94,8 @@ bank_dict = {
     "Banco Mercantil": "mercantil_banco",
     "Otras Instituciones": "otras_instituciones",
     "Banco Nacional de Crédito BNC": "bnc",
-    "BanCaribe": "bancaribe"
+    "BanCaribe": "bancaribe",
+    "Bangente": "bangente",
 }
 
 path_images = [
