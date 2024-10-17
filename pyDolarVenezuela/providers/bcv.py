@@ -32,7 +32,7 @@ class BCV(Base):
             title = str(bank.find('td', 'views-field views-field-views-conditional').text).strip()
             key = bank_dict.get(title)
 
-            if title not in [bank['title'] for bank in rates]:
+            if key and key not in [bank['key'] for bank in rates]:
                 field_tasa_venta = bank.find('td', 'views-field views-field-field-tasa-venta').text
                 if field_tasa_venta.count(',') == 1:
                     price = float(field_tasa_venta.replace(',', '.'))
