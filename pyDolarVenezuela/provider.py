@@ -76,10 +76,9 @@ class Provider:
             self.page_id = self._connection.get_or_create_page(self.page)
             self.currency_id = self._connection.get_or_create_currency(self.currency)
 
-            try:
-                if not self._connection.is_monitor_exists(self.page_id, self.currency_id):
-                    self._connection.create_monitors(self.page_id, self.currency_id, data)
-
+            if not self._connection.is_monitor_exists(self.page_id, self.currency_id):
+                self._connection.create_monitors(self.page_id, self.currency_id, data)
+            else:
                 for new_monitor in data:
                     if not self._connection.is_monitor_exists_by_key(self.page_id, self.currency_id, new_monitor.key):
                         self._connection.create_monitor(self.page_id, self.currency_id, new_monitor)
@@ -88,7 +87,7 @@ class Provider:
                         old_last_update = old_monitor.last_update
                         new_last_update = new_monitor.last_update
 
-                        if self.page.name in [B.name, EP.name, A.name]:
+                        if self.page.name in [B.name, EP.name, A.name, E.name]:
                             if self.page.name == B.name:
                                 if old_last_update.date() != new_last_update.date():
                                     self._update_item(old_monitor, new_monitor)
@@ -96,14 +95,12 @@ class Provider:
                                 if old_last_update.astimezone(standard_time_zone) != new_last_update:
                                     self._update_item(old_monitor, new_monitor)
                         else:
-                            if old_monitor.price != new_monitor.price:
+                            if old_monitor.price > 0 and old_monitor.price != new_monitor.price:
                                 self._update_item(old_monitor, new_monitor)
                 
-                data = self._connection.get_monitors(self.page_id, self.currency_id)
-                if not data:
-                    raise MonitorNotFound('No se pudo obtener los datos de la base de datos.')
-            except Exception as e:
-                raise e
+            data = self._connection.get_monitors(self.page_id, self.currency_id)
+            if not data:
+                raise MonitorNotFound('No se pudo obtener los datos de la base de datos.')
         return data
     
     def _update_item(self, old_monitor: MonitorModel, new_monitor: Monitor) -> None:
@@ -114,25 +111,22 @@ class Provider:
         - old_monitor: Monitor Antiguo.
         - new_monitor: Monitor nuevo. Datos obtenidos recientes.
         """
-
         old_price = old_monitor.price
         new_price = new_monitor.price
-        
-        if not new_price > 0:
-            new_price = old_price
 
         change = round(float(new_price) - float(old_price), 2)
-
         data = {
             'price': new_price,
             'price_old': old_price,
             'last_update': new_monitor.last_update,
-            'image': new_monitor.image,
             'change': change,
             'percent': float(f'{round(float((change / new_price) * 100 if old_price != 0 else 0), 2)}'.replace('-', ' ')),
             'color': "red" if new_price < old_price else "green" if new_price > old_price else "neutral",
             'symbol': "▲" if new_price > old_price else "▼" if new_price < old_price else ""
         }
+        
+        if old_monitor.image != new_monitor.image:
+            data.update({'image': new_monitor.image})
         data.update({'change': float(str(data.get('change')).replace('-', ' '))})
 
         self._connection.update_monitor(old_monitor.id, data)
