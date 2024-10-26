@@ -37,12 +37,14 @@ class BCV(Base):
                 if field_tasa_venta.count(',') == 1:
                     price = float(field_tasa_venta.replace(',', '.'))
                     price_round = round(price, 2)
+                    image = next((image.image for image in list_monitors_images if image.provider == 'bcv' and image.title == key), None)
                     last_update = get_datestring_to_datetime(bank.find('td', 'views-field views-field-field-fecha-del-indicador').text.strip().replace('-', '/'))
 
                     rates.append({
                         'key': key,
                         'title': title,
                         'price': price_round,
+                        'image': image,
                         'last_update': last_update
                     })
 
