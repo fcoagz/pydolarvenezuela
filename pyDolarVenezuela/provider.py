@@ -95,7 +95,7 @@ class Provider:
                                 if old_last_update.astimezone(standard_time_zone) != new_last_update:
                                     self._update_item(old_monitor, new_monitor)
                         else:
-                            if old_monitor.price > 0 and old_monitor.price != new_monitor.price:
+                            if old_monitor.price != new_monitor.price and new_monitor.price > 0:
                                 self._update_item(old_monitor, new_monitor)
                 
             data = self._connection.get_monitors(self.page_id, self.currency_id)
