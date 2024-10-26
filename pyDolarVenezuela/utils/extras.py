@@ -100,304 +100,289 @@ bank_dict = {
 
 path_images = [
     {
-        "title": "bcv",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1717042862/alcambio/pff3ahlx2ilvcf48ijne.png",
-        "provider": "alcambio"
+        "provider": "bcv",
+        "title": "activo",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921460/monitors/public_id:bank-activo.webp"
     },
     {
-        "title": "enparalelovzla",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1717042885/alcambio/pzlgnhggdwgkzzg3ndfs.png",
-        "provider": "alcambio"
-    },
-    {
-        "title": "usd",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093823/bcv/uppdtt4fzbhnwq5cu9br.png",
-        "provider": "bcv"
-    },
-    {
-        "title": "try",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716099345/bcv/zowkdfsqlmiafsksgdwb.png",
-        "provider": "bcv"
-    },
-    {
-        "title": "eur",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093824/bcv/epzeuzakymrxe1ygwvvp.png",
-        "provider": "bcv"
-    },
-    {
-        "title": "rub",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093824/bcv/nyuavxoe4edpahvuzciv.png",
-        "provider": "bcv"
-    },
-    {
-        "title": "cny",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093825/bcv/wqfalezwajdzzj6lqe8g.png",
-        "provider": "bcv"
-    },
-        {
+        "provider": "bcv",
         "title": "bancamiga",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093825/criptodolar/kvey6stefly2tz0iycxb.png",
-        "provider": "criptodolar"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921461/monitors/public_id:bank-bancamiga.webp"
     },
     {
-        "title": "banco_mercantil",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093826/criptodolar/cv11ywpqffhu5nm9jvnu.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "banco_provincial",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093827/criptodolar/ucd3xjeni9msgrjlfdtg.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "banco_venezuela",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093828/criptodolar/yepxycceaprq0feladr9.png",
-        "provider": "criptodolar"
-    },
-    {
+        "provider": "bcv",
         "title": "banesco",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093828/criptodolar/oppovzonizubffeuezwd.png",
-        "provider": "criptodolar"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921462/monitors/public_id:bank-banesco.webp"
     },
     {
+        "provider": "bcv",
         "title": "banplus",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093830/criptodolar/eyf6tzib8dpvbruueq6h.png",
-        "provider": "criptodolar"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921464/monitors/public_id:bank-banplus.webp"
     },
     {
+        "provider": "bcv",
         "title": "bnc",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093830/criptodolar/o0x92ehatdf3tvdeojeg.png",
-        "provider": "criptodolar"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921465/monitors/public_id:bank-bnc.webp"
     },
     {
-        "title": "binance",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093832/criptodolar/vfeeir2qfehonclityeb.png",
-        "provider": "criptodolar"
+        "provider": "bcv",
+        "title": "bvc",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921466/monitors/public_id:bank-bvc.webp"
     },
     {
-        "title": "cripto_dolar",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093832/criptodolar/la54eximbsqbydf9madc.png",
-        "provider": "criptodolar"
+        "provider": "bcv",
+        "title": "exterior",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921467/monitors/public_id:bank-exterior.webp"
     },
     {
-        "title": "dolar_today",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093833/criptodolar/qqmrcjkh49tjjcfoteip.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "amazon_gift_card",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093834/criptodolar/i30kozfg2qbicxqclcbu.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "paypal",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093834/criptodolar/pgyukgc2p2kxg9a1urpl.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "bcv",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093835/criptodolar/pxef065ha5r6zzpfizxy.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "skrill",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093836/criptodolar/cyp71axif36rurqulqnr.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "uphold",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093837/criptodolar/qezqmjzibtor9wr7pv6m.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "enparalelovzla",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093838/criptodolar/jukudiiabja65ijuu8yo.png",
-        "provider": "criptodolar"
-    },
-    {
-        "title": "dolartoday",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720738471/dolartoday/g1zgcculf79nzxe2njge.png",
-        "provider": "dolartoday"
-    },
-    {
-        "title": "bcv",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720738484/dolartoday/v6ueiwaboftzvo4cbigj.png",
-        "provider": "dolartoday"
-    },
-    {
-        "title": "petro",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720738643/dolartoday/xij8eoakaue9cneuqh6v.png",
-        "provider": "dolartoday"
-    },
-    {
-        "title": "bitcoin",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1720739077/dolartoday/v2siv6ahfalwqqtjf5je.png",
-        "provider": "dolartoday"
-    },
-    {
-        "title": "airtm",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093839/exchangemonitor/bekyy0llre7ypyk25rgo.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "amazon_gift_card",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093840/exchangemonitor/s9eujyaebumcwpblupr0.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "bancamiga",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093842/exchangemonitor/ylqelunizpr6frababbe.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "bancaribe",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023856/exchangemonitor/burnekr9pidop4wz3xrx.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "banco_de_venezuela",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023820/exchangemonitor/zlz0iuhw3me4ldhu9k1g.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "banco_exterior",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093842/exchangemonitor/eyf90rndgix2ayfirptz.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "banca_plaza",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023752/exchangemonitor/aqmehn1enysonjsihed3.webp",
-        "provider": "exchangemonitor"
-    },
-        {
-        "title": "banplus",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1719023923/exchangemonitor/vg4gibg5y4ziyloejlrl.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "banesco",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093843/exchangemonitor/wb581lw04tyccpemgvlw.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "bbva_provincial",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093843/exchangemonitor/snwobyspdjueqk3hnmcy.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "bcv",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093844/exchangemonitor/cynwwdlkdcstqxfwxetc.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "binance",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093844/exchangemonitor/uxmug0r4taifpy2tkk77.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "bnc",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093845/exchangemonitor/dvxkxspvbifxnv9iwjfm.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "cambios_r&a",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093846/exchangemonitor/bo152xqyrshncklgcp0b.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "dolartoday_(btc)",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093847/exchangemonitor/samnvo9ml1bjwwbky87h.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "dolartoday",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093847/exchangemonitor/jojtn5gu1g52zq3el3zp.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "el_dorado",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093849/exchangemonitor/klzike64gmwlhnpyuuju.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "dolar_em",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093849/exchangemonitor/mx1tostafvbftdn1ofbe.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "italcambio",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093850/exchangemonitor/ma295gq8ftcasuh3ki8o.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "mercantil",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093850/exchangemonitor/w0xsro1si7laxalu8zgs.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "mkambio",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093851/exchangemonitor/himq41taohdcxbcnlgub.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "monitor_dolar_vzla",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093852/exchangemonitor/qwydse1rhwqyzh4vzmyj.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "monitor_dolar_venezuela",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093852/exchangemonitor/kih3nvrygbratbtzvvew.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "monitor_dolar",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093852/exchangemonitor/kih3nvrygbratbtzvvew.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "enparalelovzla",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093852/exchangemonitor/kih3nvrygbratbtzvvew.webp",
-        "provider": "exchangemonitor"
-    },
-    {
+        "provider": "bcv",
         "title": "otras_instituciones",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093853/exchangemonitor/myh2wpnsaruz462fbhqs.webp",
-        "provider": "exchangemonitor"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921468/monitors/public_id:bank-instituciones.webp"
     },
     {
+        "provider": "bcv",
+        "title": "mercantil_banco",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921469/monitors/public_id:bank-mercantil.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "plaza",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921470/monitors/public_id:bank-plaza.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "provincial",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921471/monitors/public_id:bank-provincial.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "sofitasa",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921472/monitors/public_id:sofitasa.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "mi_banco",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921472/monitors/public_id:mi_banco.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "cny",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921473/monitors/public_id:china.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "eur",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921474/monitors/public_id:european-union.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "rub",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921475/monitors/public_id:russia.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "try",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921476/monitors/public_id:turkey.webp"
+    },
+    {
+        "provider": "bcv",
+        "title": "usd",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921477/monitors/public_id:united-states.webp"
+    },
+    {
+        "provider": "alcambio",
+        "title": "bcv",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921478/monitors/public_id:bcv.webp"
+    },
+    {
+        "provider": "alcambio",
+        "title": "enparalelovzla",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921479/monitors/public_id:epv.webp"
+    },
+    {
+        "provider": "enparalelovzla",
+        "title": "enparalelovzla",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921479/monitors/public_id:epv.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "amazon_gift_card",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921480/monitors/public_id:amazon.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "dolar_today",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921481/monitors/public_id:dolartoday.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "bcv",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921478/monitors/public_id:bcv.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "airtm",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921483/monitors/public_id:airtm.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "binance",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921484/monitors/public_id:binance.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "cripto_dolar",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921484/monitors/public_id:cripto_dolar.webp"
+    },
+    {
+        "provider": "criptodolar",
+        "title": "enparalelovzla",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921479/monitors/public_id:epv.webp"
+    },
+    {
+        "provider": "criptodolar",
         "title": "paypal",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093853/exchangemonitor/hsvaysq1ow3ayaefm5b7.webp",
-        "provider": "exchangemonitor"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921486/monitors/public_id:paypal.webp"
     },
     {
-        "title": "petro",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093855/exchangemonitor/vrguo6kaxxa7zmtyp88u.webp",
-        "provider": "exchangemonitor"
-    },
-    {
-        "title": "remesas_zoom",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093855/exchangemonitor/ki6sg08a1c1yoe2tp7ou.webp",
-        "provider": "exchangemonitor"
-    },
-    {
+        "provider": "criptodolar",
         "title": "skrill",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093856/exchangemonitor/e6i3rygmyjft0mwbfeif.webp",
-        "provider": "exchangemonitor"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921487/monitors/public_id:skrill.webp"
     },
     {
+        "provider": "criptodolar",
+        "title": "uphold",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921488/monitors/public_id:uphold.webp"
+    },
+    {
+        "provider": "dolartoday",
+        "title": "dolartoday",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921481/monitors/public_id:dolartoday.webp"
+    },
+    {
+        "provider": "dolartoday",
+        "title": "bcv",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921478/monitors/public_id:bcv.webp"
+    },
+    {
+        "provider": "dolartoday",
+        "title": "bitcoin",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921491/monitors/public_id:bitcoin.webp"
+    },
+    {
+        "provider": "dolartoday",
+        "title": "petro",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921492/monitors/public_id:petro.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "em",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921493/monitors/public_id:em.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "airtm",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921483/monitors/public_id:airtm.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "monitor_dolar",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921479/monitors/public_id:epv.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "enparalelovzla",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921479/monitors/public_id:epv.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "bcv",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921478/monitors/public_id:bcv.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banco_activo",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921460/monitors/public_id:bank-activo.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banco_bancamiga",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921461/monitors/public_id:bank-bancamiga.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banesco",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921462/monitors/public_id:bank-banesco.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banplus",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921464/monitors/public_id:bank-banplus.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "bnc",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921465/monitors/public_id:bank-bnc.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "bvc",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921466/monitors/public_id:bank-bvc.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banco_exterior",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921467/monitors/public_id:bank-exterior.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "otras_instituciones",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921468/monitors/public_id:bank-instituciones.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banco_mercantil",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921469/monitors/public_id:bank-mercantil.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banco_plaza",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921470/monitors/public_id:bank-plaza.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "banco_provincial",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921471/monitors/public_id:bank-provincial.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "el_dorado",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921508/monitors/public_id:el-dorado.webp"
+    },
+    {
+        "provider": "exchangemonitor",
         "title": "syklo",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093856/exchangemonitor/ctpuvtmlxtakuon6e2la.webp",
-        "provider": "exchangemonitor"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921509/monitors/public_id:syklo.webp"
     },
     {
+        "provider": "exchangemonitor",
+        "title": "dolartoday",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921481/monitors/public_id:dolartoday.webp"
+    },
+    {
+        "provider": "exchangemonitor",
         "title": "yadio",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093857/exchangemonitor/kj25w4xgtz4ztgoljrqz.webp",
-        "provider": "exchangemonitor"
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921510/monitors/public_id:yadio.webp"
     },
     {
-        "title": "zinli",
-        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1716093857/exchangemonitor/t4ncrzmvldaw1kzqpc0v.webp",
-        "provider": "exchangemonitor"
+        "provider": "exchangemonitor",
+        "title": "cambios_r&a",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921606/monitors/public_id:cambios-rya.webp"
+    },
+    {
+        "provider": "exchangemonitor",
+        "title": "mkfrontera",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921607/monitors/public_id:mk-frontera.webp"
     }
 ]
 list_monitors_images = [Image(**item) for item in path_images]
