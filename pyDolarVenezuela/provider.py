@@ -1,32 +1,28 @@
 from typing import Union, Any, List, Dict
 from datetime import datetime
 from .exceptions import MonitorNotFound, CurrencyNotFound, DatabaseNotDefined
-from .providers import AlCambio, BCV, CriptoDolar, DolarToday, ExchangeMonitor, EnParaleloVzla, Italcambio
+from .providers import providers
 from .data import DatabaseSettings, MonitorModel
 from .models import Page, Monitor, HistoryPrice, LocalDatabase, Database
 from .storage import Cache
-from .pages import (
-    AlCambio as A,
-    BCV as B,
-    CriptoDolar as C,
-    DolarToday as D,
-    ExchangeMonitor as E,
-    EnParaleloVzla as EP,
-    Italcambio as I
-)
+from .pages import AlCambio as A, BCV as B, ExchangeMonitor as E, EnParaleloVzla as EP
 from .utils.time import standard_time_zone
 
-monitor_classes = {
-    A.name: {'currency': A.currencies, 'provider': AlCambio},
-    B.name: {'currency': B.currencies, 'provider': BCV},
-    C.name: {'currency': C.currencies, 'provider': CriptoDolar},
-    D.name: {'currency': D.currencies, 'provider': DolarToday},
-    E.name: {'currency': E.currencies, 'provider': ExchangeMonitor},
-    EP.name: {'currency': EP.currencies, 'provider': EnParaleloVzla},
-    I.name: {'currency': I.currencies, 'provider': Italcambio},
-}
+def _find_provider(page: Page) -> Dict[str, Any]:
+    """
+    Encuentra el proveedor de la página solicitada.
 
-def model_to_dict(model, exclude: List[str] = None) -> Dict[Any, Any]:
+    Args:
+    - page: La página de la que se accederán los datos.
+    """
+    for provider in providers:
+        if provider.PAGE.name == page.name:
+            return {
+                'currency': page.currencies,
+                'provider': provider
+            }
+
+def _model_to_dict(model, exclude: List[str] = None) -> Dict[Any, Any]:
     """
     Convierte una instancia del modelo de SQLAlchemy en un diccionario,
     excluyendo los atributos especificados.
@@ -69,7 +65,7 @@ class Provider:
         """
         Extrae los datos y si la base de datos está declarada, actualizará cada monitor en la página que estás solicitando.
         """
-        monitor_class = monitor_classes.get(self.page.name).get('provider')
+        monitor_class = _find_provider(self.page).get('provider')
         data = [Monitor(**item) for item in monitor_class.get_values(currency=self.currency)]
 
         if self.database is not None:
@@ -148,7 +144,7 @@ class Provider:
                 data = cache.get(self.key)
             
             if self.database is not None:
-                data = [Monitor(**model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id'])) for monitor in data]
+                data = [Monitor(**_model_to_dict(monitor, exclude=['id', 'page_id', 'currency_id'])) for monitor in data]
             
             if not type_monitor:
                 return data
@@ -181,7 +177,7 @@ class Provider:
             currency_id = self._connection.get_or_create_currency(self.currency)
             
             data = self._connection.get_date_range_history(page_id, currency_id, type_monitor, start_date, end_date)
-            data = [HistoryPrice(**model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
+            data = [HistoryPrice(**_model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
             
             return data
         except ValueError as e:
@@ -206,7 +202,7 @@ class Provider:
             currency_id = self._connection.get_or_create_currency(self.currency)
             
             data = self._connection.get_prices_monitor_one_day(page_id, currency_id, type_monitor, date)
-            data = [HistoryPrice(**model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
+            data = [HistoryPrice(**_model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
             
             return data
         except ValueError as e:
