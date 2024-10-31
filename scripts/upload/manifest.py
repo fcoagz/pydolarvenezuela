@@ -63,6 +63,7 @@ PAGES = [
         'page': 'exchangemonitor',
         'files': [
             {'file': 'em.webp', 'title': 'em'},
+            {'file': 'average.webp', 'title': 'promedio'},
             {'file': 'airtm.webp', 'title': 'airtm'},
             {'file': 'epv.webp', 'title': 'monitor_dolar'},
             {'file': 'epv.webp', 'title': 'enparalelovzla'},
