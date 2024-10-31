@@ -77,7 +77,17 @@ class DatabaseSettings:
                 date_key = price_history.last_update.date()
                 
                 if date_key not in changes:
-                    changes[date_key] = price_history
+                    changes[date_key] = {
+                        'price': price_history.price,
+                        'price_high': price_history.price,
+                        'price_low': price_history.price,
+                        'price_open': price_history.price,
+                        'last_update': price_history.last_update
+                    }
+                else:
+                    changes[date_key]['price_high'] = max(changes[date_key]['price_high'], price_history.price)
+                    changes[date_key]['price_low']  = min(changes[date_key]['price_low'], price_history.price)
+                    changes[date_key]['price_open'] = price_history.price
             
             return changes.values()
     
