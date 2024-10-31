@@ -71,10 +71,13 @@ class HistoryPrice:
     History price instance
     """
     price: float
+    price_high: float
+    price_low: float
+    price_open: float
     last_update: datetime
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}(price={self.price!r}, last_update={self.last_update!r})'
+        return f'{self.__class__.__name__}(price={self.price!r}, price_high={self.price_high!r}, price_low={self.price_low!r}, price_open={self.price_open!r}, last_update={self.last_update!r})'
 
 @dataclass
 class Image:
