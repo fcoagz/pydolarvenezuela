@@ -23,33 +23,27 @@ def upload_image(file: bytes, public_id: str, folder: str) -> str:
     return upload_result["secure_url"]
 
 if __name__ == "__main__":
-    data = {}
+    images = {}
+    data = []
     for page in PAGES:
         for file in page["files"]:
             # search = Search().expression(f"public_id:{os.path.basename(file['file']).split('.')[0]}").execute()
             # if search["total_count"] > 0:
             #     url = search["resources"][0]["secure_url"]
             #     print(f"Image {file['title']} already exists: {url}")
-            if data.get(file["title"]):
-                print(f"Image {file['title']} already exists: {data[file['title']]['image']}")
-                url = data[file["title"]]["image"]
+            if images.get(file["title"]):
+                print(f"Image {file['title']} already exists: {images[file['title']]}")
+                url = images[file["title"]]
             else:
                 with open(f"./icons/webp/{file['file']}", "rb") as image:
                     url = upload_image(image.read(), f'public_id:{os.path.basename(file['file']).split('.')[0]}', 'monitors')
+                    images[file["title"]] = url
                     print(f"Uploaded {file['title']}: {url}")
-            data[file["title"]] = {
+
+            data.append({
                 "provider": page["page"],
                 "title": file["title"],
                 "image": url
-            }
-    
-    data = [
-        {
-            "provider": value["provider"],
-            "title": key,
-            "image": value["image"]
-        }
-        for key, value in data.items()
-    ]
+            })
     with open("data.json", "w") as f:
         f.write(json.dumps(data, indent=4))
