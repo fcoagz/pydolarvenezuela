@@ -45,8 +45,8 @@ if __name__ == "__main__":
     
     data = [
         {
-            "title": key,
             "provider": value["provider"],
+            "title": key,
             "image": value["image"]
         }
         for key, value in data.items()
