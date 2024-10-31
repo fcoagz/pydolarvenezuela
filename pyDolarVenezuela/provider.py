@@ -3,7 +3,7 @@ from datetime import datetime
 from .exceptions import MonitorNotFound, CurrencyNotFound, DatabaseNotDefined
 from .providers import providers
 from .data import DatabaseSettings, MonitorModel
-from .models import Page, Monitor, HistoryPrice, LocalDatabase, Database
+from .models import Page, Monitor, HistoryPrice, ChangePrice, LocalDatabase, Database
 from .storage import Cache
 from .pages import AlCambio as A, BCV as B, ExchangeMonitor as E, EnParaleloVzla as EP
 from .utils.time import standard_time_zone
@@ -202,7 +202,7 @@ class Provider:
             currency_id = self._connection.get_or_create_currency(self.currency)
             
             data = self._connection.get_prices_monitor_one_day(page_id, currency_id, type_monitor, date)
-            data = [HistoryPrice(**_model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
+            data = [ChangePrice(**_model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
             
             return data
         except ValueError as e:
