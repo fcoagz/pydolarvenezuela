@@ -32,7 +32,7 @@ if __name__ == "__main__":
             #     print(f"Image {file['title']} already exists: {url}")
             if data.get(file["title"]):
                 print(f"Image {file['title']} already exists: {data[file['title']]['image']}")
-                continue
+                url = data[file["title"]]["image"]
             else:
                 with open(f"./icons/webp/{file['file']}", "rb") as image:
                     url = upload_image(image.read(), f'public_id:{os.path.basename(file['file']).split('.')[0]}', 'monitors')
