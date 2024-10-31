@@ -177,7 +177,7 @@ class Provider:
             currency_id = self._connection.get_or_create_currency(self.currency)
             
             data = self._connection.get_date_range_history(page_id, currency_id, type_monitor, start_date, end_date)
-            data = [HistoryPrice(**_model_to_dict(monitor, exclude=['id', 'monitor_id'])) for monitor in data]
+            data = [HistoryPrice(**monitor) for monitor in data]
             
             return data
         except ValueError as e:
