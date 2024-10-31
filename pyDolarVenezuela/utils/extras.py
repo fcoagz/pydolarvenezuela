@@ -281,6 +281,11 @@ path_images = [
     },
     {
         "provider": "exchangemonitor",
+        "title": "promedio",
+        "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1730348774/monitors/public_id:average.webp"
+    },
+    {
+        "provider": "exchangemonitor",
         "title": "airtm",
         "image": "https://res.cloudinary.com/dcpyfqx87/image/upload/v1729921483/monitors/public_id:airtm.webp"
     },
